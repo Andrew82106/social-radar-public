@@ -1,0 +1,291 @@
+.PoliticsInfo {
+  height: 100%;
+  width: 100%;
+
+  .PoliticsInfoBox {
+    height: 90%;
+    width: 100%;
+
+    .InfoWrap {
+      width: 97%;
+      height: 100%;
+      margin: 0 auto;
+
+      .selectTime {
+        height: 5%;
+
+        div {
+          float: right;
+        }
+      }
+
+      .groupBox {
+        width: 100%;
+        height: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #fff;
+
+        .gropTop {
+          height: 47%;
+          display: flex;
+          justify-content: space-between;
+
+          .mesBase {
+            width: 49%;
+
+            .mesBaseBox {
+              height: 80%;
+              width: 100%;
+              padding: 0 1.25rem;
+              box-sizing: border-box;
+
+              .baseMes {
+                height: 50%;
+                display: flex;
+                justify-content: space-between;
+                font-size: 1rem;
+
+                table {
+                  width: 100%;
+                  border-collapse: separate;
+                  border-spacing: 0px 0.625rem;
+
+                  tr {
+                    td {
+
+                      text-align: left;
+
+                      .news,
+                      .lables {
+                        display: flex;
+                        width: 100%;
+                        flex-wrap: wrap;
+
+                        li {
+                          width: 4.375rem;
+
+                          padding: 0 .3125rem;
+                          box-sizing: border-box;
+                          height: 1.25rem;
+                          line-height: 1.25rem;
+                          text-align: center;
+                          font-size: .625rem;
+                          border-radius: .625rem;
+                          margin: 0 .3125rem 0.625rem 0;
+
+                          p {
+                            height: 1.25rem;
+                            line-height: 1.25rem;
+                            width: 100%;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                          }
+                        }
+
+                        .every_news {
+                          color: #0EF2E6;
+                          border: 1px solid #0EF2E6;
+                          margin-bottom:.75rem;
+                          margin-right:1.25rem;
+                          font-size: .75rem;
+                         
+                        }
+
+                        .every_lable {
+                          width: 3.4375rem;
+                          background: rgba(14, 242, 230, 0.3);
+                          color: #fff;
+                          margin-right:1.25rem;
+                          margin-bottom:.75rem;
+                          font-size: .75rem;
+                        }
+                      }
+
+                      .leave {
+                        font-size: .75rem;
+                        color: #0EF2E6;
+
+                        .effect {
+                          margin-bottom:0.625rem;
+                          div {
+                            display: flex;
+                            align-items: center;
+
+
+                            img {
+                              width: 2.1875rem;
+                              height: 1.6875rem;
+                            }
+
+                          }
+
+
+                        }
+
+                        .per_box {
+                          display: flex;
+                          align-items: center;
+
+                          p {
+                            margin-right: .25rem
+                          }
+
+                          .perbox {
+                            font-size: 0;
+                            width: 5.6875rem;
+                            box-sizing: border-box;
+                            height: .625rem;
+                            border-radius: .3125rem;
+                            position: relative;
+                            margin-right: 0.25rem;
+                            background-color: rgba(14,242,230,0.35);
+
+
+                            .per {
+                              font-size: 0;
+                              position: absolute;
+                              top: 0;
+                              left: 0;
+                              height: .625rem;
+                            border-radius: .3125rem;
+                              background-color: #0EF2E6;
+
+                            }
+                          }
+
+                        }
+                      }
+
+                    }
+
+                    .td1 {
+                      width: 15%;
+                      text-align: left;
+                    }
+
+                    .td2 {
+                      width: 55%;
+                    }
+
+                    .td3 {
+                      width: 30%;
+                    }
+                  }
+                }
+
+
+
+
+
+
+
+
+
+              }
+
+              .content {
+                height: 50%;
+                overflow-y: scroll;
+                width: 100%;
+                font-size: .75rem;
+                line-height: 1.625rem;
+                // text-indent: 2em;
+                text-align: left;
+              }
+
+              .content::-webkit-scrollbar {
+                display: none
+              }
+            }
+          }
+
+          .mesPredicted {
+            width: 49%;
+            position: relative;
+
+            .mesPredicted_box {
+              position: absolute;
+              top: 3.5%;
+              left: 1.5%;
+              width: 97%;
+              height: 93%;
+              background-color: #042256;
+              display: flex;
+              flex-direction: column;
+
+
+            }
+          }
+        }
+
+        .gropBottom {
+          height: 49%;
+          padding: 1.25rem;
+          box-sizing: border-box;
+          display: flex;
+          justify-content: space-between;
+
+          .relation {
+            width: 49%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .select_local {
+              width: 100%;
+
+              margin-bottom: 1.25rem;
+
+              div {
+                float: left;
+              }
+            }
+
+            
+          }
+
+          .select_event {
+            width: 49%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            ul {
+              display: flex;
+              justify-content: flex-start;
+              width:80%;
+              margin:0 auto;
+              
+              li {
+                display: flex;
+                align-items: center;
+               width:25%;
+
+                .colorset {
+                  width: .875rem;
+                  height: .875rem;
+
+                  margin-right: .3125rem
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+
+  }
+}
+
+#myChartMap {
+  width: 100%;
+  height: 90%;
+}
+.goleft{
+  display:flex;
+  justify-content: flex-end;
+}

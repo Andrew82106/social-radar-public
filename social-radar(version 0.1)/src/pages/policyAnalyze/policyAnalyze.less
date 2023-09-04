@@ -1,0 +1,403 @@
+.PoliticsInfo {
+  height: 100%;
+  width: 100%;
+
+  .PoliticsInfoBox {
+    height: 90%;
+    width: 100%;
+
+    .InfoWrap {
+      width: 96%;
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+
+      .groupBox {
+        height: 94%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #fff;
+
+        .gropTop {
+          height: 50%;
+          display: flex;
+          justify-content: space-between;
+
+          .mesBase {
+            width: 49%;
+
+            .mesBaseBox {
+              height: 80%;
+              width: 100%;
+              padding: 0 1.25rem;
+              box-sizing: border-box;
+              overflow-y: scroll;
+
+              .baseMes {
+                // height: 50%;
+                display: flex;
+                justify-content: space-between;
+                font-size: 1rem;
+
+                table {
+                  width: 100%;
+                  border-collapse: separate;
+                  border-spacing: 0px 0.625rem;
+
+                  tr {
+                    td {
+                      text-align: left;
+
+                      .news,
+                      .lables {
+                        display: flex;
+                        width: 100%;
+                        flex-wrap: wrap;
+
+                        li {
+                          width: 4.375rem;
+                          padding: 0 0.3125rem;
+                          box-sizing: border-box;
+                          height: 1.25rem;
+                          line-height: 1.25rem;
+                          text-align: center;
+                          font-size: 0.625rem;
+                          border-radius: 0.625rem;
+                          margin: 0 0.625rem 0.625rem 0;
+
+                          p {
+                            height: 1.25rem;
+                            line-height: 1.25rem;
+                            width: 100%;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                          }
+                        }
+
+                        .every_news {
+                          color: #0ef2e6;
+                          border: 1px solid #0ef2e6;
+                          margin-right: 1.25rem;
+                          margin-bottom: 0.75rem;
+                          font-size: 0.75rem;
+                        }
+
+                        .every_lable {
+                          width: 3.4375rem;
+                          background: rgba(14, 242, 230, 0.3);
+                          color: #fff;
+                          margin-right: 1.25rem;
+                          margin-bottom: 0.75rem;
+                          font-size: 0.75rem;
+                        }
+                      }
+
+                      .leave {
+                        font-size: 0.75rem;
+                        color: #0ef2e6;
+
+                        .effect {
+                          margin-bottom: 0.625rem;
+
+                          div {
+                            display: flex;
+                            align-items: center;
+
+                            img {
+                              width: 2.1875rem;
+                              height: 1.6875rem;
+                            }
+                          }
+                        }
+
+                        .per_box {
+                          display: flex;
+                          align-items: center;
+
+                          p {
+                            margin-right: 0.25rem;
+                          }
+
+                          .perbox {
+                            font-size: 0;
+                            width: 5.6875rem;
+                            box-sizing: border-box;
+                            height: 0.625rem;
+                            border-radius: 0.3125rem;
+                            position: relative;
+                            margin-right: 0.25rem;
+                            background: rgba(14, 242, 230, 0.35);
+
+                            .per {
+                              font-size: 0;
+                              position: absolute;
+                              top: 0;
+                              left: 0;
+                              height: 0.625rem;
+                              border-radius: 0.3125rem;
+                              background-color: #0ef2e6;
+                            }
+                          }
+                        }
+                      }
+                    }
+
+                    .td1 {
+                      width: 15%;
+                      text-align: left;
+                    }
+
+                    .td2 {
+                      width: 60%;
+                    }
+
+                    .td3 {
+                      width: 25%;
+                    }
+                  }
+                }
+              }
+
+              .content {
+                height: 50%;
+                overflow-y: scroll;
+                width: 100%;
+                font-size: 0.75rem;
+                line-height: 1.625rem;
+                // text-indent: 2em;
+                text-align: left;
+              }
+
+              .content::-webkit-scrollbar {
+                display: none;
+              }
+            }
+            .mesBaseBox::-webkit-scrollbar {
+              display: none;
+            }
+          }
+
+          .mesPredicted {
+            width: 49.2%;
+          }
+        }
+
+        .gropBottom {
+          display: flex;
+          justify-content: space-between;
+          height: 47%;
+        }
+      }
+    }
+  }
+}
+
+// 時間軸
+.time h2 {
+  color: #ff6600;
+  margin: 20px auto 30px auto;
+}
+
+.time-line {
+  width: 96%;
+  height: 90%;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  position: relative;
+  margin: 0 auto;
+  font-size: 0;
+  position: absolute;
+  bottom: 0.625rem;
+  left: 50%;
+  margin-left: -48%;
+}
+
+.time-line::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.time-line::-webkit-scrollbar-button {
+  width: 12px;
+  height: 12px;
+}
+
+.time-line::-webkit-scrollbar-track {
+  background: #09275d;
+  border-radius: 20px;
+}
+
+.time-line::-webkit-scrollbar-track-piece {
+  background: #09275d;
+  border-radius: 20px;
+}
+
+.time-line::-webkit-scrollbar-thumb {
+  background: #10419d;
+  border-radius: 50px;
+}
+
+.time-line::-webkit-scrollbar-corner {
+  background: #fff;
+}
+
+.time-line::-webkit-scrollbar-resizer {
+  background: #fff;
+}
+
+.time-line-div {
+  display: inline-block;
+  position: relative;
+  // float: left;
+  width: 15%;
+  font-size: 0;
+  height: 100%;
+}
+
+.content_detail {
+  height: 60%;
+  position: absolute;
+  bottom: 80px;
+
+  font-size: 11px;
+  font-family: PingFang SC;
+  font-weight: 400;
+  color: rgba(254, 254, 254, 1);
+  width: 100%;
+  left: 50%;
+  margin-left: -50%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.time-line-div > div:nth-child(2) {
+  position: absolute;
+  bottom: 60px;
+  height: 17px;
+  line-height: 17px;
+  z-index: 2;
+  width: 100%;
+  left: 50%;
+  margin-left: -50%;
+}
+
+.circle {
+  width: 6px;
+  height: 6px;
+  margin: 5px auto 0;
+  background: rgba(165, 168, 172, 1);
+  border-radius: 50%;
+}
+
+.time-line-div > div:nth-child(3) {
+  position: absolute;
+  bottom: 20px;
+  padding: 20px 0px 10px 0px;
+  font-size: 0.8rem;
+  color: #fff;
+  width: 100%;
+  left: 50%;
+  margin-left: -50%;
+}
+
+.back_item_titel {
+  font-size: 11px;
+  font-family: PingFang SC;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 12px;
+  background: rgba(224, 106, 72, 1);
+  padding: 0.25rem 0.5rem;
+  text-align: left;
+
+  p {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.back_item_content {
+  width: 100%;
+  max-height: 80%;
+  line-height: 17px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  ul {
+    height: 95%;
+    overflow-y: scroll;
+  }
+
+  ul::-webkit-scrollbar {
+    display: none;
+  }
+
+  li {
+    text-align: left;
+  }
+}
+
+.img-dotted {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: 68.5px;
+  left: 0;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.time-line-detail > p {
+  margin-left: 30px;
+  margin-bottom: 10px;
+}
+
+// 信息预测分析
+.select_event {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  div {
+    width: 100%;
+    ul {
+      width: 80%;
+      display: flex;
+      justify-content: flex-start;
+      margin: 0 auto;
+
+      li {
+        width: 25%;
+        display: flex;
+        align-items: center;
+        font-size: 0.875rem;
+
+        .colorset {
+          width: 0.875rem;
+          height: 0.875rem;
+
+          margin-right: 0.3125rem;
+        }
+      }
+    }
+  }
+}
+
+.title {
+  font-size: 1rem !important;
+  margin: 0.625rem 0;
+}
+
+.goleft {
+  display: flex;
+  justify-content: flex-end;
+}
