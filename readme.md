@@ -22,7 +22,7 @@
 
 # old version social radar
 
-in file 'social-radar(version 0.1)' run command:``npm run dev``
+in file **social-radar(version 0.1)** run command:``npm run dev``
 
 效果图：
 
