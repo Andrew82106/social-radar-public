@@ -3,7 +3,7 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="/social-radar/backend/database/example_data/巴以冲突B站视频500条详细评论清洗版.csv">
+        <entry key="/backend/database/example_data/巴以冲突B站视频500条详细评论清洗版.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

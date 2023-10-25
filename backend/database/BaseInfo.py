@@ -1,4 +1,5 @@
 import datetime
+import json
 
 
 class BaseInfo:
@@ -10,12 +11,17 @@ class BaseInfo:
         self.platform = ""
         self.ID_Index = "ID"
         self.platform_index = "platform"
+        self.ID_UserName = 'username'
+        self.ID_Time = 'time'
+        self.ID_Like = 'like'
+        self.ID_Comment = 'comment'
 
     def load_data(self):
         pass
 
     def fetch(self):
-        self.load_data()
+        if self.data is None:
+            self.load_data()
         self.info['platform'] = self.platform
         self.info['data'] = self.data
         return self.info
@@ -28,3 +34,6 @@ class BaseInfo:
             if str(i[self.ID_Index]) == str(ID):
                 dataLst.append(i)
         return json.dumps(dataLst)
+
+    def fetch_associate_event_with_ID(self, ID):
+        raise Exception("该函数未重写，无法在此处调用")
