@@ -7,14 +7,9 @@ class BilibiliComment(BaseInfo):
     def __init__(self):
         super(BilibiliComment, self).__init__()
         self.platform = 'bilibili'
-        self.ID_UserName = 'username'
-        self.ID_Time = 'time'
-        self.ID_Like = 'like'
-        self.ID_Comment = 'comment'
 
     def load_data(self, Location=None, ID_Index=1, length=-1):
         """
-
         :param Location: 输入csv或者excel的位置，如果输入api则启用sql
         :param ID_Index: 和读取数据相关的事件的ID
         :param length: 读取的数据的条数
@@ -63,6 +58,13 @@ class BilibiliComment(BaseInfo):
         else:
             print("loading data from remote database")
 
+    def fetch_associate_event_with_ID(self, ID):
+        res = []
+        for i in self.data:
+            if i[self.ID_Index] == ID:
+                res.append(i)
+        return res
+
 
 if __name__ == '__main__':
     a = BilibiliComment()
@@ -71,4 +73,5 @@ if __name__ == '__main__':
         length=10
     )
     print(len(a.fetch()))
+
     print("end")
