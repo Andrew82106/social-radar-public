@@ -1,6 +1,6 @@
 # 工作总览
 
-![img.png](src/img.png)
+![img.png](asset/img.png)
 
 # 工作进度表
 
@@ -26,4 +26,4 @@ in file **social-radar(version 0.1)** run command:``npm run dev``
 
 效果图：
 
-![img.png](src/img1.png)
+![img.png](asset/img1.png)
