@@ -1,8 +1,10 @@
 # --coding:utf-8--
-import sys
-sys.path.append('/Users/andrewlee/Desktop/Projects/2023大创/social-radar/backend')
-sys.path.append('/Users/andrewlee/Desktop/Projects/2023大创/social-radar/backend/CrawlMaster')
-sys.path.append('/Users/andrewlee/Desktop/Projects/2023大创/social-radar/backend/database')
+import sys, os
+current_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(current_path, '../'))
+sys.path.append(os.path.join(current_path, '../CrawlMaster'))
+sys.path.append(os.path.join(current_path, '../database'))
+
 from database.BaseInfo import BaseInfo
 from database.BilibiliUserInfo import BilibiliUserInfo
 from database.BilibiliComment import BilibiliComment
@@ -10,12 +12,15 @@ from database.ZhihuComment import ZhihuComment
 from database.WangYiNews import WangYiNews
 from database.EventQuota import EventQuota
 from database.UserQuota import UserQuota
+
 import json
 from flask import Flask, request
+from flask_cors import CORS
 import datetime
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "ABCDFWA"
 
+app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000"])
+app.config["SECRET_KEY"] = "ABCDFWA"
 
 commentList = [
     BilibiliComment(),
