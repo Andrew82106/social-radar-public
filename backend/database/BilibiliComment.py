@@ -1,4 +1,4 @@
-from BaseInfo import BaseInfo
+from database.BaseInfo import BaseInfo
 import pandas as pd
 import tqdm
 

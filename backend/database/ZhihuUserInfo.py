@@ -1,10 +1,10 @@
 from database.BaseInfo import BaseInfo
 
 
-class BilibiliUserInfo(BaseInfo):
+class ZhihuUserInfo(BaseInfo):
     def __init__(self):
-        super(BilibiliUserInfo, self).__init__()
-        self.platform = 'bilibili'
+        super(ZhihuUserInfo, self).__init__()
+        self.platform = 'zhihu'
 
     def load_data(self):
         self.data = [
