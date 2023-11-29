@@ -1,51 +1,25 @@
 # --coding:utf-8--
-import sys, os
-current_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(current_path, '../'))
-sys.path.append(os.path.join(current_path, '../CrawlMaster'))
-sys.path.append(os.path.join(current_path, '../database'))
+import os
+import sys
 
-from database.BaseInfo import BaseInfo
-from database.BilibiliUserInfo import BilibiliUserInfo
-from database.BilibiliComment import BilibiliComment
-from database.ZhihuComment import ZhihuComment
-from database.WangYiNews import WangYiNews
+current_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.dirname(current_path))
+sys.path.append(os.path.join(os.path.dirname(current_path), '/CrawlMaster'))
+sys.path.append(os.path.join(os.path.dirname(current_path), '/database'))
+
 from database.EventQuota import EventQuota
 from database.UserQuota import UserQuota
-
-import json
+from database.globalConfig import SupportedPlatform, commentList, newsList, userList
+from database.EventList import EventLst
 from flask import Flask, request
 from flask_cors import CORS
-import datetime
+
+EventList = EventLst()
+
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
 app.config["SECRET_KEY"] = "ABCDFWA"
-
-commentList = [
-    BilibiliComment(),
-    ZhihuComment()
-]
-
-newsList = [
-    WangYiNews()
-]
-
-userList = [
-    BilibiliUserInfo()
-]
-
-
-class SupportedPlatform(BaseInfo):
-    def __init__(self):
-        super(SupportedPlatform, self).__init__()
-
-    def load_data(self):
-        self.data = {
-            "评论类平台": [i.platform for i in commentList],
-            "新闻类平台": [i.platform for i in newsList],
-            "用户信息平台": [i.platform for i in userList]
-        }
 
 
 @app.route('/fetchcomment/<platform>')
@@ -76,6 +50,11 @@ def fetchUser(platform):
 def supportedPlatform():
     a = SupportedPlatform()
     return a.fetch()
+
+
+@app.route('/eventList')
+def supportedEventList():
+    return EventList.fetch()
 
 
 @app.route('/fetchdetailcomment/')
@@ -137,5 +116,18 @@ def fetchUserQuota():
         return res
 
 
+@app.route('/addEvent/<wordlist>')
+def addEvent(wordlist):
+    Lst = str(wordlist).split("-")
+    EventList.addEvent(Lst)
+    return EventList.fetch()
+
+
+@app.route('/delEvent/<eventid>')
+def delEvent(eventid):
+    EventList.delEvent(eventid)
+    return EventList.fetch()
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
