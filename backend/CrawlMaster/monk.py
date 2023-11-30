@@ -13,12 +13,16 @@ try:
     from database.globalConfig import SupportedPlatform, commentList, newsList, userList
     from database.EventList import EventLst
     from database.Search import Search
+    from database.ServerStatus import ServerStatus
+    from database.SummaryData import SummaryData
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
     from ..database.globalConfig import SupportedPlatform, commentList, newsList, userList
     from ..database.EventList import EventLst
     from ..database.Search import Search
+    from ..database.ServerStatus import ServerStatus
+    from ..database.SummaryData import SummaryData
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -148,6 +152,18 @@ def searchUser(keyword):
 def searchContent(keyword):
     a = Search()
     return a.SearchContent(keyword)
+
+
+@app.route('/serverstatus/')
+def ServerState():
+    a = ServerStatus()
+    return a.fetch()
+
+
+@app.route('/dataoverview/')
+def dataOverview():
+    a = SummaryData()
+    return a.fetch()
 
 
 if __name__ == '__main__':

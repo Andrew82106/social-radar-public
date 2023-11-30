@@ -4,8 +4,6 @@ try:
 except:
     from BaseInfo import BaseInfo
     from loadFromDB import DB_Data
-import pandas as pd
-import tqdm
 
 
 class BilibiliComment(BaseInfo, DB_Data):
