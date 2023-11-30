@@ -1,48 +1,18 @@
-from datetime import datetime, timedelta
-from database.BaseInfo import BaseInfo
-
-EventList = {
-    'maximum ID': 5,
-    'finished': {1: ["华为Mate60", 'mate60', '雷蒙多'],
-                 2: ["巴以冲突", '巴以'],
-                 3: ['俄乌冲突', '俄乌']},
-    'processing': {
-        4:
-            {
-                'keyword': ['流感', '甲流'],
-                'start time': (datetime.now() - timedelta(hours=3)).strftime("%Y %D %H:%M:%S"),
-                'schedule': 0.55
-            },
-        5:
-            {
-                'keyword': ['旧金山访问', '亚太会议'],
-                'start time': (datetime.now() - timedelta(hours=6)).strftime("%Y %D %H:%M:%S"),
-                'schedule': 0.55
-            }
-    },
-    'trash': []
-}
-
-"""
-EventList存放所有的事件信息
-
-maximum ID存放当前使用到的事件数
-
-finished 存放已经爬取好的事件
-
-processing 存放正在处理的事件
-
-trash 存放已经丢弃的事件
-"""
+from datetime import datetime
+try:
+    from database.BaseInfo import BaseInfo
+    from database.loadFromDB import DB_Data
+except:
+    from BaseInfo import BaseInfo
+    from loadFromDB import DB_Data
 
 
-class EventLst(BaseInfo):
+class EventLst(BaseInfo, DB_Data):
     def __init__(self):
         super(EventLst, self).__init__()
 
     def load_data(self):
-        self.data = EventList
-        self.maxID = self.data['maximum ID']
+        self.readEventList()
 
     def getEventID(self, description):
         for i in self.data['finished']:

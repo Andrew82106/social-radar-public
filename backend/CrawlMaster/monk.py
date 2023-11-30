@@ -7,10 +7,19 @@ sys.path.append(os.path.dirname(current_path))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/CrawlMaster'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/database'))
 
-from database.EventQuota import EventQuota
-from database.UserQuota import UserQuota
-from database.globalConfig import SupportedPlatform, commentList, newsList, userList
-from database.EventList import EventLst
+try:
+    from database.EventQuota import EventQuota
+    from database.UserQuota import UserQuota
+    from database.globalConfig import SupportedPlatform, commentList, newsList, userList
+    from database.EventList import EventLst
+    from database.Search import Search
+except:
+    from ..database.EventQuota import EventQuota
+    from ..database.UserQuota import UserQuota
+    from ..database.globalConfig import SupportedPlatform, commentList, newsList, userList
+    from ..database.EventList import EventLst
+    from ..database.Search import Search
+
 from flask import Flask, request
 from flask_cors import CORS
 
@@ -98,9 +107,9 @@ def fetchEventQuota():
     print(eventid, platform)
     res = eventQuota.fetch_detail(eventid, platform)
     if res is None:
-        return f"NO such event {eventid} in {platform}"
+        return eventQuota.packetFormat(f"NO such event {eventid} in {platform}")
     else:
-        return res
+        return eventQuota.packetFormat(res)
 
 
 @app.route('/fetchuserquota/')
@@ -111,9 +120,9 @@ def fetchUserQuota():
     print(eventid, platform)
     res = userQuota.fetch_detail(eventid, platform)
     if res is None:
-        return f"NO such user {eventid} in {platform}"
+        return userQuota.packetFormat(f"NO such event {eventid} in {platform}")
     else:
-        return res
+        return userQuota.packetFormat(res)
 
 
 @app.route('/addEvent/<wordlist>')
@@ -127,6 +136,18 @@ def addEvent(wordlist):
 def delEvent(eventid):
     EventList.delEvent(eventid)
     return EventList.fetch()
+
+
+@app.route('/searchuser/<keyword>')
+def searchUser(keyword):
+    a = Search()
+    return a.SearchUserName(keyword)
+
+
+@app.route('/searchcontent/<keyword>')
+def searchContent(keyword):
+    a = Search()
+    return a.SearchContent(keyword)
 
 
 if __name__ == '__main__':
