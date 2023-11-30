@@ -1,5 +1,6 @@
 import tqdm
-from database import BilibiliComment, EventList
+from database import BilibiliComment
+from database.EventList import EventLst
 from database.BaseInfo import BaseInfo
 from datetime import datetime
 from collections import Counter
@@ -62,6 +63,7 @@ class TimeQuota(BaseInfo):
         :param databaseLoc:
         :return:
         """
+        EventList = EventLst()
         Lst = EventList.getEventIDList()
         for i in Lst:
             self.updateQuota(databaseLoc, i)

@@ -1,4 +1,7 @@
-from BaseInfo import BaseInfo
+try:
+    from database.BaseInfo import BaseInfo
+except:
+    from BaseInfo import BaseInfo
 
 
 class EventQuota(BaseInfo):
@@ -47,6 +50,7 @@ class EventQuota(BaseInfo):
         # 这里的ID_Index和platform_index分别指事件ID和平台名称
         # 每一个事件暂定有6个指标，分别表示：
         # 时间敏感度指标、内容敏感度指标、用户真实度指标、情感激烈性指标、观点对立性指标和热度持续性指标
+        # 每一个事件在所有的支持平台都有指标
 
     def fetch_detail(self, ID, ID2=None):
         if self.data is None:

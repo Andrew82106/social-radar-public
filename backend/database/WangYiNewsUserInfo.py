@@ -6,10 +6,10 @@ except:
     from loadFromDB import DB_Data
 
 
-class ZhihuComment(BaseInfo, DB_Data):
+class WangYiNewsUserInfo(BaseInfo, DB_Data):
     def __init__(self):
-        super(ZhihuComment, self).__init__()
-        self.platform = 'zhihu'
+        super(WangYiNewsUserInfo, self).__init__()
+        self.platform = 'wangyi'
 
     def load_data(self):
-        self.readZhihuComment()
+        self.readWangyiUserInfo()
