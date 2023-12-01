@@ -11,7 +11,6 @@ export default function Page() {
 
   return (
     <main>
-
       <p>{JSON.stringify(data, null, 2)}</p>
     </main>
   )
