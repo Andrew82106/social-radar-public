@@ -6,6 +6,7 @@ current_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.dirname(current_path))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/CrawlMaster'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/database'))
+sys.path.append(os.path.join(os.path.dirname(current_path), '/SparkModel_V30'))
 
 try:
     from database.EventQuota import EventQuota
@@ -15,6 +16,7 @@ try:
     from database.Search import Search
     from database.ServerStatus import ServerStatus
     from database.SummaryData import SummaryData
+    from SparkModel_V30.SparkApi import SparkChatModel
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
@@ -23,6 +25,7 @@ except:
     from ..database.Search import Search
     from ..database.ServerStatus import ServerStatus
     from ..database.SummaryData import SummaryData
+    from ..SparkModel_V30.SparkApi import SparkChatModel
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -163,6 +166,13 @@ def ServerState():
 @app.route('/dataoverview/')
 def dataOverview():
     a = SummaryData()
+    return a.fetch()
+
+
+@app.route('/llmsummarytext/<TEXT>')
+def llmSummary(TEXT):
+    a = SparkChatModel()
+    a.chat(TEXT)
     return a.fetch()
 
 

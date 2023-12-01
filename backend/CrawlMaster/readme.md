@@ -23,6 +23,7 @@
 - 全文搜索事件内容
 - 服务器性能统计
 - 总体数据量统计
+- 使用星火大模型API接口进行文本总结
 
 对应的接口：
 
@@ -42,6 +43,7 @@
 - http://127.0.0.1:5000/searchcontent/[keyword]
 - http://127.0.0.1:5000/serverstatus
 - http://127.0.0.1:5000/dataoverview
+- http://127.0.0.1:5000/llmsummarytext/[TEXT]
 
 比如：
 
@@ -60,5 +62,6 @@
 - http://127.0.0.1:5000/searchcontent/人
 - http://127.0.0.1:5000/serverstatus
 - http://127.0.0.1:5000/dataoverview
+- http://127.0.0.1:5000/llmsummarytext/OpenAI 创始人 Sam Altman 当地时间 11 月 29 日宣布，他将重返 OpenAI 担任首席执行官，Mira Murati 将继续担任首席技术官。
 
 接口返回的数据格式运行monk.py进行查看。
