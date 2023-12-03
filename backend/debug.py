@@ -10,4 +10,5 @@ x.update_all_quota(
     databaseLoc="/Users/andrewlee/Desktop/Projects/2023大创/social-radar/backend/database/example_data/巴以冲突B站视频500条详细评论清洗版.csv",
 )
 print(x.q)
+print(x.getDateList('bilibili', 1))
 print("end")

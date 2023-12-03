@@ -27,11 +27,15 @@ class BaseConfig:
         self.CommentInfo_time = 'time'
         self.CommentInfo_type = "type"
         self.CommentInfo_content = "comment"
+        self.CommentInfo_IDIndex = "IDIndex"
+        self.CommentInfo_platform = "platform"
 
         self.NewsInfo_location = 'location'
         self.NewsInfo_source = 'source'
         self.NewsInfo_read = "read"
         self.NewsInfo_content = "content"
+        self.NewsInfo_IDIndex = "IDIndex"
+        self.NewsInfo_platform = "platform"
         """
         这里规定从数据库读进来的数据的键的内容
         """
@@ -40,12 +44,17 @@ class BaseConfig:
         self.projectRoute = os.path.dirname(os.path.realpath(__file__))
         while not self.projectRoute.endswith(self.projectName):
             self.projectRoute = os.path.dirname(self.projectRoute)
-        self.ExampleDataRoute = os.path.join(self.projectRoute, "backend/database/example_data/巴以冲突B站视频500条详细评论清洗版.csv")
-
+        self.AllDataRoute = os.path.join(self.projectRoute,
+                                         "backend/database/example_data/allNews.xlsx")
+        self.ExampleDataRoute = os.path.join(self.projectRoute,
+                                             "backend/database/example_data/巴以冲突B站视频500条详细评论清洗版.csv")
+        self.ExampleDataRoute_Ali = os.path.join(self.projectRoute,
+                                                 "backend/database/example_data/阿里车祸.xlsx")
 
 
 if __name__ == '__main__':
     x = BaseConfig()
+    print(x.projectRoute)
     print(os.path.dirname(x.projectRoute))
     print(str(x.projectRoute).endswith('/database'))
     print(x.ExampleDataRoute)

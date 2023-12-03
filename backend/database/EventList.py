@@ -24,7 +24,9 @@ class EventLst(BaseInfo, DB_Data):
         return self.data['finished'][EventID]
 
     def getEventIDList(self):
-        res = [i for i in range(1, self.EventList['maximum ID'] + 1, 1)]
+        if self.data is None:
+            self.load_data()
+        res = [i for i in range(1, self.data['maximum ID'] + 1, 1)]
         return res
 
     def addEvent(self, wordlist):

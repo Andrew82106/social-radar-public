@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(current_path))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/CrawlMaster'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/database'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/SparkModel_V30'))
-
+import json
 try:
     from database.EventQuota import EventQuota
     from database.UserQuota import UserQuota
@@ -17,6 +17,8 @@ try:
     from database.ServerStatus import ServerStatus
     from database.SummaryData import SummaryData
     from SparkModel_V30.SparkApi import SparkChatModel
+    from QuotaCalculate.timeQuota import TimeQuota
+    from Utils.NpEncoder import NpEncoder
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
@@ -26,6 +28,8 @@ except:
     from ..database.ServerStatus import ServerStatus
     from ..database.SummaryData import SummaryData
     from ..SparkModel_V30.SparkApi import SparkChatModel
+    from ..QuotaCalculate.timeQuota import TimeQuota
+    from Utils.NpEncoder import NpEncoder
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -154,7 +158,9 @@ def searchUser(keyword):
 @app.route('/searchcontent/<keyword>')
 def searchContent(keyword):
     a = Search()
-    return a.SearchContent(keyword)
+    res = a.SearchContent(keyword)
+    res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
+    return res
 
 
 @app.route('/serverstatus/')
@@ -173,6 +179,13 @@ def dataOverview():
 def llmSummary(TEXT):
     a = SparkChatModel()
     a.chat(TEXT)
+    return a.fetch()
+
+
+@app.route('/timequota/gettimeseq/<eventid>')
+def getTimeSeq(eventid):
+    a = TimeQuota()
+    a.getDateListofAllPlatform(int(eventid))
     return a.fetch()
 
 

@@ -36,4 +36,8 @@ class BaseInfo(BaseConfig):
         return self.packetFormat(json.dumps(dataLst))
 
     def fetch_associate_event_with_ID(self, ID):
-        raise Exception("该函数未重写，无法在此处调用")
+        res = []
+        for i in self.data:
+            if i[self.ID_Index] == ID:
+                res.append(i)
+        return res
