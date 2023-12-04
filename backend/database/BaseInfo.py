@@ -1,8 +1,12 @@
 import json
+import datetime
+
 try:
     from database.BaseConfig import BaseConfig
+    from Utils.NpEncoder import NpEncoder
 except:
     from BaseConfig import BaseConfig
+    from Utils.NpEncoder import NpEncoder
 
 
 class BaseInfo(BaseConfig):
@@ -32,8 +36,17 @@ class BaseInfo(BaseConfig):
         dataLst = []
         for i in self.data:
             if str(i[self.ID_Index]) == str(ID):
+                for j in i:
+                    if isinstance(i[j], datetime.time):
+                        i[j] = str(i[j])
                 dataLst.append(i)
-        return self.packetFormat(json.dumps(dataLst))
+
+        # json_ = json.dumps(dataLst)
+        return self.packetFormat(dataLst)
 
     def fetch_associate_event_with_ID(self, ID):
-        raise Exception("该函数未重写，无法在此处调用")
+        res = []
+        for i in self.data:
+            if i[self.ID_Index] == ID:
+                res.append(i)
+        return res

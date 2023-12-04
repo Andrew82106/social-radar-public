@@ -6,7 +6,8 @@ current_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.dirname(current_path))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/CrawlMaster'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/database'))
-
+sys.path.append(os.path.join(os.path.dirname(current_path), '/SparkModel_V30'))
+import json
 try:
     from database.EventQuota import EventQuota
     from database.UserQuota import UserQuota
@@ -15,6 +16,9 @@ try:
     from database.Search import Search
     from database.ServerStatus import ServerStatus
     from database.SummaryData import SummaryData
+    from SparkModel_V30.SparkApi import SparkChatModel
+    from QuotaCalculate.timeQuota import TimeQuota
+    from Utils.NpEncoder import NpEncoder
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
@@ -23,6 +27,9 @@ except:
     from ..database.Search import Search
     from ..database.ServerStatus import ServerStatus
     from ..database.SummaryData import SummaryData
+    from ..SparkModel_V30.SparkApi import SparkChatModel
+    from ..QuotaCalculate.timeQuota import TimeQuota
+    from Utils.NpEncoder import NpEncoder
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -77,7 +84,11 @@ def fetchDetailComment():
     print(eventid, platform)
     for identity in commentList:
         if identity.platform == platform:
-            return identity.fetch_detail(eventid)
+            res = identity.fetch_detail(eventid)
+            # print(res)
+            # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
+            return res
+
     return f"NO such platform called {platform}"
 
 
@@ -88,7 +99,9 @@ def fetchDetailNews():
     print(eventid, platform)
     for identity in newsList:
         if identity.platform == platform:
-            return identity.fetch_detail(eventid)
+            res = identity.fetch_detail(eventid)
+            # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
+            return res
     return f"NO such platform called {platform}"
 
 
@@ -99,7 +112,9 @@ def fetchDetailUser():
     print(eventid, platform)
     for identity in userList:
         if identity.platform == platform:
-            return identity.fetch_detail(eventid)
+            res = identity.fetch_detail(eventid)
+            # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
+            return res
     return f"NO such platform called {platform}"
 
 
@@ -151,7 +166,10 @@ def searchUser(keyword):
 @app.route('/searchcontent/<keyword>')
 def searchContent(keyword):
     a = Search()
-    return a.SearchContent(keyword)
+    res = a.SearchContent(keyword)
+    print(res)
+    # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
+    return res
 
 
 @app.route('/serverstatus/')
@@ -163,6 +181,20 @@ def ServerState():
 @app.route('/dataoverview/')
 def dataOverview():
     a = SummaryData()
+    return a.fetch()
+
+
+@app.route('/llmsummarytext/<TEXT>')
+def llmSummary(TEXT):
+    a = SparkChatModel()
+    a.chat(TEXT)
+    return a.fetch()
+
+
+@app.route('/timequota/gettimeseq/<eventid>')
+def getTimeSeq(eventid):
+    a = TimeQuota()
+    a.getDateListofAllPlatform(int(eventid))
     return a.fetch()
 
 

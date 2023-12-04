@@ -1,7 +1,12 @@
 import tqdm
-from database import BilibiliComment
-from database.EventList import EventLst
-from database.BaseInfo import BaseInfo
+try:
+    from database import BilibiliComment, WangYiNews, ZhihuComment
+    from database.EventList import EventLst
+    from database.BaseInfo import BaseInfo
+except:
+    from ..database import BilibiliComment, WangYiNews, ZhihuComment
+    from ..database.EventList import EventLst
+    from ..database.BaseInfo import BaseInfo
 from datetime import datetime
 from collections import Counter
 import numpy as np
@@ -12,21 +17,38 @@ class TimeQuota(BaseInfo):
     def __init__(self):
         super(TimeQuota, self).__init__()
         self.q = {}
+        self.platformLst = [BilibiliComment.BilibiliComment(), ZhihuComment.ZhihuComment(), WangYiNews.WangYiNews()]
+        for p in self.platformLst:
+            p.load_data()
 
-    @staticmethod
-    def updateLatestData(databaseLoc, eventID):
+    def updateLatestData(self, eventID, databaseLoc=None):
         """
+        批量从csv中或其他渠道读取数据
         :param databaseLoc: 输入csv或者excel的位置，如果输入api则启用sql
         :param eventID: 和读取数据相关的事件的ID
-        :return:
+        :return AimData: 读取到的每个平台的和当前eventID匹配的数据
         """
-        EventLst = [eventID]
-        bilibili = BilibiliComment.BilibiliComment()
-        bilibili.load_data(Location=databaseLoc)
-        AimData = []
-        for i in EventLst:
-            AimData += bilibili.fetch_associate_event_with_ID(i)
+        AimData = {}
+        for p in self.platformLst:
+            if databaseLoc is not None:
+                p.load_data(databaseLoc)
+            AimData[p.platform] = p.fetch_associate_event_with_ID(eventID)
         return AimData
+
+    def getDateList(self, platformName: str, eventID):
+        DateList = []
+        for instance in self.platformLst:
+            if instance.platform != platformName:
+                continue
+            for ii in instance.fetch_associate_event_with_ID(eventID):
+                DateList.append(ii[self.ID_Time])
+        return DateList
+
+    def getDateListofAllPlatform(self, eventID):
+        DateList = {}
+        for instance in self.platformLst:
+            DateList[instance.platform] = self.getDateList(instance.platform, eventID)
+        self.data = DateList
 
     def updateQuota(self, databaseLoc, eventID):
         """
@@ -35,14 +57,25 @@ class TimeQuota(BaseInfo):
         :param eventID: 和读取数据相关的事件的ID
         :return:
         """
-        DataLst = self.updateLatestData(databaseLoc, eventID)
+        DataLst_ = self.updateLatestData(databaseLoc, eventID)
+        DataLst = []
+        for instance in DataLst_:
+            for i in DataLst_[instance]:
+                DataLst.append(i)
+        # 有可能DataLst是空的
+        if len(DataLst) == 0:
+            self.q[eventID] = 0
+            print("debug--time quota of event {}: proximity:0, concentration:0".format(eventID))
+            return
         dateList = []
         for ii in DataLst:
             dateList.append(ii[self.ID_Time])
 
-        date_objects = [
-            datetime.strptime(date, '%Y-%m-%d %H:%M') if len(date) > 10 else datetime.strptime(date, '%Y-%m-%d') for
-            date in dateList]
+        date_objects = []
+        for date in dateList:
+            # print(date)
+            date_objects.append(datetime.strptime(date, '%Y-%m-%d %H:%M') if (
+                        10 < len(date) <= 16) else (datetime.strptime(date, '%Y-%m-%d') if 10 >= len(date) else datetime.strptime(date, '%Y-%m-%d %H:%M:%S')))
 
         # 计算与当前日期的接近度
         current_date = datetime.now()

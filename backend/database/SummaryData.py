@@ -33,6 +33,12 @@ class SummaryData(BaseInfo):
             platform = Data['platform']
             self.data['评论信息'][platform] = len(data)
 
+    def fetch(self):
+        self.load_data()
+        self.info['platform'] = self.platform
+        self.info['data'] = self.data
+        return self.info
+
 
 if __name__ == '__main__':
     x = SummaryData()
