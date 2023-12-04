@@ -84,7 +84,11 @@ def fetchDetailComment():
     print(eventid, platform)
     for identity in commentList:
         if identity.platform == platform:
-            return identity.fetch_detail(eventid)
+            res = identity.fetch_detail(eventid)
+            # print(res)
+            # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
+            return res
+
     return f"NO such platform called {platform}"
 
 
@@ -95,7 +99,9 @@ def fetchDetailNews():
     print(eventid, platform)
     for identity in newsList:
         if identity.platform == platform:
-            return identity.fetch_detail(eventid)
+            res = identity.fetch_detail(eventid)
+            # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
+            return res
     return f"NO such platform called {platform}"
 
 
@@ -106,7 +112,9 @@ def fetchDetailUser():
     print(eventid, platform)
     for identity in userList:
         if identity.platform == platform:
-            return identity.fetch_detail(eventid)
+            res = identity.fetch_detail(eventid)
+            # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
+            return res
     return f"NO such platform called {platform}"
 
 
@@ -159,7 +167,8 @@ def searchUser(keyword):
 def searchContent(keyword):
     a = Search()
     res = a.SearchContent(keyword)
-    res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
+    print(res)
+    # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
     return res
 
 

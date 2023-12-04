@@ -59,5 +59,5 @@ class Search(BaseInfo, DB_Data):
                 if keyWord in userInfo[self.NewsInfo_content]:
                     newsRes[instance.platform].append(userInfo)
 
-        self.data = {'comment': commentRes, 'news': newsRes}
+        self.data = {"comment": commentRes, "news": newsRes}
         return self.fetch()

@@ -33,7 +33,7 @@ class BaseConfig:
         self.NewsInfo_location = 'location'
         self.NewsInfo_source = 'source'
         self.NewsInfo_read = "read"
-        self.NewsInfo_content = "content"
+        self.NewsInfo_content = "comment"
         self.NewsInfo_IDIndex = "IDIndex"
         self.NewsInfo_platform = "platform"
         """

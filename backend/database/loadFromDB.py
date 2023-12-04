@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 EventList = {
     'maximum ID': 5,
-    'finished': {1: ["华为Mate60", 'mate60', '雷蒙多'],
+    'finished': {1: ["巴以", "加沙"],
                  2: ["阿里", '车祸', '血槽姐']},
     'processing': {
         4:
@@ -93,11 +93,11 @@ class DB_Data(BaseConfig):
                 # print(dfi.columns)
                 self.data.append({
                     self.CommentInfo_UserName: dfi[self.CommentInfo_UserName].iloc[0],
-                    self.CommentInfo_time: dfi[self.CommentInfo_time].iloc[0],
-                    self.CommentInfo_like: dfi[self.CommentInfo_like].iloc[0],
+                    self.CommentInfo_time: str(dfi[self.CommentInfo_time].iloc[0]),
+                    self.CommentInfo_like: int(dfi[self.CommentInfo_like].iloc[0]),
                     self.CommentInfo_content: dfi[self.CommentInfo_content].iloc[0],
                     self.CommentInfo_type: 'response',
-                    self.ID_Index: dfi[self.CommentInfo_IDIndex].iloc[0]
+                    self.ID_Index: int(dfi[self.CommentInfo_IDIndex].iloc[0])
                 })
                 cnt += 1
                 if cnt > length and (length != -1):
@@ -147,11 +147,11 @@ class DB_Data(BaseConfig):
                     continue
                 self.data.append({
                     self.CommentInfo_UserName: dfi[self.CommentInfo_UserName].iloc[0],
-                    self.CommentInfo_time: dfi[self.CommentInfo_time].iloc[0],
-                    self.CommentInfo_like: dfi[self.CommentInfo_like].iloc[0],
+                    self.CommentInfo_time: str(dfi[self.CommentInfo_time].iloc[0]),
+                    self.CommentInfo_like: int(dfi[self.CommentInfo_like].iloc[0]),
                     self.CommentInfo_content: dfi[self.CommentInfo_content].iloc[0],
                     self.CommentInfo_type: 'response',
-                    self.ID_Index: dfi[self.CommentInfo_IDIndex].iloc[0]
+                    self.ID_Index: int(dfi[self.CommentInfo_IDIndex].iloc[0])
                 })
                 cnt += 1
                 if cnt > length and (length != -1):
@@ -206,11 +206,11 @@ class DB_Data(BaseConfig):
                     continue
                 self.data.append({
                     self.CommentInfo_UserName: dfi[self.CommentInfo_UserName].iloc[0],
-                    self.CommentInfo_time: dfi[self.CommentInfo_time].iloc[0],
-                    self.CommentInfo_like: dfi[self.CommentInfo_like].iloc[0],
+                    self.CommentInfo_time: str(dfi[self.CommentInfo_time].iloc[0]),
+                    self.CommentInfo_like: int(dfi[self.CommentInfo_like].iloc[0]),
                     self.CommentInfo_content: dfi[self.CommentInfo_content].iloc[0],
                     self.CommentInfo_type: 'response',
-                    self.ID_Index: dfi[self.CommentInfo_IDIndex].iloc[0]
+                    self.ID_Index: int(dfi[self.CommentInfo_IDIndex].iloc[0])
                 })
                 cnt += 1
                 if cnt > length and (length != -1):
@@ -234,4 +234,4 @@ class DB_Data(BaseConfig):
 
     def readEventList(self):
         self.data = EventList
-        self.maxID = self.data['maximum ID']
+        self.maxID = int(self.data['maximum ID'])
