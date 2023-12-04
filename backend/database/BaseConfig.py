@@ -30,10 +30,12 @@ class BaseConfig:
         self.CommentInfo_IDIndex = "IDIndex"
         self.CommentInfo_platform = "platform"
 
-        self.NewsInfo_location = 'location'
+        self.NewsInfo_location = 'Location'
         self.NewsInfo_source = 'source'
         self.NewsInfo_read = "read"
-        self.NewsInfo_content = "comment"
+        self.NewsInfo_Title = "Title"
+        self.NewsInfo_Time = "time"
+        self.NewsInfo_content = "Content"
         self.NewsInfo_IDIndex = "IDIndex"
         self.NewsInfo_platform = "platform"
         """
@@ -50,6 +52,15 @@ class BaseConfig:
                                              "backend/database/example_data/巴以冲突B站视频500条详细评论清洗版.csv")
         self.ExampleDataRoute_Ali = os.path.join(self.projectRoute,
                                                  "backend/database/example_data/阿里车祸.xlsx")
+        self.baYiNewsWangyi = os.path.join(self.projectRoute,
+                                           "backend/database/example_data/巴以网易.csv")
+
+        self.newsTableRoute = [
+            self.baYiNewsWangyi,
+        ]
+        self.CommentTableRoute = [
+            self.AllDataRoute,
+        ]
 
 
 if __name__ == '__main__':
