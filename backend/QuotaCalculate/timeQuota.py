@@ -3,10 +3,12 @@ try:
     from database import BilibiliComment, WangYiNews, ZhihuComment
     from database.EventList import EventLst
     from database.BaseInfo import BaseInfo
+    from database.globalConfig import Ins_WangYiNews, Ins_ZhihuComment, Ins_BilibiliComment
 except:
     from ..database import BilibiliComment, WangYiNews, ZhihuComment
     from ..database.EventList import EventLst
     from ..database.BaseInfo import BaseInfo
+    from ..database.globalConfig import Ins_WangYiNews, Ins_ZhihuComment, Ins_BilibiliComment
 from datetime import datetime
 from collections import Counter
 import numpy as np
@@ -17,7 +19,7 @@ class TimeQuota(BaseInfo):
     def __init__(self):
         super(TimeQuota, self).__init__()
         self.q = {}
-        self.platformLst = [BilibiliComment.BilibiliComment(), ZhihuComment.ZhihuComment(), WangYiNews.WangYiNews()]
+        self.platformLst = [Ins_BilibiliComment, Ins_ZhihuComment, Ins_WangYiNews]
         for p in self.platformLst:
             p.load_data()
 
@@ -35,19 +37,25 @@ class TimeQuota(BaseInfo):
             AimData[p.platform] = p.fetch_associate_event_with_ID(eventID)
         return AimData
 
-    def getDateList(self, platformName: str, eventID):
-        DateList = []
+    def getDateList(self, platformName: str, eventID, mode='date'):
+        DateList = {}
         for instance in self.platformLst:
             if instance.platform != platformName:
                 continue
             for ii in instance.fetch_associate_event_with_ID(eventID):
-                DateList.append(ii[self.ID_Time])
+                if mode == 'date':
+                    T = ii[self.ID_Time].split(" ")[0]
+                else:
+                    T = ii[self.ID_Time]
+                if T not in DateList:
+                    DateList[T] = 0
+                DateList[T] += 1
         return DateList
 
-    def getDateListofAllPlatform(self, eventID):
+    def getDateListofAllPlatform(self, eventID, mode):
         DateList = {}
         for instance in self.platformLst:
-            DateList[instance.platform] = self.getDateList(instance.platform, eventID)
+            DateList[instance.platform] = self.getDateList(instance.platform, eventID, mode)
         self.data = DateList
 
     def updateQuota(self, databaseLoc, eventID):

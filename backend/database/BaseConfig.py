@@ -7,7 +7,7 @@ class BaseConfig:
         self.info = {
             "time": str(datetime.datetime.now().strftime("%Y %D %H:%M:%S"))
         }
-        self.ID_Index = "ID"
+        self.ID_Index = "IDIndex"
 
         self.data = None
         self.platform = ""
@@ -46,6 +46,7 @@ class BaseConfig:
         self.projectRoute = os.path.dirname(os.path.realpath(__file__))
         while not self.projectRoute.endswith(self.projectName):
             self.projectRoute = os.path.dirname(self.projectRoute)
+        self.cacheName = os.path.join(self.projectRoute, "backend/cache")
         self.AllDataRoute = os.path.join(self.projectRoute,
                                          "backend/database/example_data/allNews.xlsx")
         self.ExampleDataRoute = os.path.join(self.projectRoute,
@@ -71,6 +72,11 @@ class BaseConfig:
             self.ExampleDataRoute_Ali3,
         ]
 
+    def __len__(self):
+        if self.data is None:
+            return 0
+        return len(self.data)
+
 
 if __name__ == '__main__':
     x = BaseConfig()
@@ -78,3 +84,4 @@ if __name__ == '__main__':
     print(os.path.dirname(x.projectRoute))
     print(str(x.projectRoute).endswith('/database'))
     print(x.ExampleDataRoute)
+    print(x.cacheName)
