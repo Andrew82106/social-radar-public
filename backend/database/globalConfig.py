@@ -62,3 +62,57 @@ class SupportedPlatform(BaseInfo):
             "新闻类平台": [i.platform for i in newsList],
             "用户信息平台": [i.platform for i in userList]
         }
+
+    def summaryEventByPlatform(self):
+        data = {
+
+        }
+        for instance in commentList:
+            if instance.platform not in data:
+                data[instance.platform] = []
+            instance.load_data()
+            for dataItem in instance.data:
+                if dataItem[self.CommentInfo_IDIndex] not in data[instance.platform]:
+                    data[instance.platform].append(dataItem[self.CommentInfo_IDIndex])
+
+        for instance in newsList:
+            if instance.platform not in data:
+                data[instance.platform] = []
+            instance.load_data()
+            for dataItem in instance.data:
+                if dataItem[self.NewsInfo_IDIndex] not in data[instance.platform]:
+                    data[instance.platform].append(dataItem[self.NewsInfo_IDIndex])
+
+        return self.packetFormat(data)
+
+    def summaryPlatformByEvent(self):
+        data = {
+
+        }
+        for instance in commentList:
+            instance.load_data()
+            for dataItem in instance.data:
+                ID = dataItem[self.CommentInfo_IDIndex]
+                platform = instance.platform
+                if ID not in data:
+                    data[ID] = []
+                if platform not in data[ID]:
+                    data[ID].append(platform)
+
+        for instance in newsList:
+            instance.load_data()
+            for dataItem in instance.data:
+                ID = dataItem[self.NewsInfo_IDIndex]
+                platform = instance.platform
+                if ID not in data:
+                    data[ID] = []
+                if platform not in data[ID]:
+                    data[ID].append(platform)
+
+        return self.packetFormat(data)
+
+
+if __name__ == '__main__':
+    x = SupportedPlatform()
+    print(x.summaryEventByPlatform())
+    print(x.summaryPlatformByEvent())

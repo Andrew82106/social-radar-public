@@ -225,5 +225,17 @@ def refresh():
     return cache.del_cache()
 
 
+@app.route('/summaryEventByPlatform')
+def summaryEventByPlatform():
+    a = SupportedPlatform()
+    return a.summaryEventByPlatform()
+
+
+@app.route('/summaryPlatformByEvent')
+def summaryPlatformByEvent():
+    a = SupportedPlatform()
+    return a.summaryPlatformByEvent()
+
+
 if __name__ == '__main__':
     app.run(debug=True)
