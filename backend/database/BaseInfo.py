@@ -3,10 +3,8 @@ import datetime
 
 try:
     from database.BaseConfig import BaseConfig
-    from Utils.NpEncoder import NpEncoder
 except:
     from BaseConfig import BaseConfig
-    from Utils.NpEncoder import NpEncoder
 
 
 class BaseInfo(BaseConfig):
@@ -22,6 +20,22 @@ class BaseInfo(BaseConfig):
         self.info['platform'] = self.platform
         self.info['data'] = self.data
         return self.info
+
+    def fetchPage(self, count=None, page=None):
+        if self.data is None:
+            self.load_data()
+        self.info['platform'] = self.platform
+        self.info['data'] = self.data
+        if count is not None:
+            assert page is not None, 'para Page is None!'
+            count = int(count)
+            page = int(page)
+            try:
+                self.info['dataPage'] = self.info['data'][page*count:page*count + count]
+            except:
+                self.info['dataPage'] = f"参数错误，数据读取失败。self.info['data']长{len(self.info['data'])}"
+
+        return self.packetFormat(self.info['dataPage'])
 
     def packetFormat(self, data):
         return {

@@ -13,7 +13,10 @@ class SummaryData(BaseInfo):
     def load_data(self):
         self.data = {
             "用户信息": {},
-            "评论信息": {}
+            "评论信息": {},
+            '细节数据': {
+
+            }
         }
         for instance in userList:
             Data = instance.fetch()
@@ -26,12 +29,27 @@ class SummaryData(BaseInfo):
             data = Data['data']
             platform = Data['platform']
             self.data['评论信息'][platform] = len(data)
+            for i in data:
+                eventID = i[self.NewsInfo_IDIndex]
+                if eventID not in self.data['细节数据']:
+                    self.data['细节数据'][eventID] = {}
+                if platform not in self.data['细节数据'][eventID]:
+                    self.data['细节数据'][eventID][platform] = 0
+                self.data['细节数据'][eventID][platform] += 1
 
         for instance in commentList:
             Data = instance.fetch()
             data = Data['data']
             platform = Data['platform']
             self.data['评论信息'][platform] = len(data)
+            for i in data:
+                eventID = i[self.CommentInfo_IDIndex]
+                if eventID not in self.data['细节数据']:
+                    self.data['细节数据'][eventID] = {}
+                if platform not in self.data['细节数据'][eventID]:
+                    self.data['细节数据'][eventID][platform] = 0
+                self.data['细节数据'][eventID][platform] += 1
+
 
     def fetch(self):
         self.load_data()

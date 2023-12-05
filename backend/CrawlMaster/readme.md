@@ -7,8 +7,8 @@
 
 现阶段可展示的数据有：
 
-- 不同评论类平台爬取的舆情对象文本内容和文本相关信息（所有信息）
-- 不同新闻类平台爬取的舆情对象文本内容和文本相关信息（所有信息）
+- 不同评论类平台爬取的舆情对象文本内容和文本相关信息（所有信息），并按照count条信息每页的格式返回第page页
+- 不同新闻类平台爬取的舆情对象文本内容和文本相关信息（所有信息），并按照count条信息每页的格式返回第page页
 - 平台用户相关信息（所有用户信息）
 - 支持的平台信息
 - 不同评论类平台中**某个事件**的舆情对象文本内容和文本相关信息（仅事件相关信息）
@@ -24,12 +24,15 @@
 - 服务器性能统计
 - 总体数据量统计
 - 使用星火大模型API接口进行文本总结
-- 获取不同平台下的时间指标中eventID事件的时间热度序列
+- 获取不同平台下的时间指标中eventID事件的时间热度序列，按照精确度为mode返回（mode=date则精确到日期，等于其他则为精确到秒）
+- 从某个平台platform中的某个事件eventid中搜索某个关键词keyword，并按照count条信息每页的格式返回第page页
+- 删除项目缓存
+
 
 对应的接口：
 
-- http://127.0.0.1:5000/fetchcomment/[platform]
-- http://127.0.0.1:5000/fetchnews/[platform]
+- http://127.0.0.1:5000/fetchcomment/?platform=[platform]&count=[count]&page=[page]
+- http://127.0.0.1:5000/fetchnews/?platform=[platform]&count=[count]&page=[page]
 - http://127.0.0.1:5000/fetchuserinfo/[platform]
 - http://127.0.0.1:5000/supportedplatform
 - http://127.0.0.1:5000/fetchdetailcomment/?id=[EVENTID]&platform=[PLATFORM]
@@ -38,19 +41,21 @@
 - http://127.0.0.1:5000/fetcheventquota/?id=[EVENTID]&platform=[PLATFORM]
 - http://127.0.0.1:5000/fetchuserquota/?id=[USERID]&platform=[PLATFORM]
 - http://127.0.0.1:5000/eventList
-- http://127.0.0.1:5000/addEvent/wordlist
-- http://127.0.0.1:5000/delEvent/eventID
+- http://127.0.0.1:5000/addEvent/[wordlist]
+- http://127.0.0.1:5000/delEvent/[eventID]
 - http://127.0.0.1:5000/searchuser/[keyword]
 - http://127.0.0.1:5000/searchcontent/[keyword]
 - http://127.0.0.1:5000/serverstatus
 - http://127.0.0.1:5000/dataoverview
 - http://127.0.0.1:5000/llmsummarytext/[TEXT]
-- http://127.0.0.1:5000/timequota/gettimeseq/[eventID]
+- http://127.0.0.1:5000/timequota/gettimeseq/?eventID=[eventID]?mode=[MODE]
+- http://127.0.0.1:5000/searcheventdetail/?eventid=[eventid]&platform=[platform]&keyword=[keyword]&count=[count]&page=[page]
+- http://127.0.0.1:5000/refresh
 
 比如：
 
-- http://127.0.0.1:5000/fetchcomment/bilibili
-- http://127.0.0.1:5000/fetchnews/wangyi
+- http://127.0.0.1:5000/fetchcomment/?platform=bilibili&count=30&page=2
+- http://127.0.0.1:5000/fetchnews/?platform=wangyi&count=30&page=2
 - http://127.0.0.1:5000/fetchuserinfo/bilibili
 - http://127.0.0.1:5000/supportedplatform
 - http://127.0.0.1:5000/fetchdetailcomment/?id=1&platform=zhihu
@@ -65,6 +70,8 @@
 - http://127.0.0.1:5000/serverstatus
 - http://127.0.0.1:5000/dataoverview
 - http://127.0.0.1:5000/llmsummarytext/OpenAI 创始人 Sam Altman 当地时间 11 月 29 日宣布，他将重返 OpenAI 担任首席执行官，Mira Murati 将继续担任首席技术官。
-- http://127.0.0.1:5000/timequota/gettimeseq/1
+- http://127.0.0.1:5000/timequota/gettimeseq/?eventID=1&mode=date
+- http://127.0.0.1:5000/searcheventdetail/?eventid=1&platform=bilibili&keyword=我们&count=5&page=0
+- http://127.0.0.1:5000/refresh
 
 接口返回的数据格式运行monk.py进行查看。

@@ -4,9 +4,13 @@ import pandas as pd
 import tqdm
 try:
     from database.BaseConfig import BaseConfig
+    from database.AutoCache import Cache
 except:
     from BaseConfig import BaseConfig
+    from AutoCache import Cache
 from datetime import datetime, timedelta
+
+cache = Cache()
 
 EventList = {
     'maximum ID': 5,
@@ -63,24 +67,23 @@ class DB_Data(BaseConfig):
             if res is None:
                 res = _DF
             else:
-                print(res)
-                print(_DF)
-                res = pd.concat(res, _DF)
+                res = pd.concat([res, _DF], ignore_index=1)
         return res
 
     def readNewsTable(self):
         res = None
         for r in self.newsTableRoute:
             if '.csv' in r:
-                _DF = pd.read_csv(r)
+                _DF = pd.read_csv(r, index_col=0)
             else:
-                _DF = pd.read_excel(r)
+                _DF = pd.read_excel(r, index_col=0)
             if res is None:
                 res = _DF
             else:
-                pd.concat(res, _DF)
+                res = pd.concat([res, _DF], ignore_index=1)
         return res
 
+    @cache.cache_result(cache_path='readBiliBiliComment.pkl')
     def readBiliBiliComment(self, Location=None, ID_Index=1, length=-1):
         """
         :param Location: 输入csv或者excel的位置，如果输入api则启用sql，如果是-1则加载默认csv
@@ -124,12 +127,13 @@ class DB_Data(BaseConfig):
                     self.CommentInfo_like: int(dfi[self.CommentInfo_like].iloc[0]),
                     self.CommentInfo_content: str(dfi[self.CommentInfo_content].iloc[0]),
                     self.CommentInfo_type: 'response',
-                    self.ID_Index: int(dfi[self.CommentInfo_IDIndex].iloc[0])
+                    self.CommentInfo_IDIndex: int(dfi[self.CommentInfo_IDIndex].iloc[0])
                 })
                 cnt += 1
                 if cnt > length and (length != -1):
                     break
 
+    @cache.cache_result(cache_path='readBiliBiliUserInfo.pkl')
     def readBiliBiliUserInfo(self):
         self.data = [
             {self.UserInfo_UserName: '金渐层烤乳牛', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',
@@ -144,6 +148,7 @@ class DB_Data(BaseConfig):
              },
         ]
 
+    @cache.cache_result(cache_path='readWangyiNews.pkl')
     def readWangyiNews(self, Location=None, ID_Index=1, length=-1):
         if Location is None:
             self.data = [
@@ -178,12 +183,13 @@ class DB_Data(BaseConfig):
                     self.NewsInfo_location: str(dfi[self.NewsInfo_location].iloc[0]),
                     self.NewsInfo_read: random.randint(0, 10000),
                     self.NewsInfo_source: "网易新闻",
-                    self.ID_Index: int(dfi[self.ID_Index].iloc[0])
+                    self.NewsInfo_IDIndex: int(dfi[self.ID_Index].iloc[0])
                 })
                 cnt += 1
                 if cnt > length and (length != -1):
                     break
 
+    @cache.cache_result(cache_path='readWangyiUserInfo.pkl')
     def readWangyiUserInfo(self):
         self.data = [
             {self.UserInfo_UserName: '金渐层烤乳牛', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',
@@ -198,6 +204,7 @@ class DB_Data(BaseConfig):
              },
         ]
 
+    @cache.cache_result(cache_path='readZhihuComment.pkl')
     def readZhihuComment(self, Location=None, ID_Index=1, length=-1):
         if Location is None:
             self.data = [
@@ -232,12 +239,13 @@ class DB_Data(BaseConfig):
                     self.CommentInfo_like: int(dfi[self.CommentInfo_like].iloc[0]),
                     self.CommentInfo_content: dfi[self.CommentInfo_content].iloc[0],
                     self.CommentInfo_type: 'response',
-                    self.ID_Index: int(dfi[self.CommentInfo_IDIndex].iloc[0])
+                    self.CommentInfo_IDIndex: int(dfi[self.CommentInfo_IDIndex].iloc[0])
                 })
                 cnt += 1
                 if cnt > length and (length != -1):
                     break
 
+    @cache.cache_result(cache_path='readZhihuUserInfo.pkl')
     def readZhihuUserInfo(self):
         self.data = [
             {self.UserInfo_UserName: '金渐层烤乳牛猪', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',

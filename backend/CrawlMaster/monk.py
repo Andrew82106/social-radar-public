@@ -8,6 +8,7 @@ sys.path.append(os.path.join(os.path.dirname(current_path), '/CrawlMaster'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/database'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/SparkModel_V30'))
 import json
+
 try:
     from database.EventQuota import EventQuota
     from database.UserQuota import UserQuota
@@ -16,6 +17,7 @@ try:
     from database.Search import Search
     from database.ServerStatus import ServerStatus
     from database.SummaryData import SummaryData
+    from database.AutoCache import Cache
     from SparkModel_V30.SparkApi import SparkChatModel
     from QuotaCalculate.timeQuota import TimeQuota
     from Utils.NpEncoder import NpEncoder
@@ -27,34 +29,40 @@ except:
     from ..database.Search import Search
     from ..database.ServerStatus import ServerStatus
     from ..database.SummaryData import SummaryData
+    from ..database.AutoCache import Cache
     from ..SparkModel_V30.SparkApi import SparkChatModel
     from ..QuotaCalculate.timeQuota import TimeQuota
     from Utils.NpEncoder import NpEncoder
 
 from flask import Flask, request
 from flask_cors import CORS
-
+cache = Cache()
 EventList = EventLst()
-
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
 app.config["SECRET_KEY"] = "ABCDFWA"
 
 
-@app.route('/fetchcomment/<platform>')
-def fetchComment(platform):
+@app.route('/fetchcomment/')
+def fetchComment():
+    platform = request.args.get("platform")
+    count = request.args.get("count")
+    page = request.args.get("page")
     for identity in commentList:
         if identity.platform == platform:
-            return identity.fetch()
+            return identity.fetchPage(count, page)
     return f"NO such platform called {platform}"
 
 
-@app.route('/fetchnews/<platform>')
-def fetchNews(platform):
+@app.route('/fetchnews/')
+def fetchNews():
+    platform = request.args.get("platform")
+    count = request.args.get("count")
+    page = request.args.get("page")
     for identity in newsList:
         if identity.platform == platform:
-            return identity.fetch()
+            return identity.fetchPage(count, page)
     return f"NO such platform called {platform}"
 
 
@@ -81,7 +89,7 @@ def supportedEventList():
 def fetchDetailComment():
     eventid = request.args.get("id")
     platform = request.args.get("platform")
-    print(eventid, platform)
+    # print(eventid, platform)
     for identity in commentList:
         if identity.platform == platform:
             res = identity.fetch_detail(eventid)
@@ -167,7 +175,7 @@ def searchUser(keyword):
 def searchContent(keyword):
     a = Search()
     res = a.SearchContent(keyword)
-    print(res)
+    # print(res)
     # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
     return res
 
@@ -191,11 +199,30 @@ def llmSummary(TEXT):
     return a.fetch()
 
 
-@app.route('/timequota/gettimeseq/<eventid>')
-def getTimeSeq(eventid):
+@app.route('/timequota/gettimeseq/')
+def getTimeSeq():
+    eventid = request.args.get("eventid")
+    mode = request.args.get("mode")
     a = TimeQuota()
-    a.getDateListofAllPlatform(int(eventid))
+    a.getDateListofAllPlatform(int(eventid), mode)
     return a.fetch()
+
+
+@app.route('/searcheventdetail/')
+def searchEventDetail():
+    eventid = request.args.get("eventid")
+    platform = request.args.get("platform")
+    keyword = request.args.get("keyword")
+    count = request.args.get("count")
+    page = request.args.get("page")
+    a = Search()
+    a.SearchContentInDetail(keyword, platform, eventid)
+    return a.fetchPage(count, page)
+
+
+@app.route('/refresh/')
+def refresh():
+    return cache.del_cache()
 
 
 if __name__ == '__main__':

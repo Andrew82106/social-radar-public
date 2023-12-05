@@ -7,7 +7,7 @@ class BaseConfig:
         self.info = {
             "time": str(datetime.datetime.now().strftime("%Y %D %H:%M:%S"))
         }
-        self.ID_Index = "ID"
+        self.ID_Index = "IDIndex"
 
         self.data = None
         self.platform = ""
@@ -46,21 +46,36 @@ class BaseConfig:
         self.projectRoute = os.path.dirname(os.path.realpath(__file__))
         while not self.projectRoute.endswith(self.projectName):
             self.projectRoute = os.path.dirname(self.projectRoute)
+        self.cacheName = os.path.join(self.projectRoute, "backend/cache")
         self.AllDataRoute = os.path.join(self.projectRoute,
                                          "backend/database/example_data/allNews.xlsx")
         self.ExampleDataRoute = os.path.join(self.projectRoute,
                                              "backend/database/example_data/巴以冲突B站视频500条详细评论清洗版.csv")
         self.ExampleDataRoute_Ali = os.path.join(self.projectRoute,
                                                  "backend/database/example_data/阿里车祸.xlsx")
+        self.ExampleDataRoute_Ali2 = os.path.join(self.projectRoute,
+                                                  "backend/database/example_data/血槽姐网易.csv")
+        self.ExampleDataRoute_Ali3 = os.path.join(self.projectRoute,
+                                                  "backend/database/example_data/血槽姐知乎.csv")
         self.baYiNewsWangyi = os.path.join(self.projectRoute,
                                            "backend/database/example_data/巴以网易.csv")
+        self.baYiNewsWangyi1 = os.path.join(self.projectRoute,
+                                            "backend/database/example_data/巴以网易1.csv")
 
         self.newsTableRoute = [
             self.baYiNewsWangyi,
+            self.baYiNewsWangyi1,
+            self.ExampleDataRoute_Ali2,
         ]
         self.CommentTableRoute = [
             self.AllDataRoute,
+            self.ExampleDataRoute_Ali3,
         ]
+
+    def __len__(self):
+        if self.data is None:
+            return 0
+        return len(self.data)
 
 
 if __name__ == '__main__':
@@ -69,3 +84,4 @@ if __name__ == '__main__':
     print(os.path.dirname(x.projectRoute))
     print(str(x.projectRoute).endswith('/database'))
     print(x.ExampleDataRoute)
+    print(x.cacheName)
