@@ -14,7 +14,7 @@ export default function Page() {
 
   if (error) return <div>Failed to load</div>;
   return (
-    <main className="p-4 flex text-black overflow-auto overscroll-none h-screen">
+    <main className="p-4 flex text-black overflow-auto overscroll-none">
       <div>
         <h2>Finished</h2>
         {data ? (

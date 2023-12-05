@@ -3,52 +3,54 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { CheckCircle, Settings, BarChartBig } from "lucide-react";
 
+function DashboardLink({ href, children, isActive }) {
+  return (
+    <li
+      className={`${
+        isActive ? "text-blue-500" : ""
+      } transition duration-300 ease-in-out transform-gpu hover:scale-105`}
+    >
+      <Link href={href}>
+        <div className="flex items-center space-x-2">{children}</div>
+      </Link>
+    </li>
+  );
+}
+
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
-
+  const layoutdashboard = ["/dashboard", "/dashboard/status"];
+  const isPathInLayoutDashboard = layoutdashboard.includes(pathname);
   return (
     <div className="flex h-screen bg-gray-200">
-      <div className="p-6 w-64 bg-white">
-        {pathname === "/dashboard" && (
+      <div className="grow-0 p-6 bg-white">
+        {isPathInLayoutDashboard && (
           <ul className="text-lg font-semibold font-sans space-y-4 text-black">
-            <li className={pathname == "/dashboard" ? "text-blue-500 " : ""}>
-              <Link href="/dashboard">
-                <div className="flex items-center space-x-2">
-                  <CheckCircle size={24} />
-                  <span>Tasks</span>
-                </div>
-              </Link>
-            </li>
-            <li
-              className={
-                pathname == "/dashboard/status" ? "text-blue-500" : ""
-              }
+            <DashboardLink
+              href="/dashboard"
+              isActive={pathname == "/dashboard"}
             >
-              <Link href="/dashboard/status">
-                <div className="flex items-center space-x-2">
-                  <BarChartBig size={24} />
-                  <span>Status</span>
-                </div>
-              </Link>
-            </li>
-
-            <li
-              className={
-                pathname == "/dashboard/settings" ? "text-blue-500" : ""
-              }
+              <CheckCircle size={24} />
+              <span>Tasks</span>
+            </DashboardLink>
+            <DashboardLink
+              href="/dashboard/status"
+              isActive={pathname == "/dashboard/status"}
             >
-              <Link href="/dashboard/settings">
-                <div className="flex items-center space-x-2">
-                  <Settings size={24} />
-                  <span>Settings</span>
-                </div>
-              </Link>
-            </li>
+              <BarChartBig size={24} />
+              <span>Status</span>
+            </DashboardLink>
+            <DashboardLink
+              href="/dashboard/settings"
+              isActive={pathname == "/dashboard/settings"}
+            >
+              <Settings size={24} />
+              <span>Settings</span>
+            </DashboardLink>
           </ul>
         )}
-        {pathname === "/dashboard/tasks" && <></>}
       </div>
-      <div className="flex-grow p-6">{children}</div>
+      <div className="p-6 w-full h-screen">{children}</div>
     </div>
   );
 }
