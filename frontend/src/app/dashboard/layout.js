@@ -20,6 +20,7 @@ function DashboardLink({ href, children, isActive }) {
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
   const layoutdashboard = ["/dashboard", "/dashboard/status"];
+  const layouttasks = ["/dashboard/tasks"];
   const isPathInLayoutDashboard = layoutdashboard.includes(pathname);
   return (
     <div className="flex h-screen bg-gray-200">
