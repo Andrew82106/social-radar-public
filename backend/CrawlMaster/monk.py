@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(current_path))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/CrawlMaster'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/database'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/SparkModel_V30'))
-import json
+
 
 try:
     from database.EventQuota import EventQuota
@@ -42,6 +42,7 @@ EventList = EventLst()
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
 app.config["SECRET_KEY"] = "ABCDFWA"
+SupportedPlatform = SupportedPlatform()
 
 
 @app.route('/fetchcomment/')
@@ -76,8 +77,7 @@ def fetchUser(platform):
 
 @app.route('/supportedplatform')
 def supportedPlatform():
-    a = SupportedPlatform()
-    return a.fetch()
+    return SupportedPlatform.fetch()
 
 
 @app.route('/eventList')
@@ -227,14 +227,27 @@ def refresh():
 
 @app.route('/summaryEventByPlatform')
 def summaryEventByPlatform():
-    a = SupportedPlatform()
-    return a.summaryEventByPlatform()
+    return SupportedPlatform.summaryEventByPlatform()
 
 
 @app.route('/summaryPlatformByEvent')
 def summaryPlatformByEvent():
-    a = SupportedPlatform()
-    return a.summaryPlatformByEvent()
+    return SupportedPlatform.summaryPlatformByEvent()
+
+
+@app.route('/deleteplatform/')
+def deletePlatform():
+    platformName = request.args.get("platformName")
+    SupportedPlatform.delPlatform(platformName)
+    return SupportedPlatform.fetch()
+
+
+@app.route('/addplatform/')
+def addPlatform():
+    platformName = request.args.get("platformName")
+    platformType = request.args.get("platformType")
+    SupportedPlatform.addPlatform(platformType, platformName)
+    return SupportedPlatform.fetch()
 
 
 if __name__ == '__main__':

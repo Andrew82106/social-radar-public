@@ -29,6 +29,8 @@
 - 删除项目缓存
 - 查看事件中可选的平台
 - 查看每个平台中包含的事件
+- 在平台类型为platformType的类型中添加平台名为platformName的平台，platformType可选：新闻类平台、用户信息平台、评论类平台
+- 在所以平台类型中删除名为platformName的平台
 
 
 对应的接口：
@@ -55,6 +57,7 @@
 - http://127.0.0.1:5000/refresh
 - http://127.0.0.1:5000/summaryPlatformByEvent
 - http://127.0.0.1:5000/summaryEventByPlatform
+- http://127.0.0.1:5000/addplatform/?platformType=[platformType]&platformName=[platformName]
 
 比如：
 
@@ -79,5 +82,6 @@
 - http://127.0.0.1:5000/refresh
 - http://127.0.0.1:5000/summaryPlatformByEvent
 - http://127.0.0.1:5000/summaryEventByPlatform
+- http://127.0.0.1:5000/addplatform/?platformType=评论类平台&platformName=baidu1111
 
 接口返回的数据格式运行monk.py进行查看。
