@@ -63,22 +63,20 @@ class DB_Data(BaseConfig):
             if res is None:
                 res = _DF
             else:
-                print(res)
-                print(_DF)
-                res = pd.concat(res, _DF)
+                res = pd.concat([res, _DF], ignore_index=1)
         return res
 
     def readNewsTable(self):
         res = None
         for r in self.newsTableRoute:
             if '.csv' in r:
-                _DF = pd.read_csv(r)
+                _DF = pd.read_csv(r, index_col=0)
             else:
-                _DF = pd.read_excel(r)
+                _DF = pd.read_excel(r, index_col=0)
             if res is None:
                 res = _DF
             else:
-                pd.concat(res, _DF)
+                res = pd.concat([res, _DF], ignore_index=1)
         return res
 
     def readBiliBiliComment(self, Location=None, ID_Index=1, length=-1):

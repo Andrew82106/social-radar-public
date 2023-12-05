@@ -52,14 +52,23 @@ class BaseConfig:
                                              "backend/database/example_data/巴以冲突B站视频500条详细评论清洗版.csv")
         self.ExampleDataRoute_Ali = os.path.join(self.projectRoute,
                                                  "backend/database/example_data/阿里车祸.xlsx")
+        self.ExampleDataRoute_Ali2 = os.path.join(self.projectRoute,
+                                                  "backend/database/example_data/血槽姐网易.csv")
+        self.ExampleDataRoute_Ali3 = os.path.join(self.projectRoute,
+                                                  "backend/database/example_data/血槽姐知乎.csv")
         self.baYiNewsWangyi = os.path.join(self.projectRoute,
                                            "backend/database/example_data/巴以网易.csv")
+        self.baYiNewsWangyi1 = os.path.join(self.projectRoute,
+                                            "backend/database/example_data/巴以网易1.csv")
 
         self.newsTableRoute = [
             self.baYiNewsWangyi,
+            self.baYiNewsWangyi1,
+            self.ExampleDataRoute_Ali2,
         ]
         self.CommentTableRoute = [
             self.AllDataRoute,
+            self.ExampleDataRoute_Ali3,
         ]
 
 
