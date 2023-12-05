@@ -2,6 +2,7 @@ import random
 
 import pandas as pd
 import tqdm
+
 try:
     from database.BaseConfig import BaseConfig
     from database.AutoCache import Cache
@@ -45,7 +46,6 @@ processing 存放正在处理的事件
 trash 存放已经丢弃的事件
 """
 
-
 """
 为各个类的load data方法提供接口
 """
@@ -57,9 +57,10 @@ class DB_Data(BaseConfig):
         super().__init__()
         self.maxID = None
 
-    def readCommentTable(self):
+    @staticmethod
+    def _read(RouteList):
         res = None
-        for r in self.CommentTableRoute:
+        for r in RouteList:
             if '.csv' in r:
                 _DF = pd.read_csv(r)
             else:
@@ -70,18 +71,14 @@ class DB_Data(BaseConfig):
                 res = pd.concat([res, _DF], ignore_index=1)
         return res
 
+    def readCommentTable(self):
+        return self._read(self.CommentTableRoute)
+
     def readNewsTable(self):
-        res = None
-        for r in self.newsTableRoute:
-            if '.csv' in r:
-                _DF = pd.read_csv(r, index_col=0)
-            else:
-                _DF = pd.read_excel(r, index_col=0)
-            if res is None:
-                res = _DF
-            else:
-                res = pd.concat([res, _DF], ignore_index=1)
-        return res
+        return self._read(self.newsTableRoute)
+
+    def readUserTable(self):
+        return self._read(self.UserTableRoute)
 
     @cache.cache_result(cache_path='readBiliBiliComment.pkl')
     def readBiliBiliComment(self, Location=None, ID_Index=1, length=-1):
@@ -95,19 +92,24 @@ class DB_Data(BaseConfig):
             Location = self.AllDataRoute
         if Location is None:
             self.data = [
-                {self.CommentInfo_UserName: '林中小屋', self.CommentInfo_time: '2023-08-30 05:23', self.CommentInfo_like: 21647,
+                {self.CommentInfo_UserName: '林中小屋', self.CommentInfo_time: '2023-08-30 05:23',
+                 self.CommentInfo_like: 21647,
                  self.CommentInfo_content: '芯片上的那个数字20应该不是年份',
                  self.ID_Index: 1},
-                {self.CommentInfo_UserName: '元寳ATTO', self.CommentInfo_time: '2023-08-30 08:27', self.CommentInfo_like: 950,
+                {self.CommentInfo_UserName: '元寳ATTO', self.CommentInfo_time: '2023-08-30 08:27',
+                 self.CommentInfo_like: 950,
                  self.CommentInfo_content: '回复 @林中小屋 :以后等这个量再大一点再看看吧，我估计这个2035没这么简单',
                  self.ID_Index: 1},
-                {self.CommentInfo_UserName: '林一崇伟', self.CommentInfo_time: '2023-08-30 06:25', self.CommentInfo_like: 46843,
+                {self.CommentInfo_UserName: '林一崇伟', self.CommentInfo_time: '2023-08-30 06:25',
+                 self.CommentInfo_like: 46843,
                  self.CommentInfo_content: '华为:让我康康在这我不在的4年里友商都做了什么突破\n友商:24g运存，240w快充，没有优化好的cmos\n华为:6，谢谢，都是真哥们',
                  self.ID_Index: 1},
-                {self.CommentInfo_UserName: 'Serpentera', self.CommentInfo_time: '2023-08-30 08:22', self.CommentInfo_like: 1613,
+                {self.CommentInfo_UserName: 'Serpentera', self.CommentInfo_time: '2023-08-30 08:22',
+                 self.CommentInfo_like: 1613,
                  self.CommentInfo_content: '还有绿厂放弃了自研芯片',
                  self.ID_Index: 1},
-                {self.CommentInfo_UserName: '林黛玉醉打蒋门神丶', self.CommentInfo_time: '2023-08-30 08:35', self.CommentInfo_like: 8628,
+                {self.CommentInfo_UserName: '林黛玉醉打蒋门神丶', self.CommentInfo_time: '2023-08-30 08:35',
+                 self.CommentInfo_like: 8628,
                  self.CommentInfo_content: '的确，华为被制裁之后，手机市场突然就萎缩了，抛开疫情的原因，这些年确实没出现像样的旗舰机型，更没有让人看一眼就特别想买的手机[微笑]',
                  self.ID_Index: 1},
             ]
@@ -134,19 +136,40 @@ class DB_Data(BaseConfig):
                     break
 
     @cache.cache_result(cache_path='readBiliBiliUserInfo.pkl')
-    def readBiliBiliUserInfo(self):
-        self.data = [
-            {self.UserInfo_UserName: '金渐层烤乳牛', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',
-             self.UserInfo_IPLocation: "中国 台湾",
-             self.UserInfo_Level: 6,
-             self.ID_Index: 1
-             },
-            {self.UserInfo_UserName: '幻舞*Ustd', self.UserInfo_RegisterTime: '2019-07-01 07:22:14',
-             self.UserInfo_IPLocation: "哈萨克斯坦",
-             self.UserInfo_Level: 5,
-             self.ID_Index: 2
-             },
-        ]
+    def readBiliBiliUserInfo(self, mode='from table'):
+        if mode is None:
+            self.data = [
+                {self.UserInfo_UserName: '金渐层烤乳牛', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',
+                 self.UserInfo_IPLocation: "台湾",
+                 self.UserInfo_Level: 6,
+                 self.ID_Index: 1,
+                 self.UserInfo_RelatedEvent: ['1', '2']
+                 },
+                {self.UserInfo_UserName: '幻舞*Ustd', self.UserInfo_RegisterTime: '2019-07-01 07:22:14',
+                 self.UserInfo_IPLocation: "哈萨克斯坦",
+                 self.UserInfo_Level: 5,
+                 self.ID_Index: 2,
+                 self.UserInfo_RelatedEvent: ['1', '2']
+                 },
+            ]
+        else:
+            print("loading data from excel or csv")
+            _DF = self.readUserTable()
+            self.data = []
+            cnt = 0
+            for i in tqdm.tqdm(range(len(_DF))):
+                dfi = _DF.iloc[i:i + 1]
+                if dfi[self.UserInfo_platform].iloc[0] != self.platform:
+                    continue
+                # print(dfi.columns)
+                self.data.append({
+                    self.UserInfo_Level: int(dfi[self.UserInfo_Level].iloc[0]),
+                    self.UserInfo_UserName: str(dfi[self.UserInfo_UserName].iloc[0]),
+                    self.UserInfo_IPLocation: str(dfi[self.UserInfo_IPLocation].iloc[0]),
+                    self.UserInfo_RegisterTime: str(dfi[self.UserInfo_RegisterTime].iloc[0]),
+                    self.UserInfo_ID: int(dfi[self.UserInfo_ID].iloc[0]),
+                    self.UserInfo_RelatedEvent: str(dfi[self.UserInfo_RelatedEvent].iloc[0]).split('-')
+                })
 
     @cache.cache_result(cache_path='readWangyiNews.pkl')
     def readWangyiNews(self, Location=None, ID_Index=1, length=-1):
@@ -195,12 +218,14 @@ class DB_Data(BaseConfig):
             {self.UserInfo_UserName: '金渐层烤乳牛', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',
              self.UserInfo_IPLocation: "中国 台湾",
              self.UserInfo_Level: 6,
-             self.ID_Index: 1
+             self.ID_Index: 1,
+             self.UserInfo_RelatedEvent: ['1', '2']
              },
             {self.UserInfo_UserName: '猪猪侠', self.UserInfo_RegisterTime: '2019-07-01 07:22:14',
              self.UserInfo_IPLocation: "巴林",
              self.UserInfo_Level: 5,
-             self.ID_Index: 2
+             self.ID_Index: 2,
+             self.UserInfo_RelatedEvent: ['1', '2']
              },
         ]
 
@@ -213,12 +238,14 @@ class DB_Data(BaseConfig):
                  self.CommentInfo_type: 'answer',
                  self.ID_Index: 1,
                  self.CommentInfo_content: '中兴：我挨打了，他们敲诈我十亿美元。众人沉默。华为：我也挨打了，美国人封锁我。众人沉默，惴惴不安。海康、曙光等一众继续挨打。众人开始扎堆讨论，TMD美国人不能信啊，不能把命交到海外供应链里。于是：工信部出来讲话，要自强；发改委财政部出来给支持；中科院说缺啥咱就搞啥，但光靠我不行，要大家一起上；证监会说我给大家整科创板，打通社会融资。缺设备，上海方阵议论了一会儿，中微站起来，说我是中字头，我先上，把蚀刻做了。华创说，哥，我来搭把手。上微看了华为一眼，说光刻我从二十多纳米开始追。缺大硅片，沪硅想了一会儿站起来，看了一眼京津冀方阵，说我还年轻，死就死了，我上。中环握紧拳头致意。缺光刻胶，一众个头小的企业手拉手站起来，说我们一个人干不成，但可以一起干。缺EDA，大家都面面相觑，北京方阵站起来个小个子，华大九天哭着说，大家帮帮我，我去试试。设备出来总要有人试。中芯才要站起来，华虹按住他，说我先来。华润微说，咱一起来。中芯问那谁来做下游，谁来做应用。封测三雄站起来说义不容辞。兆易汇顶韦尔澜起也纷纷站起来。整个深圳方阵都站起来，还坐着的企业几乎都站起来了。大基金看了一圈说，钱不够的我去找。中国烟草当即掏出支票簿。证监会说我以最快速度批上市重组定增。发改委说，谁这时候骗补，我弄死谁。华为沉默着抽完最后几口烟，站起来说，只要我一天不死，就和大家努力自建IDM一天。'},
-                {self.CommentInfo_UserName: 'daniellin', 'location': '福建', 'reliability': 0.97, 'time': '2023-09-04 00:22',
+                {self.CommentInfo_UserName: 'daniellin', 'location': '福建', 'reliability': 0.97,
+                 'time': '2023-09-04 00:22',
                  self.CommentInfo_like: 422,
                  self.CommentInfo_type: 'comment',
                  self.ID_Index: 1,
                  self.CommentInfo_content: '之前看到一个人说过：你生于这个国家，就回避不了宏大的叙事背景，这是生于大国的国民宿命。'},
-                {self.CommentInfo_UserName: '上下求索', 'location': '浙江', 'reliability': 0.80, 'time': '2023-09-04 01:02',
+                {self.CommentInfo_UserName: '上下求索', 'location': '浙江', 'reliability': 0.80,
+                 'time': '2023-09-04 01:02',
                  self.CommentInfo_like: 93,
                  self.CommentInfo_type: 'comment',
                  self.ID_Index: 1,
@@ -251,12 +278,14 @@ class DB_Data(BaseConfig):
             {self.UserInfo_UserName: '金渐层烤乳牛猪', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',
              self.UserInfo_IPLocation: "中国 台湾",
              self.UserInfo_Level: 6,
-             self.ID_Index: 1
+             self.ID_Index: 1,
+             self.UserInfo_RelatedEvent: ['1', '2']
              },
             {self.UserInfo_UserName: '幻舞*Ustd', self.UserInfo_RegisterTime: '2019-07-01 07:22:14',
              self.UserInfo_IPLocation: "哈萨克斯坦",
              self.UserInfo_Level: 5,
-             self.ID_Index: 2
+             self.ID_Index: 2,
+             self.UserInfo_RelatedEvent: ['1', '2']
              },
         ]
 

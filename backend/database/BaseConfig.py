@@ -19,8 +19,11 @@ class BaseConfig:
 
         self.UserInfo_UserName = 'Username'
         self.UserInfo_RegisterTime = 'register time'
+        self.UserInfo_RelatedEvent = 'relatedEvent'
         self.UserInfo_IPLocation = 'IP location'
         self.UserInfo_Level = "Level"
+        self.UserInfo_platform = "platform"
+        self.UserInfo_ID = "IDIndex"
 
         self.CommentInfo_UserName = 'Username'
         self.CommentInfo_like = 'like'
@@ -61,6 +64,8 @@ class BaseConfig:
                                            "backend/database/example_data/巴以网易.csv")
         self.baYiNewsWangyi1 = os.path.join(self.projectRoute,
                                             "backend/database/example_data/巴以网易1.csv")
+        self.BilibiliUserData = os.path.join(self.projectRoute,
+                                             "backend/database/example_data/BilibiliUserData.xlsx")
 
         self.newsTableRoute = [
             self.baYiNewsWangyi,
@@ -70,6 +75,9 @@ class BaseConfig:
         self.CommentTableRoute = [
             self.AllDataRoute,
             self.ExampleDataRoute_Ali3,
+        ]
+        self.UserTableRoute = [
+            self.BilibiliUserData
         ]
 
     def __len__(self):

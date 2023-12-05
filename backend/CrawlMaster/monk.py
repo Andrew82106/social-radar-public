@@ -8,7 +8,6 @@ sys.path.append(os.path.join(os.path.dirname(current_path), '/CrawlMaster'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/database'))
 sys.path.append(os.path.join(os.path.dirname(current_path), '/SparkModel_V30'))
 
-
 try:
     from database.EventQuota import EventQuota
     from database.UserQuota import UserQuota
@@ -20,7 +19,6 @@ try:
     from database.AutoCache import Cache
     from SparkModel_V30.SparkApi import SparkChatModel
     from QuotaCalculate.timeQuota import TimeQuota
-    from Utils.NpEncoder import NpEncoder
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
@@ -32,10 +30,10 @@ except:
     from ..database.AutoCache import Cache
     from ..SparkModel_V30.SparkApi import SparkChatModel
     from ..QuotaCalculate.timeQuota import TimeQuota
-    from Utils.NpEncoder import NpEncoder
 
 from flask import Flask, request
 from flask_cors import CORS
+
 cache = Cache()
 EventList = EventLst()
 
@@ -248,6 +246,29 @@ def addPlatform():
     platformType = request.args.get("platformType")
     SupportedPlatform.addPlatform(platformType, platformName)
     return SupportedPlatform.fetch()
+
+
+@app.route('/summaryLocationByPlatform/')
+def summaryLocationByPlatform():
+    eventID = request.args.get("eventID")
+    Platform = request.args.get("Platform")
+    for instance in userList:
+        if instance.platform != Platform:
+            continue
+        return instance.summary_location(eventID)
+
+
+@app.route('/summaryLocationall/')
+def summaryLocationall():
+    eventID = request.args.get("eventID")
+    res = {}
+    for instance in userList:
+        res_for_instance = instance.summary_location(eventID)['data']
+        for location in res_for_instance:
+            if location not in res:
+                res[location] = 0
+            res[location] += res_for_instance[location]
+    return userList[0].packetFormat(res)
 
 
 if __name__ == '__main__':
