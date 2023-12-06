@@ -36,6 +36,7 @@
 - 查询敏感词表汇总情况
 - 基于敏感词表计算输入句子中的敏感词汇
 - 基于敏感词表统计platform中eventid事件的敏感词总体情况
+- 计算platform中eventid事件的情感激烈性指标(第一次计算耗时很久，需要写等待效果)，mode参数设置时间的精确度，mode=date则时间精确到日
 
 
 对应的接口：
@@ -68,6 +69,7 @@
 - http://127.0.0.1:5000/sensitivedataOverview
 - http://127.0.0.1:5000/sensitivedataDetect/[sentence]
 - http://127.0.0.1:5000/sensitivedataOverviewDetail/?eventID=[EVENTID]&Platform=[PLATFORM]
+- http://127.0.0.1:5000/EmotionDataDetail/?eventID=[eventID]&Platform=[Platform]&mode=[mode]
 
 比如：
 
@@ -98,5 +100,6 @@
 - http://127.0.0.1:5000/sensitivedataOverview
 - http://127.0.0.1:5000/sensitivedataDetect/明天早上车站那边整个核蛋清扫一下，兵力部属你这边要到位，不然就只能打砸抢了
 - http://127.0.0.1:5000/sensitivedataOverviewDetail/?eventID=1&Platform=bilibili
+- http://127.0.0.1:5000/EmotionDataDetail/?eventID=1&Platform=bilibili&mode=date
 
 接口返回的数据格式运行monk.py进行查看。

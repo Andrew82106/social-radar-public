@@ -20,6 +20,7 @@ try:
     from SparkModel_V30.SparkApi import SparkChatModel
     from QuotaCalculate.timeQuota import TimeQuota
     from QuotaCalculate.SensitiveQuota import SensitiveQuota
+    from QuotaCalculate.EmotionEvaluationQuota import EmotionEvaluationQuota
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
@@ -32,6 +33,7 @@ except:
     from ..SparkModel_V30.SparkApi import SparkChatModel
     from ..QuotaCalculate.timeQuota import TimeQuota
     from ..QuotaCalculate.SensitiveQuota import SensitiveQuota
+    from ..QuotaCalculate.EmotionEvaluationQuota import EmotionEvaluationQuota
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -93,8 +95,6 @@ def fetchDetailComment():
     for identity in commentList:
         if identity.platform == platform:
             res = identity.fetch_detail(eventid)
-            # print(res)
-            # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
             return res
 
     return f"NO such platform called {platform}"
@@ -108,7 +108,6 @@ def fetchDetailNews():
     for identity in newsList:
         if identity.platform == platform:
             res = identity.fetch_detail(eventid)
-            # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
             return res
     return f"NO such platform called {platform}"
 
@@ -121,7 +120,6 @@ def fetchDetailUser():
     for identity in userList:
         if identity.platform == platform:
             res = identity.fetch_detail(eventid)
-            # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
             return res
     return f"NO such platform called {platform}"
 
@@ -175,8 +173,6 @@ def searchUser(keyword):
 def searchContent(keyword):
     a = Search()
     res = a.SearchContent(keyword)
-    # print(res)
-    # res = json.dumps(res, indent=2, sort_keys=True, ensure_ascii=False, cls=NpEncoder)
     return res
 
 
@@ -291,6 +287,17 @@ def sensitivedataOverviewDetail():
     eventID = request.args.get("eventID")
     Platform = request.args.get("Platform")
     return x.summarySensitiveWord(eventID, Platform)
+
+
+y = EmotionEvaluationQuota()
+
+
+@app.route('/EmotionDataDetail/')
+def EmotionDataDetail():
+    eventID = request.args.get("eventID")
+    Platform = request.args.get("Platform")
+    mode = request.args.get("mode")
+    return y.calcScoreByEventAndPlatform(eventID, Platform, mode)
 
 
 if __name__ == '__main__':
