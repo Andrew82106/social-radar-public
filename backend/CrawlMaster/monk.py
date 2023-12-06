@@ -21,6 +21,7 @@ try:
     from QuotaCalculate.timeQuota import TimeQuota
     from QuotaCalculate.SensitiveQuota import SensitiveQuota
     from QuotaCalculate.EmotionEvaluationQuota import EmotionEvaluationQuota
+    from QuotaCalculate.OpinionQuota import OpinionQuota
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
@@ -34,6 +35,7 @@ except:
     from ..QuotaCalculate.timeQuota import TimeQuota
     from ..QuotaCalculate.SensitiveQuota import SensitiveQuota
     from ..QuotaCalculate.EmotionEvaluationQuota import EmotionEvaluationQuota
+    from ..QuotaCalculate.OpinionQuota import OpinionQuota
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -298,6 +300,16 @@ def EmotionDataDetail():
     Platform = request.args.get("Platform")
     mode = request.args.get("mode")
     return y.calcScoreByEventAndPlatform(eventID, Platform, mode)
+
+
+y1 = OpinionQuota()
+
+
+@app.route('/OpinionDataDetail/')
+def OpinionDataDetail():
+    eventID = request.args.get("eventID")
+    Platform = request.args.get("Platform")
+    return y1.calcOpinionQuota(eventID, Platform)
 
 
 if __name__ == '__main__':
