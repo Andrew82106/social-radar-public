@@ -15,7 +15,7 @@ export default function Page() {
   const fetcher = (urls) =>
     Promise.all(urls.map((url) => fetch(url).then((res) => res.json())));
   const { data, error } = useSWR(urls, fetcher);
-
+  if (error) return <div>Failed to load</div>;
   if (!data) return <Loading />;
 
   const filesystems = data[0].data.filesystems;

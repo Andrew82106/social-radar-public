@@ -51,7 +51,7 @@ export default function DashboardLayout({ children }) {
           </ul>
         )}
       </div>
-      <div className="p-6 w-full h-screen">{children}</div>
+      <div className="p-4 w-full h-screen">{children}</div>
     </div>
   );
 }
