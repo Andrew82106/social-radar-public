@@ -19,6 +19,7 @@ try:
     from database.AutoCache import Cache
     from SparkModel_V30.SparkApi import SparkChatModel
     from QuotaCalculate.timeQuota import TimeQuota
+    from QuotaCalculate.SensitiveQuota import SensitiveQuota
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
@@ -30,6 +31,7 @@ except:
     from ..database.AutoCache import Cache
     from ..SparkModel_V30.SparkApi import SparkChatModel
     from ..QuotaCalculate.timeQuota import TimeQuota
+    from ..QuotaCalculate.SensitiveQuota import SensitiveQuota
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -269,6 +271,26 @@ def summaryLocationall():
                 res[location] = 0
             res[location] += res_for_instance[location]
     return userList[0].packetFormat(res)
+
+
+x = SensitiveQuota()
+
+
+@app.route('/sensitivedataOverview/')
+def sensitivedataOverview():
+    return x.sensitiveDataOverview()
+
+
+@app.route('/sensitivedataDetect/<sentence>')
+def sensitivedataDetect(sentence):
+    return x.sensitiveWordCheck(sentence)
+
+
+@app.route('/sensitivedataOverviewDetail/')
+def sensitivedataOverviewDetail():
+    eventID = request.args.get("eventID")
+    Platform = request.args.get("Platform")
+    return x.summarySensitiveWord(eventID, Platform)
 
 
 if __name__ == '__main__':
