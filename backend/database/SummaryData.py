@@ -51,12 +51,13 @@ class SummaryData(BaseInfo):
                 self.data['细节数据'][eventID][platform] += 1
 
 
+"""
     def fetch(self):
         self.load_data()
         self.info['platform'] = self.platform
         self.info['data'] = self.data
         return self.info
-
+"""
 
 if __name__ == '__main__':
     x = SummaryData()

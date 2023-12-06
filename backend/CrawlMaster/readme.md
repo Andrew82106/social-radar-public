@@ -27,6 +27,12 @@
 - 获取不同平台下的时间指标中eventID事件的时间热度序列，按照精确度为mode返回（mode=date则精确到日期，等于其他则为精确到秒）
 - 从某个平台platform中的某个事件eventid中搜索某个关键词keyword，并按照count条信息每页的格式返回第page页
 - 删除项目缓存
+- 查看事件中可选的平台
+- 查看每个平台中包含的事件
+- 在平台类型为platformType的类型中添加平台名为platformName的平台，platformType可选：新闻类平台、用户信息平台、评论类平台
+- 在所有平台类型中删除名为platformName的平台
+- 查询对于事件eventid，平台platform的相关用户的地域分布
+- 查询对于事件eventid，所有平台的相关用户的地域分布
 
 
 对应的接口：
@@ -51,6 +57,11 @@
 - http://127.0.0.1:5000/timequota/gettimeseq/?eventID=[eventID]?mode=[MODE]
 - http://127.0.0.1:5000/searcheventdetail/?eventid=[eventid]&platform=[platform]&keyword=[keyword]&count=[count]&page=[page]
 - http://127.0.0.1:5000/refresh
+- http://127.0.0.1:5000/summaryPlatformByEvent
+- http://127.0.0.1:5000/summaryEventByPlatform
+- http://127.0.0.1:5000/addplatform/?platformType=[platformType]&platformName=[platformName]
+- http://127.0.0.1:5000/summaryLocationByPlatform/?eventID=[eventID]&Platform=[Platform]
+- http://127.0.0.1:5000/summaryLocationall/?eventID=[eventID]
 
 比如：
 
@@ -73,5 +84,10 @@
 - http://127.0.0.1:5000/timequota/gettimeseq/?eventID=1&mode=date
 - http://127.0.0.1:5000/searcheventdetail/?eventid=1&platform=bilibili&keyword=我们&count=5&page=0
 - http://127.0.0.1:5000/refresh
+- http://127.0.0.1:5000/summaryPlatformByEvent
+- http://127.0.0.1:5000/summaryEventByPlatform
+- http://127.0.0.1:5000/addplatform/?platformType=评论类平台&platformName=baidu1111
+- http://127.0.0.1:5000/summaryLocationByPlatform/?eventID=1&Platform=bilibili
+- http://127.0.0.1:5000/summaryLocationall/?eventID=2
 
 接口返回的数据格式运行monk.py进行查看。

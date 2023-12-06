@@ -1,4 +1,7 @@
-from database.BaseInfo import BaseInfo
+try:
+    from database.BaseInfo import BaseInfo
+except:
+    from BaseInfo import BaseInfo
 
 
 class UserQuota(BaseInfo):
