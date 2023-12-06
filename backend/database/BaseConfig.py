@@ -50,6 +50,7 @@ class BaseConfig:
         while not self.projectRoute.endswith(self.projectName):
             self.projectRoute = os.path.dirname(self.projectRoute)
         self.cacheName = os.path.join(self.projectRoute, "backend/cache")
+        self.calculateBase = os.path.join(self.projectRoute, "backend/QuotaCalculate/data")
         self.AllDataRoute = os.path.join(self.projectRoute,
                                          "backend/database/example_data/allNews.xlsx")
         self.ExampleDataRoute = os.path.join(self.projectRoute,

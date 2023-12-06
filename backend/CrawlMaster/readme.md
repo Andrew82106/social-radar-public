@@ -33,6 +33,9 @@
 - 在所有平台类型中删除名为platformName的平台
 - 查询对于事件eventid，平台platform的相关用户的地域分布
 - 查询对于事件eventid，所有平台的相关用户的地域分布
+- 查询敏感词表汇总情况
+- 基于敏感词表计算输入句子中的敏感词汇
+- 基于敏感词表统计platform中eventid事件的敏感词总体情况
 
 
 对应的接口：
@@ -62,6 +65,9 @@
 - http://127.0.0.1:5000/addplatform/?platformType=[platformType]&platformName=[platformName]
 - http://127.0.0.1:5000/summaryLocationByPlatform/?eventID=[eventID]&Platform=[Platform]
 - http://127.0.0.1:5000/summaryLocationall/?eventID=[eventID]
+- http://127.0.0.1:5000/sensitivedataOverview
+- http://127.0.0.1:5000/sensitivedataDetect/[sentence]
+- http://127.0.0.1:5000/sensitivedataOverviewDetail/?eventID=[EVENTID]&Platform=[PLATFORM]
 
 比如：
 
@@ -89,5 +95,8 @@
 - http://127.0.0.1:5000/addplatform/?platformType=评论类平台&platformName=baidu1111
 - http://127.0.0.1:5000/summaryLocationByPlatform/?eventID=1&Platform=bilibili
 - http://127.0.0.1:5000/summaryLocationall/?eventID=2
+- http://127.0.0.1:5000/sensitivedataOverview
+- http://127.0.0.1:5000/sensitivedataDetect/明天早上车站那边整个核蛋清扫一下，兵力部属你这边要到位，不然就只能打砸抢了
+- http://127.0.0.1:5000/sensitivedataOverviewDetail/?eventID=1&Platform=bilibili
 
 接口返回的数据格式运行monk.py进行查看。
