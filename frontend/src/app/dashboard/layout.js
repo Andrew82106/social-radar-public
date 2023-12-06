@@ -23,10 +23,10 @@ export default function DashboardLayout({ children }) {
   const layouttasks = ["/dashboard/tasks"];
   const isPathInLayoutDashboard = layoutdashboard.includes(pathname);
   return (
-    <div className="flex h-screen bg-gray-200">
-      <div className="grow-0 p-6 bg-white">
+    <div className="flex h-screen bg-gray-200 dark:bg-gray-700">
+      <div className="grow-0 p-6 bg-white dark:bg-black">
         {isPathInLayoutDashboard && (
-          <ul className="text-lg font-semibold font-sans space-y-4 text-black">
+          <ul className="text-lg font-semibold font-sans space-y-4 text-black dark:text-white">
             <DashboardLink
               href="/dashboard"
               isActive={pathname == "/dashboard"}

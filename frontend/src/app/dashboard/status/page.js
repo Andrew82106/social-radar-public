@@ -2,21 +2,23 @@
 
 import useSWR from "swr";
 import Loading from "../loading";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, registerables } from "chart.js";
+import { Doughnut, Bar } from "react-chartjs-2";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(...registerables);
 
 export default function Page() {
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  const { data, error } = useSWR(
+  const urls = [
     `${process.env.NEXT_PUBLIC_API_URL}/serverstatus`,
-    fetcher
-  );
+    `${process.env.NEXT_PUBLIC_API_URL}/dataoverview`,
+  ];
+  const fetcher = (urls) =>
+    Promise.all(urls.map((url) => fetch(url).then((res) => res.json())));
+  const { data, error } = useSWR(urls, fetcher);
 
   if (!data) return <Loading />;
 
-  const filesystems = data.data.filesystems;
+  const filesystems = data[0].data.filesystems;
   const labels = Object.keys(filesystems);
   const usageData = labels.map((label) =>
     filesystems[label].usage.slice(0, -1)
@@ -77,15 +79,41 @@ export default function Page() {
     },
   };
 
+  const barData = {
+    labels: Object.keys(data[1].data["用户信息"]),
+    datasets: [
+      {
+        label: "用户信息",
+        axis: "y",
+        data: Object.values(data[1].data["用户信息"]),
+        backgroundColor: "rgba(255, 105, 180, 0.2)", // 粉色
+        borderColor: "rgba(255, 105, 180, 1)", // 粉色
+        borderWidth: 1,
+      },
+      {
+        label: "评论信息",
+        axis: "y",
+        data: Object.values(data[1].data["评论信息"]),
+        backgroundColor: "rgba(255, 165, 0, 0.2)", // 橙色
+        borderColor: "rgba(255, 165, 0, 1)", // 橙色
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <main className="flex flex-row space-x-2 flag-warp h-full w-full">
       <div className="flex flex-col space-y-2 basis-1/2 h-auto">
-        <div className="flex h-60 bg-white shadow-lg rounded-xl p-4 items-center justify-center">
+        <div className="flex h-60 bg-white shadow-lg rounded-xl p-4 items-center justify-center dark:bg-black">
           <Doughnut data={chartData} options={options} />
+        </div>
+        <div className="col-span-2 flex flex-col bg-white shadow-lg rounded-xl p-4 justify-center dark:bg-black">
+          {/* {JSON.stringify(data[1])} */}
+          <Bar data={barData} options={{ indexAxis: "y" }} />
         </div>
       </div>
       <div className="flex flex-col space-y-2 basis-1/2 h-auto">
-        <div className="col-span-2 flex flex-col bg-white shadow-lg rounded-xl p-4 justify-center">
+        <div className="col-span-2 flex flex-col bg-white shadow-lg rounded-xl p-4 justify-center dark:bg-black">
           {labels.map((label) => {
             const used = Number(filesystems[label].used);
             const free = Number(filesystems[label].free);
@@ -104,8 +132,8 @@ export default function Page() {
             );
           })}
         </div>
-        <div className="col-span-2 flex flex-col bg-white shadow-lg rounded-xl p-4 justify-center">
-          {data.data.top.split("\n").map((line, index) => {
+        <div className="col-span-2 flex flex-col bg-white shadow-lg rounded-xl p-4 justify-center dark:bg-black">
+          {data[0].data.top.split("\n").map((line, index) => {
             const parts = line.split(":");
             return (
               <p key={index} className="text-base">
