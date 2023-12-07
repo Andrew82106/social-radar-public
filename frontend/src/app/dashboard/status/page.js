@@ -11,6 +11,7 @@ export default function Page() {
   const urls = [
     `${process.env.NEXT_PUBLIC_API_URL}/serverstatus`,
     `${process.env.NEXT_PUBLIC_API_URL}/dataoverview`,
+    `${process.env.NEXT_PUBLIC_API_URL}/supportedplatform`,
   ];
   const fetcher = (urls) =>
     Promise.all(urls.map((url) => fetch(url).then((res) => res.json())));
@@ -107,11 +108,28 @@ export default function Page() {
         <div className="flex h-60 bg-white shadow-lg rounded-xl p-4 items-center justify-center dark:bg-black">
           <Doughnut data={chartData} options={options} />
         </div>
-        <div className="col-span-2 flex flex-col bg-white shadow-lg rounded-xl p-4 justify-center dark:bg-black">
-          {/* {JSON.stringify(data[1])} */}
+        <div className="flex flex-col bg-white shadow-lg rounded-xl p-4 justify-center dark:bg-black">
           <Bar data={barData} options={{ indexAxis: "y" }} />
         </div>
+        <div className="flex flex-col bg-white shadow-lg rounded-xl p-4 justify-center dark:bg-black">
+          {Object.entries(data[2].data).map(([category, platforms]) => (
+            <div key={category}>
+              <h2 className="text-lg font-bold mb-2">{category}</h2>
+              <div className="flex flex-wrap">
+                {platforms.map((platform) => (
+                  <div
+                    key={platform}
+                    className="mb-2 mx-1 px-4 py-2 bg-rose-200 text-rose-400 font-serif rounded-md"
+                  >
+                    {platform}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+
       <div className="flex flex-col space-y-2 basis-1/2 h-auto">
         <div className="col-span-2 flex flex-col bg-white shadow-lg rounded-xl p-4 justify-center dark:bg-black">
           {labels.map((label) => {
