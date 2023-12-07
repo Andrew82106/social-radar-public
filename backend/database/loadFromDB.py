@@ -224,21 +224,40 @@ class DB_Data(BaseConfig):
                     break
 
     @cache.cache_result(cache_path='readWangyiUserInfo.pkl')
-    def readWangyiUserInfo(self):
-        self.data = [
-            {self.UserInfo_UserName: '金渐层烤乳牛', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',
-             self.UserInfo_IPLocation: "中国 台湾",
-             self.UserInfo_Level: 6,
-             self.ID_Index: 1,
-             self.UserInfo_RelatedEvent: ['1', '2']
-             },
-            {self.UserInfo_UserName: '猪猪侠', self.UserInfo_RegisterTime: '2019-07-01 07:22:14',
-             self.UserInfo_IPLocation: "巴林",
-             self.UserInfo_Level: 5,
-             self.ID_Index: 2,
-             self.UserInfo_RelatedEvent: ['1', '2']
-             },
-        ]
+    def readWangyiUserInfo(self, mode='from table'):
+        if mode is None:
+            self.data = [
+                {self.UserInfo_UserName: '金渐层烤乳牛', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',
+                 self.UserInfo_IPLocation: "台湾",
+                 self.UserInfo_Level: 6,
+                 self.ID_Index: 1,
+                 self.UserInfo_RelatedEvent: ['1', '2']
+                 },
+                {self.UserInfo_UserName: '幻舞*Ustd', self.UserInfo_RegisterTime: '2019-07-01 07:22:14',
+                 self.UserInfo_IPLocation: "哈萨克斯坦",
+                 self.UserInfo_Level: 5,
+                 self.ID_Index: 2,
+                 self.UserInfo_RelatedEvent: ['1', '2']
+                 },
+            ]
+        else:
+            print("loading data from excel or csv")
+            _DF = self.readUserTable()
+            self.data = []
+            cnt = 0
+            for i in tqdm.tqdm(range(len(_DF))):
+                dfi = _DF.iloc[i:i + 1]
+                if dfi[self.UserInfo_platform].iloc[0] != self.platform:
+                    continue
+                # print(dfi.columns)
+                self.data.append({
+                    self.UserInfo_Level: int(dfi[self.UserInfo_Level].iloc[0]),
+                    self.UserInfo_UserName: str(dfi[self.UserInfo_UserName].iloc[0]),
+                    self.UserInfo_IPLocation: str(dfi[self.UserInfo_IPLocation].iloc[0]),
+                    self.UserInfo_RegisterTime: str(dfi[self.UserInfo_RegisterTime].iloc[0]),
+                    self.UserInfo_ID: int(dfi[self.UserInfo_ID].iloc[0]),
+                    self.UserInfo_RelatedEvent: str(dfi[self.UserInfo_RelatedEvent].iloc[0]).split('-')
+                })
 
     @cache.cache_result(cache_path='readZhihuComment.pkl')
     def readZhihuComment(self, Location=None, ID_Index=1, length=-1):
@@ -291,21 +310,40 @@ class DB_Data(BaseConfig):
                     break
 
     @cache.cache_result(cache_path='readZhihuUserInfo.pkl')
-    def readZhihuUserInfo(self):
-        self.data = [
-            {self.UserInfo_UserName: '金渐层烤乳牛猪', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',
-             self.UserInfo_IPLocation: "中国 台湾",
-             self.UserInfo_Level: 6,
-             self.ID_Index: 1,
-             self.UserInfo_RelatedEvent: ['1', '2']
-             },
-            {self.UserInfo_UserName: '幻舞*Ustd', self.UserInfo_RegisterTime: '2019-07-01 07:22:14',
-             self.UserInfo_IPLocation: "哈萨克斯坦",
-             self.UserInfo_Level: 5,
-             self.ID_Index: 2,
-             self.UserInfo_RelatedEvent: ['1', '2']
-             },
-        ]
+    def readZhihuUserInfo(self, mode='from table'):
+        if mode is None:
+            self.data = [
+                {self.UserInfo_UserName: '金渐层烤乳牛', self.UserInfo_RegisterTime: '2023-09-04 10:22:14',
+                 self.UserInfo_IPLocation: "台湾",
+                 self.UserInfo_Level: 6,
+                 self.ID_Index: 1,
+                 self.UserInfo_RelatedEvent: ['1', '2']
+                 },
+                {self.UserInfo_UserName: '幻舞*Ustd', self.UserInfo_RegisterTime: '2019-07-01 07:22:14',
+                 self.UserInfo_IPLocation: "哈萨克斯坦",
+                 self.UserInfo_Level: 5,
+                 self.ID_Index: 2,
+                 self.UserInfo_RelatedEvent: ['1', '2']
+                 },
+            ]
+        else:
+            print("loading data from excel or csv")
+            _DF = self.readUserTable()
+            self.data = []
+            cnt = 0
+            for i in tqdm.tqdm(range(len(_DF))):
+                dfi = _DF.iloc[i:i + 1]
+                if dfi[self.UserInfo_platform].iloc[0] != self.platform:
+                    continue
+                # print(dfi.columns)
+                self.data.append({
+                    self.UserInfo_Level: int(dfi[self.UserInfo_Level].iloc[0]),
+                    self.UserInfo_UserName: str(dfi[self.UserInfo_UserName].iloc[0]),
+                    self.UserInfo_IPLocation: str(dfi[self.UserInfo_IPLocation].iloc[0]),
+                    self.UserInfo_RegisterTime: str(dfi[self.UserInfo_RegisterTime].iloc[0]),
+                    self.UserInfo_ID: int(dfi[self.UserInfo_ID].iloc[0]),
+                    self.UserInfo_RelatedEvent: str(dfi[self.UserInfo_RelatedEvent].iloc[0]).split('-')
+                })
 
     def readEventList(self):
         self.data = EventList
