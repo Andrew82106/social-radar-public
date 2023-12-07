@@ -41,7 +41,7 @@
 32. 计算平台platform中名字为username的用户的指标，返回包括指标在内的用户的所有信息
 33. 计算对于事件eventid，平台platform中的用户综合指标，时间精确到日
 34. 计算对于事件eventid，平台platform中的总指标，时间精确到日
-34. 返回对于事件eventid，平台platform的日期列表，时间精确到日
+35. 返回对于事件eventid，平台platform的日期列表，时间精确到日
 
 对应的接口：
 
