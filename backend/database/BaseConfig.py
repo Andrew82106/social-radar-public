@@ -69,6 +69,10 @@ class BaseConfig:
                                             "backend/database/example_data/巴以网易1.csv")
         self.BilibiliUserData = os.path.join(self.projectRoute,
                                              "backend/database/example_data/BilibiliUserData.xlsx")
+        self.WangyiUserData = os.path.join(self.projectRoute,
+                                           "backend/database/example_data/WangyiUserData.xlsx")
+        self.ZhihuUserData = os.path.join(self.projectRoute,
+                                          "backend/database/example_data/ZhiHuUserData.xlsx")
 
         self.newsTableRoute = [
             self.baYiNewsWangyi,
@@ -80,7 +84,9 @@ class BaseConfig:
             self.ExampleDataRoute_Ali3,
         ]
         self.UserTableRoute = [
-            self.BilibiliUserData
+            self.BilibiliUserData,
+            self.WangyiUserData,
+            self.ZhihuUserData
         ]
 
     def __len__(self):
