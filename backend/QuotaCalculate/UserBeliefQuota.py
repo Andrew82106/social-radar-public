@@ -53,7 +53,7 @@ class UserBQuota(BaseInfo):
                 instance = i
                 break
         assert instance is not None, f"instance is None! para: eventid:{eventid} platform:{platform}"
-        for dataI in tqdm.tqdm(instance.dateRange, desc="计算用户指标中"):
+        for dataI in tqdm.tqdm(instance.dateRange[int(eventid)], desc="计算用户指标中"):
             TIME = dataI.split(" ")[0]
             res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
         return self.packetFormat(res)

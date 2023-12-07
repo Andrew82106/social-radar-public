@@ -30,7 +30,7 @@ class OpinionQuota(BaseInfo):
 
     def calcOpinionQuota(self, eventid, platform):
         res = {}
-        aimDate = '2023-12-29'
+        aimDate = self.aimDate
         instance = None
         for i in self.platformLst:
             if i.platform == platform:

@@ -8,7 +8,7 @@ class BaseConfig:
             "time": str(datetime.datetime.now().strftime("%Y %D %H:%M:%S"))
         }
         self.ID_Index = "IDIndex"
-        self.dateRange = []
+        self.dateRange = {}
 
         self.data = None
         self.platform = ""

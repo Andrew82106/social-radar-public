@@ -23,6 +23,7 @@ try:
     from QuotaCalculate.EmotionEvaluationQuota import EmotionEvaluationQuota
     from QuotaCalculate.OpinionQuota import OpinionQuota
     from QuotaCalculate.UserBeliefQuota import UserBQuota
+    from QuotaCalculate.summaryQuota import SummaryQuota
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
@@ -38,6 +39,7 @@ except:
     from ..QuotaCalculate.EmotionEvaluationQuota import EmotionEvaluationQuota
     from ..QuotaCalculate.OpinionQuota import OpinionQuota
     from ..QuotaCalculate.UserBeliefQuota import UserBQuota
+    from ..QuotaCalculate.summaryQuota import SummaryQuota
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -330,6 +332,29 @@ def UserDataByDate():
     eventid = request.args.get("eventid")
     platform = request.args.get("platform")
     return yyy.calcUserQuota(eventid, platform)
+
+
+ss = SummaryQuota()
+
+
+@app.route('/SummaryQuota/')
+def SummaryQuota():
+    eventid = request.args.get("eventid")
+    platform = request.args.get("platform")
+    return ss.calc_summary_q(eventid, platform)
+
+
+@app.route('/timeseq/')
+def timeseq():
+    eventid = request.args.get("eventid")
+    platform = request.args.get("platform")
+    for i in commentList:
+        if i.platform == platform:
+            return i.packetFormat(i.dateRange[int(eventid)])
+    for i in newsList:
+        if i.platform == platform:
+            return i.packetFormat(i.dateRange[int(eventid)])
+    return commentList[0].packetFormat("无该平台")
 
 
 if __name__ == '__main__':

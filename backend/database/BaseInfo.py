@@ -11,6 +11,7 @@ except:
 class BaseInfo(BaseConfig):
     def __init__(self):
         super().__init__()
+        self.aimDate = '2023-12-29'
 
     def load_data(self):
         pass
@@ -18,7 +19,7 @@ class BaseInfo(BaseConfig):
     @staticmethod
     def _map_to_range(value):
         sine_value = math.sin(value)
-        mapped_value = (sine_value + 1) * 4
+        mapped_value = (sine_value + 1) * 4 + random.randint(-100, 100)/100
         return mapped_value
 
     @staticmethod
@@ -31,6 +32,8 @@ class BaseInfo(BaseConfig):
 
     @staticmethod
     def _calculate_date_difference(start_date_str, target_date_str):
+        if "/" in start_date_str:
+            start_date_str = start_date_str.replace('/', "-")
         start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
         target_date = datetime.strptime(target_date_str, "%Y-%m-%d")
         date_difference = (target_date - start_date).days

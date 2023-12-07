@@ -40,6 +40,8 @@
 31. 计算platform中eventid事件的观点指标(第一次计算耗时很久，需要写等待效果)，时间精确到日
 32. 计算平台platform中名字为username的用户的指标，返回包括指标在内的用户的所有信息
 33. 计算对于事件eventid，平台platform中的用户综合指标，时间精确到日
+34. 计算对于事件eventid，平台platform中的总指标，时间精确到日
+34. 返回对于事件eventid，平台platform的日期列表，时间精确到日
 
 对应的接口：
 
@@ -76,6 +78,8 @@
 31. http://127.0.0.1:5000/OpinionDataDetail/?eventID=[eventID]&Platform=[Platform]
 32. http://127.0.0.1:5000/UserDataDetail/?userName=[userName]&platform=[platform]
 33. http://127.0.0.1:5000/UserDataByDate/?eventid=[eventid]&platform=[platform]
+34. http://127.0.0.1:5000/SummaryQuota/?eventid=[eventid]&platform=[platform]
+35. http://127.0.0.1:5000/timeseq/?eventid=[eventid]&platform=[platform]
 
 比如：
 
@@ -112,5 +116,7 @@
 31. http://127.0.0.1:5000/OpinionDataDetail/?eventID=1&Platform=bilibili
 32. http://127.0.0.1:5000/UserDataDetail/?userName=Reachhalo&platform=bilibili
 33. http://127.0.0.1:5000/UserDataByDate/?eventid=1&platform=bilibili
+34. http://127.0.0.1:5000/SummaryQuota/?eventid=1&platform=zhihu
+35. http://127.0.0.1:5000/timeseq/?eventid=1&platform=zhihu
 
 接口返回的数据格式运行monk.py进行查看。
