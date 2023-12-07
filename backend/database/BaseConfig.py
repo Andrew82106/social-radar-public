@@ -8,6 +8,7 @@ class BaseConfig:
             "time": str(datetime.datetime.now().strftime("%Y %D %H:%M:%S"))
         }
         self.ID_Index = "IDIndex"
+        self.dateRange = {}
 
         self.data = None
         self.platform = ""
@@ -24,6 +25,7 @@ class BaseConfig:
         self.UserInfo_Level = "Level"
         self.UserInfo_platform = "platform"
         self.UserInfo_ID = "IDIndex"
+        self.UserInfo_quota = "quota"
 
         self.CommentInfo_UserName = 'Username'
         self.CommentInfo_like = 'like'

@@ -22,6 +22,8 @@ try:
     from QuotaCalculate.SensitiveQuota import SensitiveQuota
     from QuotaCalculate.EmotionEvaluationQuota import EmotionEvaluationQuota
     from QuotaCalculate.OpinionQuota import OpinionQuota
+    from QuotaCalculate.UserBeliefQuota import UserBQuota
+    from QuotaCalculate.summaryQuota import SummaryQuota
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
@@ -36,6 +38,8 @@ except:
     from ..QuotaCalculate.SensitiveQuota import SensitiveQuota
     from ..QuotaCalculate.EmotionEvaluationQuota import EmotionEvaluationQuota
     from ..QuotaCalculate.OpinionQuota import OpinionQuota
+    from ..QuotaCalculate.UserBeliefQuota import UserBQuota
+    from ..QuotaCalculate.summaryQuota import SummaryQuota
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -154,7 +158,7 @@ def fetchUserQuota():
 
 @app.route('/addEvent/<wordlist>')
 def addEvent(wordlist):
-    Lst = str(wordlist).split("-")
+    Lst = str(wordlist).split("|")
     EventList.addEvent(Lst)
     return EventList.fetch()
 
@@ -190,8 +194,9 @@ def dataOverview():
     return a.fetch()
 
 
-@app.route('/llmsummarytext/<TEXT>')
-def llmSummary(TEXT):
+@app.route('/llmsummarytext/')
+def llmSummary():
+    TEXT = request.args.get("content")
     a = SparkChatModel()
     a.chat(TEXT)
     return a.fetch()
@@ -310,6 +315,46 @@ def OpinionDataDetail():
     eventID = request.args.get("eventID")
     Platform = request.args.get("Platform")
     return y1.calcOpinionQuota(eventID, Platform)
+
+
+yyy = UserBQuota()
+
+
+@app.route('/UserDataDetail/')
+def UserDataDetail():
+    userName = request.args.get("userName")
+    platform = request.args.get("platform")
+    return yyy.fetch_user_quota(userName, platform)
+
+
+@app.route('/UserDataByDate/')
+def UserDataByDate():
+    eventid = request.args.get("eventid")
+    platform = request.args.get("platform")
+    return yyy.calcUserQuota(eventid, platform)
+
+
+ss = SummaryQuota()
+
+
+@app.route('/SummaryQuota/')
+def SummaryQuota():
+    eventid = request.args.get("eventid")
+    platform = request.args.get("platform")
+    return ss.calc_summary_q(eventid, platform)
+
+
+@app.route('/timeseq/')
+def timeseq():
+    eventid = request.args.get("eventid")
+    platform = request.args.get("platform")
+    for i in commentList:
+        if i.platform == platform:
+            return i.packetFormat(i.dateRange[int(eventid)])
+    for i in newsList:
+        if i.platform == platform:
+            return i.packetFormat(i.dateRange[int(eventid)])
+    return commentList[0].packetFormat("无该平台")
 
 
 if __name__ == '__main__':

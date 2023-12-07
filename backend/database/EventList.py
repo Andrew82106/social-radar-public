@@ -49,9 +49,22 @@ class EventLst(BaseInfo, DB_Data):
     def delEvent(self, EventID):
         if self.data is None:
             self.load_data()
+        print(EventID)
         if not (1 <= int(EventID) <= self.maxID):
             return
-        if EventID in self.data['trash']:
+        AIM_ID = None
+        for ID in self.data['finished']:
+            if str(ID) == str(EventID):
+                AIM_ID = ID
+
+        if AIM_ID is not None:
+            self.data['finished'].pop(AIM_ID)
             return
-        self.data['trash'].append(EventID)
+
+        for ID in self.data['processing']:
+            if str(ID) == str(EventID):
+                AIM_ID = ID
+        if AIM_ID is not None:
+            self.data['processing'].pop(AIM_ID)
+            return
 
