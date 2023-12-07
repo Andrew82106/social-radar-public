@@ -22,6 +22,7 @@ try:
     from QuotaCalculate.SensitiveQuota import SensitiveQuota
     from QuotaCalculate.EmotionEvaluationQuota import EmotionEvaluationQuota
     from QuotaCalculate.OpinionQuota import OpinionQuota
+    from QuotaCalculate.UserBeliefQuota import UserBQuota
 except:
     from ..database.EventQuota import EventQuota
     from ..database.UserQuota import UserQuota
@@ -36,6 +37,7 @@ except:
     from ..QuotaCalculate.SensitiveQuota import SensitiveQuota
     from ..QuotaCalculate.EmotionEvaluationQuota import EmotionEvaluationQuota
     from ..QuotaCalculate.OpinionQuota import OpinionQuota
+    from ..QuotaCalculate.UserBeliefQuota import UserBQuota
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -310,6 +312,23 @@ def OpinionDataDetail():
     eventID = request.args.get("eventID")
     Platform = request.args.get("Platform")
     return y1.calcOpinionQuota(eventID, Platform)
+
+
+yyy = UserBQuota()
+
+
+@app.route('/UserDataDetail/')
+def UserDataDetail():
+    userName = request.args.get("userName")
+    platform = request.args.get("platform")
+    return yyy.fetch_user_quota(userName, platform)
+
+
+@app.route('/UserDataByDate/')
+def UserDataByDate():
+    eventid = request.args.get("eventid")
+    platform = request.args.get("platform")
+    return yyy.calcUserQuota(eventid, platform)
 
 
 if __name__ == '__main__':

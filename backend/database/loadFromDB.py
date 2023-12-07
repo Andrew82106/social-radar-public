@@ -122,7 +122,8 @@ class DB_Data(BaseConfig):
                 dfi = _DF.iloc[i:i + 1]
                 if dfi[self.CommentInfo_platform].iloc[0] != self.platform:
                     continue
-                # print(dfi.columns)
+                if str(dfi[self.CommentInfo_time].iloc[0]) not in self.dateRange:
+                    self.dateRange.append(str(dfi[self.CommentInfo_time].iloc[0]))
                 self.data.append({
                     self.CommentInfo_UserName: str(dfi[self.CommentInfo_UserName].iloc[0]),
                     self.CommentInfo_time: str(dfi[self.CommentInfo_time].iloc[0]),
@@ -199,6 +200,8 @@ class DB_Data(BaseConfig):
                 dfi = _DF.iloc[i:i + 1]
                 if dfi[self.NewsInfo_platform].iloc[0] != self.platform:
                     continue
+                if str(dfi[self.NewsInfo_Time].iloc[0]) not in self.dateRange:
+                    self.dateRange.append(str(dfi[self.NewsInfo_Time].iloc[0]))
                 self.data.append({
                     self.NewsInfo_Title: dfi[self.NewsInfo_Title].iloc[0],
                     self.NewsInfo_content: str(dfi[self.NewsInfo_content].iloc[0]),
@@ -260,6 +263,8 @@ class DB_Data(BaseConfig):
                 dfi = _DF.iloc[i:i + 1]
                 if dfi[self.CommentInfo_platform].iloc[0] != self.platform:
                     continue
+                if str(dfi[self.CommentInfo_time].iloc[0]) not in self.dateRange:
+                    self.dateRange.append(str(dfi[self.CommentInfo_time].iloc[0]))
                 self.data.append({
                     self.CommentInfo_UserName: dfi[self.CommentInfo_UserName].iloc[0],
                     self.CommentInfo_time: str(dfi[self.CommentInfo_time].iloc[0]),

@@ -38,6 +38,8 @@
 - 基于敏感词表统计platform中eventid事件的敏感词总体情况
 - 计算platform中eventid事件的情感激烈性指标(第一次计算耗时很久，需要写等待效果)，mode参数设置时间的精确度，mode=date则时间精确到日
 - 计算platform中eventid事件的观点指标(第一次计算耗时很久，需要写等待效果)，时间精确到日
+- 计算平台platform中名字为username的用户的指标，返回包括指标在内的用户的所有信息
+- 计算对于事件eventid，平台platform中的用户综合指标，时间精确到日
 
 
 对应的接口：
@@ -72,6 +74,8 @@
 - http://127.0.0.1:5000/sensitivedataOverviewDetail/?eventID=[EVENTID]&Platform=[PLATFORM]
 - http://127.0.0.1:5000/EmotionDataDetail/?eventID=[eventID]&Platform=[Platform]&mode=[mode]
 - http://127.0.0.1:5000/OpinionDataDetail/?eventID=[eventID]&Platform=[Platform]
+- http://127.0.0.1:5000/UserDataDetail/?userName=[userName]&platform=[platform]
+- http://127.0.0.1:5000/UserDataByDate/?eventid=[eventid]&platform=[platform]
 
 比如：
 
@@ -104,5 +108,7 @@
 - http://127.0.0.1:5000/sensitivedataOverviewDetail/?eventID=1&Platform=bilibili
 - http://127.0.0.1:5000/EmotionDataDetail/?eventID=1&Platform=bilibili&mode=date
 - http://127.0.0.1:5000/OpinionDataDetail/?eventID=1&Platform=bilibili
+- http://127.0.0.1:5000/UserDataDetail/?userName=Reachhalo&platform=bilibili
+- http://127.0.0.1:5000/UserDataByDate/?eventid=1&platform=bilibili
 
 接口返回的数据格式运行monk.py进行查看。

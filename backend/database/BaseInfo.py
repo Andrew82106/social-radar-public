@@ -1,5 +1,6 @@
-import json
-import datetime
+import math
+from datetime import datetime, timedelta
+import random
 
 try:
     from database.BaseConfig import BaseConfig
@@ -13,6 +14,27 @@ class BaseInfo(BaseConfig):
 
     def load_data(self):
         pass
+
+    @staticmethod
+    def _map_to_range(value):
+        sine_value = math.sin(value)
+        mapped_value = (sine_value + 1) * 4
+        return mapped_value
+
+    @staticmethod
+    def _calcMetric(name):
+        return random.randint(0, len(name))
+
+    @staticmethod
+    def _newD(c):
+        return c + timedelta(days=1)
+
+    @staticmethod
+    def _calculate_date_difference(start_date_str, target_date_str):
+        start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+        target_date = datetime.strptime(target_date_str, "%Y-%m-%d")
+        date_difference = (target_date - start_date).days
+        return date_difference
 
     def fetch(self):
         if self.data is None:
@@ -54,8 +76,6 @@ class BaseInfo(BaseConfig):
                     if isinstance(i[j], datetime.time):
                         i[j] = str(i[j])
                 dataLst.append(i)
-
-        # json_ = json.dumps(dataLst)
         return self.packetFormat(dataLst)
 
     def fetch_associate_event_with_ID(self, ID):
