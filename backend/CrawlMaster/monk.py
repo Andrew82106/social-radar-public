@@ -192,8 +192,9 @@ def dataOverview():
     return a.fetch()
 
 
-@app.route('/llmsummarytext/<TEXT>')
-def llmSummary(TEXT):
+@app.route('/llmsummarytext/')
+def llmSummary():
+    TEXT = request.args.get("content")
     a = SparkChatModel()
     a.chat(TEXT)
     return a.fetch()
