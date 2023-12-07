@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import Loading from "../loading";
+import Loading from "../../../components/common/Loading";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Doughnut, Bar } from "react-chartjs-2";
 

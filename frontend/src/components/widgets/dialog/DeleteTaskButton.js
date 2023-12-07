@@ -2,7 +2,7 @@ import React from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { Delete, Trash2 } from "lucide-react";
 
-const DeleteTasks = ({ taskId }) => {
+const DeleteTaskButton = ({ taskId }) => {
   const handleDelete = () => {
     window.location.reload();
   };
@@ -44,4 +44,4 @@ const DeleteTasks = ({ taskId }) => {
   );
 };
 
-export default DeleteTasks;
+export default DeleteTaskButton;

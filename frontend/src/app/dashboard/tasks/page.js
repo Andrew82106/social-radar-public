@@ -2,7 +2,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import Loading from "../loading";
+import Loading from "../../../components/common/Loading";
 
 export default function Page() {
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
@@ -57,21 +57,21 @@ export default function Page() {
           Previous
         </button>
         <div className="flex">
-        <input
-          type="text"
-          placeholder="Search..."
-          className="border-2 border-gray-300 border-blue-400 rounded-md p-2 mr-5"
-          value={searchQuery}
-          onChange={handleSearch}
-        />
-        <button
-          onClick={loadNext}
-          disabled={page === totalPages}
-          className="rounded-md flex items-center p-3 transition-transform duration-200 ease-in-out transform active:scale-90 hover:shadow-lg hover:bg-gray-400"
-        >
-          Next
-          <ChevronRight />
-        </button>
+          <input
+            type="text"
+            placeholder="Search..."
+            className="border-2 border-gray-300 border-blue-400 rounded-md p-2 mr-5"
+            value={searchQuery}
+            onChange={handleSearch}
+          />
+          <button
+            onClick={loadNext}
+            disabled={page === totalPages}
+            className="rounded-md flex items-center p-3 transition-transform duration-200 ease-in-out transform active:scale-90 hover:shadow-lg hover:bg-gray-400"
+          >
+            Next
+            <ChevronRight />
+          </button>
         </div>
       </div>
       <div className="flex flex-wrap p-2 justify-center space-x-4 space-y-4 overflow-auto">
