@@ -158,7 +158,7 @@ def fetchUserQuota():
 
 @app.route('/addEvent/<wordlist>')
 def addEvent(wordlist):
-    Lst = str(wordlist).split("-")
+    Lst = str(wordlist).split("|")
     EventList.addEvent(Lst)
     return EventList.fetch()
 
