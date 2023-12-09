@@ -9,6 +9,9 @@ import DeleteTasks from "@/components/widgets/dialog/DeleteTaskButton";
 import AddTaskButton from "@/components/widgets/dialog/AddTaskButton";
 
 export default function Page() {
+  window.addEventListener("popstate", function (event) {
+    history.pushState(null, null, document.URL);
+  });
   const router = useRouter();
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
   const { data, error, mutate } = useSWR(
@@ -20,7 +23,7 @@ export default function Page() {
   if (!data) return <Loading />;
 
   return (
-    <main className="flex flex-row justify-between flex-wrap text-black overflow-auto overscroll-none">
+    <main className="flex flex-row justify-between h-full w-full flex-wrap text-black overflow-auto overscroll-none">
       <div>
         <div className="flex flex-row flex-nowrap">
           {Object.entries(data.data.finished).map(([id, keywords]) => (
@@ -43,17 +46,17 @@ export default function Page() {
                 Complete
               </span>
               <div className="flex flex-row-reverse mt-2 mb-[-10]">
-                <DeleteTasks className="h-2" />
+                <DeleteTasks taskId={id} className="h-2" />
               </div>
             </div>
           ))}
         </div>
+
         <div className="flex flex-row flex-nowrap">
           {Object.entries(data.data.processing).map(([id, item]) => (
             <div
               key={id}
               className="flex flex-col justify-between m-4 p-4 bg-white border border-gray-100 rounded-lg shadow-sm w-64 transform transition-transform duration-200 hover:scale-105 hover:shadow-lg"
-              onClick={() => router.push(`/dashboard/tasks?id=${id}`)}
             >
               <ul className="mt-2 flex flex-wrap">
                 {item.keyword.map((keyword, index) => (
@@ -69,14 +72,16 @@ export default function Page() {
               <span className="bg-orange-200 text-sm text-orange-500 rounded pl-2 p-1">
                 Processing
               </span>
+              <div className="flex flex-row-reverse mt-2 mb-[-10]">
+                <DeleteTasks taskId={id} className="h-2" />
+              </div>
             </div>
           ))}
         </div>
       </div>
-      <div className="flex p-2 h-full ml-4">
-        <AddTaskButton />
+      <div className="flex p-2 h-full ml-4 ">
+        <AddTaskButton className="" />
       </div>
     </main>
   );
 }
-

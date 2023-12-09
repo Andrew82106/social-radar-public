@@ -2,7 +2,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import Loading from "../../../components/common/Loading";
+import Loading from "@/components/common/Loading";
 
 export default function Page() {
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
