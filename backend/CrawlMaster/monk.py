@@ -97,10 +97,11 @@ def supportedEventList():
 def fetchDetailComment():
     eventid = request.args.get("id")
     platform = request.args.get("platform")
-    # print(eventid, platform)
+    count = request.args.get("count")
+    page = request.args.get("page")
     for identity in commentList:
         if identity.platform == platform:
-            res = identity.fetch_detail(eventid)
+            res = identity.fetch_detail(eventid, count=count, page=page)
             return res
 
     return f"NO such platform called {platform}"
@@ -110,10 +111,12 @@ def fetchDetailComment():
 def fetchDetailNews():
     eventid = request.args.get("id")
     platform = request.args.get("platform")
-    print(eventid, platform)
+    count = request.args.get("count")
+    page = request.args.get("page")
+    # print(eventid, platform)
     for identity in newsList:
         if identity.platform == platform:
-            res = identity.fetch_detail(eventid)
+            res = identity.fetch_detail(eventid, count=count, page=page)
             return res
     return f"NO such platform called {platform}"
 
