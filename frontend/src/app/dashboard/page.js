@@ -110,3 +110,6 @@ export default function Page() {
     </main>
   );
 }
+  window.addEventListener("popstate", function (event) {
+    history.pushState(null, null, document.URL);
+  });
