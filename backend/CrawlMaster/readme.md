@@ -11,8 +11,8 @@
 2. 不同新闻类平台爬取的舆情对象文本内容和文本相关信息（所有信息），并按照count条信息每页的格式返回第page页
 3. 平台用户相关信息（所有用户信息）
 4. 支持的平台信息
-5. 不同评论类平台中**某个事件**的舆情对象文本内容和文本相关信息（仅事件相关信息）
-6. 不同新闻类平台中**某个事件**的舆情对象文本内容和文本相关信息（仅事件相关信息）
+5. 不同评论类平台中**某个事件**的舆情对象文本内容和文本相关信息（仅事件相关信息），并按照count条信息每页的格式返回第page页
+6. 不同新闻类平台中**某个事件**的舆情对象文本内容和文本相关信息（仅事件相关信息），并按照count条信息每页的格式返回第page页
 7. 平台**某位用户**相关信息（仅用户相关信息）
 8. **某个事件**在**某个平台**中的相关指标
 9. **某个用户**在**某个平台**中的相关指标
@@ -43,14 +43,16 @@
 34. 计算对于事件eventid，平台platform中的总指标，时间精确到日
 35. 返回对于事件eventid，平台platform的日期列表，时间精确到日
 
+fetchdetailcomment分页，分页都要有返回值
+
 对应的接口：
 
 1. http://127.0.0.1:5000/fetchcomment/?platform=[platform]&count=[count]&page=[page]
 2. http://127.0.0.1:5000/fetchnews/?platform=[platform]&count=[count]&page=[page]
 3. http://127.0.0.1:5000/fetchuserinfo/[platform]
 4. http://127.0.0.1:5000/supportedplatform
-5. http://127.0.0.1:5000/fetchdetailcomment/?id=[EVENTID]&platform=[PLATFORM]
-6. http://127.0.0.1:5000/fetchdetailnews/?id=[EVENTID]&platform=[PLATFORM]
+5. http://127.0.0.1:5000/fetchdetailcomment/?id=[EVENTID]&platform=[PLATFORM]&count=[count]&page=[page]
+6. http://127.0.0.1:5000/fetchdetailnews/?id=[EVENTID]&platform=[PLATFORM]&count=[count]&page=[page]
 7. http://127.0.0.1:5000/fetchdetailuserinfo/?id=[USERID]&platform=[PLATFORM]
 8. http://127.0.0.1:5000/fetcheventquota/?id=[EVENTID]&platform=[PLATFORM]
 9. http://127.0.0.1:5000/fetchuserquota/?id=[USERID]&platform=[PLATFORM]
@@ -87,8 +89,8 @@
 2. http://127.0.0.1:5000/fetchnews/?platform=wangyi&count=30&page=2
 3. http://127.0.0.1:5000/fetchuserinfo/bilibili
 4. http://127.0.0.1:5000/supportedplatform
-5. http://127.0.0.1:5000/fetchdetailcomment/?id=1&platform=zhihu
-6. http://127.0.0.1:5000/fetchdetailnews/?id=1&platform=wangyi
+5. http://127.0.0.1:5000/fetchdetailcomment/?id=2&platform=zhihu&count=6&page=1
+6. http://127.0.0.1:5000/fetchdetailnews/?id=1&platform=wangyi&count=6&page=1
 7. http://127.0.0.1:5000/fetchdetailuserinfo/?id=1&platform=bilibili
 8. http://127.0.0.1:5000/fetcheventquota/?id=1&platform=bilibili
 9. http://127.0.0.1:5000/fetchuserquota/?id=1&platform=bilibili

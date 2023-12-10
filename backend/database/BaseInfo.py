@@ -46,7 +46,7 @@ class BaseInfo(BaseConfig):
         self.info['data'] = self.data
         return self.info
 
-    def fetchPage(self, count=None, page=None):
+    def fetchPage(self, count=None, page=None, data=None):
         if self.data is None:
             self.load_data()
         self.info['platform'] = self.platform
@@ -56,11 +56,17 @@ class BaseInfo(BaseConfig):
             count = int(count)
             page = int(page)
             try:
-                self.info['dataPage'] = self.info['data'][page*count:page*count + count]
+                if data is None:
+                    self.info['dataPage'] = self.info['data'][page*count:min(page*count + count, len(self.info['data']))]
+                else:
+                    self.info['dataPage'] = data[page*count:min(page*count + count, len(data))]
             except:
                 self.info['dataPage'] = f"参数错误，数据读取失败。self.info['data']长{len(self.info['data'])}"
 
-        return self.packetFormat(self.info['dataPage'])
+        return self.packetFormat({
+            'datalist': self.info['dataPage'],
+            'maximumPage': math.ceil(len(self.info['data'])/count) if data is None else math.ceil(len(self.info['data'])/count)
+        })
 
     def packetFormat(self, data):
         return {
@@ -69,18 +75,22 @@ class BaseInfo(BaseConfig):
             'time':  self.info['time']
         }
 
-    def fetch_detail(self, ID, ID2=None):
+    def fetch_detail(self, ID, ID2=None, count=None, page=None):
         if self.data is None:
             self.load_data()
         dataLst = []
         for i in self.data:
             if str(i[self.ID_Index]) == str(ID):
                 for j in i:
-                    if not isinstance(i[j], str):
+                    if not (isinstance(i[j], str) or isinstance(i[j], int)):
                         i[j] = str(i[j])
 
                 dataLst.append(i)
-        return self.packetFormat(dataLst)
+        if count is None:
+            return self.packetFormat(dataLst)
+        else:
+            assert page is not None, "page is None"
+            return self.fetchPage(count, page,data=dataLst)
 
     def fetch_associate_event_with_ID(self, ID):
         res = []
