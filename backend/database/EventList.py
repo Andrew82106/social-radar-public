@@ -43,7 +43,7 @@ class EventLst(BaseInfo, DB_Data):
         self.data['processing'][self.maxID] = {
             'keyword': wordlist,
             'start time': (datetime.now()).strftime("%Y %D %H:%M:%S"),
-            'schedule': 0.1
+            'schedule': 0
         }
 
     def delEvent(self, EventID):

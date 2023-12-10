@@ -93,7 +93,7 @@
 8. http://127.0.0.1:5000/fetcheventquota/?id=1&platform=bilibili
 9. http://127.0.0.1:5000/fetchuserquota/?id=1&platform=bilibili
 10. http://127.0.0.1:5000/eventList
-11. http://127.0.0.1:5000/addEvent/阿里-P0-故障-666
+11. http://127.0.0.1:5000/addEvent/阿里|P0|故障|666
 12. http://127.0.0.1:5000/delEvent/2
 13. http://127.0.0.1:5000/searchuser/猪
 14. http://127.0.0.1:5000/searchcontent/人
