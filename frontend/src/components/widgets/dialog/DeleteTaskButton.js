@@ -4,7 +4,9 @@ import { Delete, Trash2 } from "lucide-react";
 
 const DeleteTaskButton = ({ taskId }) => {
   const handleDelete = async () => {
-    const res = await fetch(`http://127.0.0.1:5000/delEvent/${taskId}`, { method: 'GET' });
+    const res = await fetch(`http://127.0.0.1:5000/delEvent/${taskId}`, {
+      method: "GET",
+    });
     if (res.ok) {
       window.location.reload();
     }
@@ -12,7 +14,7 @@ const DeleteTaskButton = ({ taskId }) => {
 
   return (
     <AlertDialog.Root>
-      <AlertDialog.Trigger asChild>
+      <AlertDialog.Trigger asChild onClick={(event) => event.stopPropagation()}>
         <button className="text-violet11 py-1 hover:bg-mauve3 shadow-blackA4 inline-flex items-center justify-center rounded-[4px] bg-red-400 text-white px-[15px] font-medium leading-none shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px] focus:shadow-red-200   ">
           <Trash2 size={20} />
         </button>
@@ -27,12 +29,12 @@ const DeleteTaskButton = ({ taskId }) => {
             这个任务将会被永久删除，您确定吗
           </AlertDialog.Description>
           <div className="flex justify-end gap-[25px]">
-            <AlertDialog.Cancel asChild>
+            <AlertDialog.Cancel asChild onClick={(event) => event.stopPropagation()}>
               <button className="text-mauve11 bg-mauve4 hover:bg-mauve5 focus:shadow-mauve7 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none outline-none focus:shadow-[0_0_0_2px]">
                 取消
               </button>
             </AlertDialog.Cancel>
-            <AlertDialog.Action asChild>
+            <AlertDialog.Action asChild onClick={(event) => event.stopPropagation()}>
               <button
                 onClick={handleDelete}
                 className="text-red11 bg-red4 hover:bg-red5 focus:shadow-red7 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none outline-none focus:shadow-[0_0_0_2px]"
