@@ -76,8 +76,9 @@ class BaseInfo(BaseConfig):
         for i in self.data:
             if str(i[self.ID_Index]) == str(ID):
                 for j in i:
-                    if isinstance(i[j], datetime.time):
+                    if not isinstance(i[j], str):
                         i[j] = str(i[j])
+
                 dataLst.append(i)
         return self.packetFormat(dataLst)
 
