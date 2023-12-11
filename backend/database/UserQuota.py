@@ -32,7 +32,7 @@ class UserQuota(BaseInfo):
              },
         ]
 
-    def fetch_detail(self, ID, ID2=None):
+    def fetch_detail(self, ID, ID2=None,  count=None, page=None):
         if self.data is None:
             self.load_data()
         for i in self.data:

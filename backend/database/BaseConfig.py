@@ -28,6 +28,7 @@ class BaseConfig:
         self.UserInfo_quota = "quota"
 
         self.CommentInfo_UserName = 'Username'
+        self.CommentInfo_UserID = 'UserID'
         self.CommentInfo_like = 'like'
         self.CommentInfo_time = 'time'
         self.CommentInfo_type = "type"
@@ -36,6 +37,7 @@ class BaseConfig:
         self.CommentInfo_platform = "platform"
 
         self.NewsInfo_location = 'Location'
+        self.NewsInfo_UserID = 'UserID'
         self.NewsInfo_source = 'source'
         self.NewsInfo_read = "read"
         self.NewsInfo_Title = "Title"

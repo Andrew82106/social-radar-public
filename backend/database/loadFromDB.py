@@ -116,6 +116,7 @@ class DB_Data(BaseConfig):
         else:
             print("loading data from excel or csv")
             _DF = self.readCommentTable()
+            BilibiliUserInfo = pd.read_excel(self.BilibiliUserData)
             self.data = []
             cnt = 0
             for i in tqdm.tqdm(range(len(_DF))):
@@ -129,14 +130,24 @@ class DB_Data(BaseConfig):
                     date = str(dfi[self.CommentInfo_time].iloc[0]).split(" ")[0]
                     self.dateRange[int(dfi[self.CommentInfo_IDIndex].iloc[0])].append(
                         date)
-                self.data.append({
-                    self.CommentInfo_UserName: str(dfi[self.CommentInfo_UserName].iloc[0]),
-                    self.CommentInfo_time: str(dfi[self.CommentInfo_time].iloc[0]),
-                    self.CommentInfo_like: int(dfi[self.CommentInfo_like].iloc[0]),
-                    self.CommentInfo_content: str(dfi[self.CommentInfo_content].iloc[0]),
-                    self.CommentInfo_type: 'response',
-                    self.CommentInfo_IDIndex: int(dfi[self.CommentInfo_IDIndex].iloc[0])
-                })
+                try:
+                    try:
+                        UID = int(
+                                BilibiliUserInfo[BilibiliUserInfo[self.UserInfo_UserName] == str(dfi[self.CommentInfo_UserName].iloc[0])][self.UserInfo_ID].iloc[0])
+                    except:
+                        UID = -1
+                    self.data.append({
+                        self.CommentInfo_UserName: str(dfi[self.CommentInfo_UserName].iloc[0]),
+                        self.CommentInfo_time: str(dfi[self.CommentInfo_time].iloc[0]),
+                        self.CommentInfo_like: int(dfi[self.CommentInfo_like].iloc[0]),
+                        self.CommentInfo_content: str(dfi[self.CommentInfo_content].iloc[0]),
+                        self.CommentInfo_type: 'response',
+                        self.CommentInfo_IDIndex: int(dfi[self.CommentInfo_IDIndex].iloc[0]),
+                        self.CommentInfo_UserID: UID
+                    })
+                except Exception as e:
+                    print(BilibiliUserInfo[BilibiliUserInfo[self.UserInfo_UserName] == str(dfi[self.CommentInfo_UserName].iloc[0])][self.UserInfo_ID])
+                    raise e
                 cnt += 1
                 if cnt > length and (length != -1):
                     break
@@ -199,6 +210,7 @@ class DB_Data(BaseConfig):
         else:
             print("loading data from excel or csv")
             _DF = self.readNewsTable()
+            WangyiUserInfo = pd.read_excel(self.WangyiUserData)
             self.data = []
             cnt = 0
             for i in tqdm.tqdm(range(len(_DF))):
@@ -217,7 +229,8 @@ class DB_Data(BaseConfig):
                     self.NewsInfo_location: str(dfi[self.NewsInfo_location].iloc[0]),
                     self.NewsInfo_read: random.randint(0, 10000),
                     self.NewsInfo_source: "网易新闻",
-                    self.NewsInfo_IDIndex: int(dfi[self.ID_Index].iloc[0])
+                    self.NewsInfo_IDIndex: int(dfi[self.ID_Index].iloc[0]),
+                    self.NewsInfo_UserID: int(WangyiUserInfo[WangyiUserInfo[self.UserInfo_UserName] == '网易新闻'][self.UserInfo_ID].iloc[0])
                 })
                 cnt += 1
                 if cnt > length and (length != -1):
@@ -267,23 +280,27 @@ class DB_Data(BaseConfig):
                  self.CommentInfo_like: 4869,
                  self.CommentInfo_type: 'answer',
                  self.ID_Index: 1,
+                 self.CommentInfo_UserID: 1,
                  self.CommentInfo_content: '中兴：我挨打了，他们敲诈我十亿美元。众人沉默。华为：我也挨打了，美国人封锁我。众人沉默，惴惴不安。海康、曙光等一众继续挨打。众人开始扎堆讨论，TMD美国人不能信啊，不能把命交到海外供应链里。于是：工信部出来讲话，要自强；发改委财政部出来给支持；中科院说缺啥咱就搞啥，但光靠我不行，要大家一起上；证监会说我给大家整科创板，打通社会融资。缺设备，上海方阵议论了一会儿，中微站起来，说我是中字头，我先上，把蚀刻做了。华创说，哥，我来搭把手。上微看了华为一眼，说光刻我从二十多纳米开始追。缺大硅片，沪硅想了一会儿站起来，看了一眼京津冀方阵，说我还年轻，死就死了，我上。中环握紧拳头致意。缺光刻胶，一众个头小的企业手拉手站起来，说我们一个人干不成，但可以一起干。缺EDA，大家都面面相觑，北京方阵站起来个小个子，华大九天哭着说，大家帮帮我，我去试试。设备出来总要有人试。中芯才要站起来，华虹按住他，说我先来。华润微说，咱一起来。中芯问那谁来做下游，谁来做应用。封测三雄站起来说义不容辞。兆易汇顶韦尔澜起也纷纷站起来。整个深圳方阵都站起来，还坐着的企业几乎都站起来了。大基金看了一圈说，钱不够的我去找。中国烟草当即掏出支票簿。证监会说我以最快速度批上市重组定增。发改委说，谁这时候骗补，我弄死谁。华为沉默着抽完最后几口烟，站起来说，只要我一天不死，就和大家努力自建IDM一天。'},
                 {self.CommentInfo_UserName: 'daniellin', 'location': '福建', 'reliability': 0.97,
                  'time': '2023-09-04 00:22',
                  self.CommentInfo_like: 422,
                  self.CommentInfo_type: 'comment',
                  self.ID_Index: 1,
+                 self.CommentInfo_UserID: 1,
                  self.CommentInfo_content: '之前看到一个人说过：你生于这个国家，就回避不了宏大的叙事背景，这是生于大国的国民宿命。'},
                 {self.CommentInfo_UserName: '上下求索', 'location': '浙江', 'reliability': 0.80,
                  'time': '2023-09-04 01:02',
                  self.CommentInfo_like: 93,
                  self.CommentInfo_type: 'comment',
                  self.ID_Index: 1,
+                 self.CommentInfo_UserID: 1,
                  self.CommentInfo_content: '这也是中国人几千年的文化基因，也是中国人区别于其他民族的地方。\n全世界也有其他大国，但是像中国这样宏大叙事，仅此一家。'}
             ]
         else:
             print("loading data from excel or csv")
             _DF = self.readCommentTable()
+            ZhihuUserInfo = pd.read_excel(self.ZhihuUserData)
             self.data = []
             cnt = 0
             for i in tqdm.tqdm(range(len(_DF))):
@@ -297,13 +314,20 @@ class DB_Data(BaseConfig):
                     date = str(dfi[self.CommentInfo_time].iloc[0]).split(" ")[0]
                     self.dateRange[int(dfi[self.CommentInfo_IDIndex].iloc[0])].append(
                         date)
+                try:
+                    UID = int(
+                        ZhihuUserInfo[ZhihuUserInfo[self.UserInfo_UserName] == dfi[self.CommentInfo_UserName].iloc[0]][
+                            self.UserInfo_ID].iloc[0])
+                except:
+                    UID = -1
                 self.data.append({
                     self.CommentInfo_UserName: dfi[self.CommentInfo_UserName].iloc[0],
                     self.CommentInfo_time: str(dfi[self.CommentInfo_time].iloc[0]),
                     self.CommentInfo_like: int(dfi[self.CommentInfo_like].iloc[0]),
                     self.CommentInfo_content: dfi[self.CommentInfo_content].iloc[0],
                     self.CommentInfo_type: 'response',
-                    self.CommentInfo_IDIndex: int(dfi[self.CommentInfo_IDIndex].iloc[0])
+                    self.CommentInfo_IDIndex: int(dfi[self.CommentInfo_IDIndex].iloc[0]),
+                    self.CommentInfo_UserID: UID
                 })
                 cnt += 1
                 if cnt > length and (length != -1):
