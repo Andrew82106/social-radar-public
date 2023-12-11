@@ -113,7 +113,6 @@ def fetchDetailNews():
     platform = request.args.get("platform")
     count = request.args.get("count")
     page = request.args.get("page")
-    # print(eventid, platform)
     for identity in newsList:
         if identity.platform == platform:
             res = identity.fetch_detail(eventid, count=count, page=page)

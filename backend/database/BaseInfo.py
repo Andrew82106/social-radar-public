@@ -65,7 +65,7 @@ class BaseInfo(BaseConfig):
 
         return self.packetFormat({
             'datalist': self.info['dataPage'],
-            'maximumPage': math.ceil(len(self.info['data'])/count) if data is None else math.ceil(len(self.info['data'])/count)
+            'maximumPage': math.ceil(len(self.info['data'])/count) - 1 if data is None else math.ceil(len(data)/count) - 1
         })
 
     def packetFormat(self, data):
@@ -90,7 +90,7 @@ class BaseInfo(BaseConfig):
             return self.packetFormat(dataLst)
         else:
             assert page is not None, "page is None"
-            return self.fetchPage(count, page,data=dataLst)
+            return self.fetchPage(count, page, data=dataLst)
 
     def fetch_associate_event_with_ID(self, ID):
         res = []
