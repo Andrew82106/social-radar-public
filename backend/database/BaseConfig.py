@@ -75,6 +75,8 @@ class BaseConfig:
                                            "backend/database/example_data/WangyiUserData.xlsx")
         self.ZhihuUserData = os.path.join(self.projectRoute,
                                           "backend/database/example_data/ZhiHuUserData.xlsx")
+        self.BaYiZhihu = os.path.join(self.projectRoute,
+                                      "backend/database/example_data/巴以冲突知乎数据.xlsx")
 
         self.newsTableRoute = [
             self.baYiNewsWangyi,
@@ -84,6 +86,7 @@ class BaseConfig:
         self.CommentTableRoute = [
             self.AllDataRoute,
             self.ExampleDataRoute_Ali3,
+            self.BaYiZhihu
         ]
         self.UserTableRoute = [
             self.BilibiliUserData,
