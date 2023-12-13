@@ -61,7 +61,8 @@ class OpinionQuota(BaseInfo):
             instance = i
             try:
                 for dataI in tqdm.tqdm(instance.dateRange[int(eventid)], desc="计算观点指标中"):
-                    TIME = dataI.split(" ")[0]
+                    TIME = dataI.split(" ")[0].replace("/", "-")
+                    TIME = datetime.strftime(datetime.strptime(TIME, "%Y-%m-%d"), "%Y-%m-%d")
                     res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
             except:
                 pass

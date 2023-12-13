@@ -55,7 +55,13 @@ class TimeQuota(BaseInfo):
     def getDateListofAllPlatform(self, eventID, mode):
         DateList = {}
         for instance in self.platformLst:
-            DateList[instance.platform] = self.getDateList(instance.platform, eventID, mode)
+            DateList0 = self.getDateList(instance.platform, eventID, mode)
+            for i in DateList0:
+                i1 = str(i).replace("/", "-")
+                i1 = datetime.strftime(datetime.strptime(i1, "%Y-%m-%d"), "%Y-%m-%d")
+                if i1 not in DateList:
+                    DateList[i1] = 0
+                DateList[i1] += DateList0[i]
         self.data = DateList
 
     def getDateListofAllPlatformDetail(self, eventID, platform):
