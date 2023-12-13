@@ -125,6 +125,15 @@
 
 ## 5 指标类接口
 
+指标包括：
+
+1. 时间指标
+2. 内容敏感度指标
+3. 用户真实度指标
+4. 情感激烈性指标
+5. 观点对立性指标
+6. 总指标
+
 ### 5.1 按照事件和平台分类
 
 #### 5.1.1 返回总数值指标
@@ -143,19 +152,19 @@
 
 基于时间序列是指该指标在每一合法日期都会有一个值
 
-> 计算platform中eventid事件的情感激烈性指标(第一次计算耗时很久，需要写等待效果)，mode参数设置时间的精确度，mode=date则时间精确到日
+> 计算platform中eventid事件的**情感激烈性指标**(第一次计算耗时很久，需要写等待效果)，mode参数设置时间的精确度，mode=date则时间精确到日
 - http://127.0.0.1:5000/EmotionDataDetail/?eventID=[eventID]&Platform=[Platform]&mode=[mode]
 - http://127.0.0.1:5000/EmotionDataDetail/?eventID=1&Platform=bilibili&mode=date
 
-> 计算platform中eventid事件的观点指标，时间精确到日
+> 计算platform中eventid事件的**观点指标**，时间精确到日
 - http://127.0.0.1:5000/OpinionDataDetail/?eventID=[eventID]&Platform=[Platform]
 - http://127.0.0.1:5000/OpinionDataDetail/?eventID=1&Platform=bilibili
 
-> 计算对于事件eventid，平台platform中的用户综合指标，时间精确到日
+> 计算对于事件eventid，平台platform中的**用户综合指标**，时间精确到日
 - http://127.0.0.1:5000/UserDataByDate/?eventid=[eventid]&platform=[platform]
 - http://127.0.0.1:5000/UserDataByDate/?eventid=1&platform=bilibili
 
-> 计算对于事件eventid，平台platform中的总指标，时间精确到日
+> 计算对于事件eventid，平台platform中的**总指标**，时间精确到日
 - http://127.0.0.1:5000/SummaryQuota/?eventid=[eventid]&platform=[platform]
 - http://127.0.0.1:5000/SummaryQuota/?eventid=1&platform=zhihu
 
