@@ -2,7 +2,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, Plus } from "lucide-react";
-import PlatformSelect from "@/components/widgets/select/PlatformSelect";
+import AddEventSelect from "@/components/widgets/select/AddEventSelect";
 
 const AddTaskButton = () => {
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
@@ -64,7 +64,7 @@ const AddTaskButton = () => {
               平台
             </label>
             <div className="flex flex-col w-80">
-              <PlatformSelect className="w-80 dark:text-black" data={data.data} />
+              <AddEventSelect className="w-80 dark:text-black" data={data.data} />
             </div>
           </fieldset>
           <div className="mt-[25px] flex justify-end">

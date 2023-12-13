@@ -6,6 +6,7 @@ import * as d3 from "d3";
 import Loading from "@/components/common/Loading";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Line } from "react-chartjs-2";
+import SelectDemo from "@/components/widgets/select/PlatformSelect";
 
 ChartJS.register(...registerables);
 
@@ -20,6 +21,7 @@ export default function Page() {
   if (!data1) return <Loading />;
   return (
     <main className="w-full h-full">
+    <SelectDemo></SelectDemo>
       <Heatmap data={data1.data} />
       <LineChart />
     </main>
@@ -207,11 +209,9 @@ const LineChart = ({}) => {
     },
   };
 
-  const datasetData = Object.values(data.bilibili);
-
   const longestDataset = Object.values(data).reduce((a, b) => (Object.keys(a).length > Object.keys(b).length ? a : b));
   const labels = Object.keys(longestDataset);
-  
+
   const chartData = {
     labels: labels,
     datasets: Object.entries(data).map(([name, values]) => ({
