@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from snownlp import SnowNLP
 import os
 
@@ -29,6 +31,11 @@ class EmotionEvaluationQuota(BaseInfo):
 
     @staticmethod
     def _calcScore(sentence):
+        """
+        calc Em Quota
+        :param sentence:
+        :return:
+        """
         if not isinstance(sentence, str):
             return 0
         return abs(SnowNLP(sentence).sentiments - 0.5)
@@ -58,34 +65,26 @@ class EmotionEvaluationQuota(BaseInfo):
             if str(ID) != str(eventid):
                 continue
             if mode == 'date':
-                date = date.split(" ")[0]
+                date = self.formatTime(date)
             score = self._calcScore(sentence)
             if date not in res:
                 res[date] = []
             res[date].append(score)
         for date in res:
             res[date] = sum(res[date])/len(res[date])
-        return self.packetFormat(res)
+        return self.packetFormat(self.normalize_dict_values(res))
 
+    @cache.cache_result(cache_path='calcEQOverall.pkl')
     def calcEQOverall(self, eventid):
         res = {}
-        aimDate = '2023-12-29'
-        instance = None
         for i in self.platformLst:
-            instance = i
-            try:
-                for dataI in tqdm.tqdm(instance.dateRange[int(eventid)], desc="计算情感激烈性指标中"):
-                    TIME = dataI.split(" ")[0]
-                    res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
-            except:
-                pass
-        return self.packetFormat(res)
+            res1 = self.calcScoreByEventAndPlatform(eventid, i.platform)['data']
+            for Date in res1:
+                if Date not in res:
+                    res[Date] = 0
+                res[Date] += res1[Date]
 
-
-
-
-
-
+        return self.packetFormat(self.normalize_dict_values(res))
 
 
 if __name__ == '__main__':

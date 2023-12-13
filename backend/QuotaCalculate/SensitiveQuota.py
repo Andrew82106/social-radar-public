@@ -108,34 +108,20 @@ class SensitiveQuota(BaseInfo):
                 TIME = dataI[self.CommentInfo_time]
             if str(ID) != str(eventid):
                 continue
-            TIME = TIME.split(" ")[0]
+            TIME = self.formatTime(TIME)
             dbscan_result = self._calcMetric(aimDate)
             res[TIME] = dbscan_result
-        return self.packetFormat(res)
+        return self.packetFormat(self.normalize_dict_values(res))
 
     def calcOverAllSensitiveQuota(self, eventid):
         res = {}
-        aimDate = self.aimDate
-        instance = None
         for i in self.platformLst:
-            instance = i
-            for dataI in tqdm.tqdm(instance.data, desc="计算敏感度指标中"):
-                try:
-                    sentence = dataI[self.CommentInfo_content]
-                    ID = dataI[self.CommentInfo_IDIndex]
-                    TIME = dataI[self.CommentInfo_time]
-                except:
-                    sentence = dataI[self.NewsInfo_content]
-                    ID = dataI[self.NewsInfo_IDIndex]
-                    TIME = dataI[self.CommentInfo_time]
-                if str(ID) != str(eventid):
-                    continue
-                TIME = TIME.split(" ")[0]
-                TIME = TIME.replace("/", "-")
-                TIME = datetime.strftime(datetime.strptime(TIME, "%Y-%m-%d"), "%Y-%m-%d")
-                dbscan_result = self._calcMetric(aimDate)
-                res[TIME] = dbscan_result * self._calcMetric(aimDate)
-        return self.packetFormat(res)
+            res1 = self.calcSensitiveQuota(eventid, i.platform)['data']
+            for Date in res1:
+                if Date not in res:
+                    res[Date] = 0
+                res[Date] += res1[Date]
+        return self.packetFormat(self.normalize_dict_values(res))
 
 
 if __name__ == '__main__':

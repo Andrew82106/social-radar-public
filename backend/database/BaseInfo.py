@@ -1,7 +1,7 @@
 import math
 from datetime import datetime, timedelta
 import random
-
+from sklearn.preprocessing import MinMaxScaler
 try:
     from database.BaseConfig import BaseConfig
 except:
@@ -98,3 +98,18 @@ class BaseInfo(BaseConfig):
             if i[self.ID_Index] == ID:
                 res.append(i)
         return res
+
+    @staticmethod
+    def normalize_dict_values(input_dict: dict):
+        if not len(input_dict):
+            return input_dict
+        values = list(input_dict.values())
+
+        # 对值进行归一化
+        scaler = MinMaxScaler()
+        scaled_values = scaler.fit_transform([[val] for val in values])
+
+        # 构建归一化后的字典
+        normalized_dict = {key: scaled_values[i][0] for i, key in enumerate(input_dict.keys())}
+
+        return normalized_dict

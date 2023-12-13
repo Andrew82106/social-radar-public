@@ -1,11 +1,11 @@
-import datetime
+from datetime import datetime
 import os
 
 
 class BaseConfig:
     def __init__(self):
         self.info = {
-            "time": str(datetime.datetime.now().strftime("%Y %D %H:%M:%S"))
+            "time": str(datetime.now().strftime("%Y %D %H:%M:%S"))
         }
         self.ID_Index = "IDIndex"
         self.dateRange = {}
@@ -98,6 +98,13 @@ class BaseConfig:
         if self.data is None:
             return 0
         return len(self.data)
+
+    @staticmethod
+    def formatTime(Time: str):
+        try:
+            return datetime.strftime(datetime.strptime(Time.split(" ")[0].replace("/", "-"), "%Y-%m-%d"), "%Y-%m-%d")
+        except:
+            return Time
 
 
 if __name__ == '__main__':

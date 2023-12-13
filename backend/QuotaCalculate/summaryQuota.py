@@ -37,7 +37,7 @@ class SummaryQuota(BaseInfo):
                 res[date] = self._map_to_range(self._calculate_date_difference(date, self.aimDate))
         except Exception as e:
             print(e)
-        return self.packetFormat(res)
+        return self.packetFormat(self.normalize_dict_values(res))
 
     def calcSQOverall(self, eventid):
         res = {}
@@ -52,7 +52,7 @@ class SummaryQuota(BaseInfo):
                     res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
             except:
                 pass
-        return self.packetFormat(res)
+        return self.packetFormat(self.normalize_dict_values(res))
 
 
 if __name__ == '__main__':

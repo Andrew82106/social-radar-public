@@ -56,6 +56,7 @@ class DB_Data(BaseConfig):
     def __init__(self):
         super().__init__()
         self.maxID = None
+        self.TimeRecord = {}
 
     @staticmethod
     def _read(RouteList):
@@ -145,6 +146,10 @@ class DB_Data(BaseConfig):
                         self.CommentInfo_IDIndex: int(dfi[self.CommentInfo_IDIndex].iloc[0]),
                         self.CommentInfo_UserID: UID
                     })
+                    Time = self.formatTime(str(dfi[self.CommentInfo_time].iloc[0]))
+                    if Time not in self.TimeRecord:
+                        self.TimeRecord[Time] = 0
+                    self.TimeRecord[Time] += 1
                 except Exception as e:
                     print(BilibiliUserInfo[BilibiliUserInfo[self.UserInfo_UserName] == str(dfi[self.CommentInfo_UserName].iloc[0])][self.UserInfo_ID])
                     raise e
@@ -232,6 +237,10 @@ class DB_Data(BaseConfig):
                     self.NewsInfo_IDIndex: int(dfi[self.ID_Index].iloc[0]),
                     self.NewsInfo_UserID: int(WangyiUserInfo[WangyiUserInfo[self.UserInfo_UserName] == '网易新闻'][self.UserInfo_ID].iloc[0])
                 })
+                Time = self.formatTime(str(dfi[self.NewsInfo_Time].iloc[0]))
+                if Time not in self.TimeRecord:
+                    self.TimeRecord[Time] = 0
+                self.TimeRecord[Time] += 1
                 cnt += 1
                 if cnt > length and (length != -1):
                     break
@@ -329,6 +338,10 @@ class DB_Data(BaseConfig):
                     self.CommentInfo_IDIndex: int(dfi[self.CommentInfo_IDIndex].iloc[0]),
                     self.CommentInfo_UserID: UID
                 })
+                Time = self.formatTime(str(dfi[self.CommentInfo_time].iloc[0]))
+                if Time not in self.TimeRecord:
+                    self.TimeRecord[Time] = 0
+                self.TimeRecord[Time] += 1
                 cnt += 1
                 if cnt > length and (length != -1):
                     break

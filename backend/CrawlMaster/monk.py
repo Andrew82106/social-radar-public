@@ -212,6 +212,7 @@ def getTimeSeq():
     a.getDateListofAllPlatform(int(eventid), mode)
     return a.fetch()
 
+
 @app.route('/timequota/gettimeseqdetail/')
 def getTimeSeqDetail():
     eventid = request.args.get("eventid")

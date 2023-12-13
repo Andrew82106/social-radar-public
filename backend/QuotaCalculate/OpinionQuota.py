@@ -1,6 +1,6 @@
-from datetime import datetime
 import tqdm
 import math
+
 try:
     from database import BilibiliComment, WangYiNews, ZhihuComment
     from database.EventList import EventLst
@@ -28,9 +28,18 @@ class OpinionQuota(BaseInfo):
         diff = self._calculate_date_difference(nowDate, aimDate)
         return int(self._map_to_range(diff))
 
+    def _calc_opinion_clusterByDate(self, nowDate):
+        res = []
+        for instance in self.platformLst:
+            if self.formatTime(nowDate) in instance.TimeRecord:
+                cont = instance.TimeRecord[self.formatTime(nowDate)]
+            else:
+                cont = 0
+            res.append(cont * (int(0.2 * cont) % 8))
+        return sum(res)/len(res)
+
     def calcOpinionQuota(self, eventid, platform):
         res = {}
-        aimDate = self.aimDate
         instance = None
         for i in self.platformLst:
             if i.platform == platform:
@@ -39,34 +48,28 @@ class OpinionQuota(BaseInfo):
         assert instance is not None, f"instance is None! para: eventid:{eventid} platform:{platform}"
         for dataI in tqdm.tqdm(instance.data, desc="计算聚类指标中"):
             try:
-                sentence = dataI[self.CommentInfo_content]
                 ID = dataI[self.CommentInfo_IDIndex]
                 TIME = dataI[self.CommentInfo_time]
             except:
-                sentence = dataI[self.NewsInfo_content]
                 ID = dataI[self.NewsInfo_IDIndex]
                 TIME = dataI[self.CommentInfo_time]
             if str(ID) != str(eventid):
                 continue
-            TIME = TIME.split(" ")[0]
-            dbscan_result = self._calc_opinion_cluster(aimDate, TIME)
+            TIME = self.formatTime(TIME)
+            dbscan_result = self._calc_opinion_clusterByDate(TIME)
             res[TIME] = dbscan_result
-        return self.packetFormat(res)
+        return self.packetFormat(self.normalize_dict_values(res))
 
     def calcOPQuotaOverall(self, eventid):
         res = {}
-        aimDate = '2023-12-29'
-        instance = None
         for i in self.platformLst:
-            instance = i
-            try:
-                for dataI in tqdm.tqdm(instance.dateRange[int(eventid)], desc="计算观点指标中"):
-                    TIME = dataI.split(" ")[0].replace("/", "-")
-                    TIME = datetime.strftime(datetime.strptime(TIME, "%Y-%m-%d"), "%Y-%m-%d")
-                    res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
-            except:
-                pass
-        return self.packetFormat(res)
+            res1 = self.calcOpinionQuota(eventid, i.platform)['data']
+            print(res1)
+            for Date in res1:
+                if Date not in res:
+                    res[Date] = 0
+                res[Date] += res1[Date]
+        return self.packetFormat(self.normalize_dict_values(res))
 
 
 if __name__ == '__main__':

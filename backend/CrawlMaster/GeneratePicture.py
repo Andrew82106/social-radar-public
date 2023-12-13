@@ -50,7 +50,7 @@ ss = SummaryQuota()
 yyy = UserBQuota()
 x = SensitiveQuota()
 y1 = OpinionQuota()
-EventID = 1
+EventID = 2
 
 
 def SensitiveDataOverAll():
@@ -81,8 +81,8 @@ def getTimeSeq():
 
 
 if __name__ == '__main__':
-    plot_time_series(SensitiveDataOverAll()['data'], title=f'SensitiveData EventID:{EventID}')
-    plot_time_series(UserQuotaOverAll()['data'], title=f'UserQuota EventID:{EventID}')
-    plot_time_series(OpinionQuotaOverAll()['data'], title=f'OpinionQuota EventID:{EventID}')
-    plot_time_series(SummaryQuotaOverAll()['data'], title=f'SummaryQuota EventID:{EventID}')
-    plot_time_series(getTimeSeq()['data'], title=f'getTimeQuota EventID:{EventID}')
+    plot_time_series(SensitiveDataOverAll()['data'], title=f'SensitiveData EventID:{EventID}', save=f'./labPicture/SensitiveData.jpg')
+    plot_time_series(UserQuotaOverAll()['data'], title=f'UserQuota EventID:{EventID}', save=f'./labPicture/UserQuota.jpg')
+    plot_time_series(OpinionQuotaOverAll()['data'], title=f'OpinionQuota EventID:{EventID}', save=f'./labPicture/OpinionQuota.jpg')
+    plot_time_series(SummaryQuotaOverAll()['data'], title=f'SummaryQuota EventID:{EventID}', save=f'./labPicture/SummaryQuota.jpg')
+    plot_time_series(getTimeSeq()['data'], title=f'getTimeQuota EventID:{EventID}', save=f'./labPicture/getTimeQuota.jpg')
