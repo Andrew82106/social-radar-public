@@ -1,7 +1,9 @@
 import os
+from datetime import datetime
 
 import tqdm
 import pandas as pd
+
 try:
     from database import BilibiliComment, WangYiNews, ZhihuComment
     from database.EventList import EventLst
@@ -129,9 +131,12 @@ class SensitiveQuota(BaseInfo):
                 if str(ID) != str(eventid):
                     continue
                 TIME = TIME.split(" ")[0]
+                TIME = TIME.replace("/", "-")
+                TIME = datetime.strftime(datetime.strptime(TIME, "%Y-%m-%d"), "%Y-%m-%d")
                 dbscan_result = self._calcMetric(aimDate)
-                res[TIME] = dbscan_result*self._calcMetric(aimDate)
+                res[TIME] = dbscan_result * self._calcMetric(aimDate)
         return self.packetFormat(res)
+
 
 if __name__ == '__main__':
     print("今天早上我吃了一碗面条")
