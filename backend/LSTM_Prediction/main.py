@@ -9,7 +9,6 @@ from torch import nn, optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 import torch.utils.data as Data
-from torchvision import transforms, datasets
 
 plt.style.use('ggplot')
 
@@ -19,9 +18,9 @@ hidden_size = 6
 num_layers = 1
 num_classes = 1
 learning_rate = 0.0001
-batch_size = 64
-n_iters = 5000
-split_ratio = 0.9
+batch_size = 16
+n_iters = 12000
+split_ratio = 0.7
 data_path = 'data.xls'
 
 
@@ -176,59 +175,7 @@ class LSTM(nn.Module):
         return out
 
 
-mymodel = LSTM(num_classes, input_size, hidden_size, num_layers)
-print(mymodel)
 criterion = torch.nn.MSELoss()  # mean-squared error for regression
-optimizer = torch.optim.Adam(mymodel.parameters(), lr=learning_rate)
-
-iter = 0
-for epochs in range(num_epochs):
-    for i, (batch_x, batch_y) in enumerate(train_loader):
-        outputs = mymodel(batch_x)
-        # batch_x.shape = torch.Size([64, 3, 3])
-        optimizer.zero_grad()
-        loss = criterion(outputs, batch_y)
-        loss.backward()
-        optimizer.step()
-        iter += 1
-
-
-def result(x_data, y_data):
-    mymodel.eval()
-    batch_size = 64  # 设置批大小
-    num_samples = len(x_data)
-    predictions = []
-
-    with torch.no_grad():
-        for i in range(0, num_samples, batch_size):
-            # 从数据集中取出一个批次的数据进行预测
-            batch_x = x_data[i:i + batch_size]
-            batch_predict = mymodel(batch_x)
-            predictions.append(batch_predict)
-
-    # 将所有批次的预测结果连接成一个张量
-    predictions = torch.cat(predictions)
-    print(">>>>>finish loading model<<<<<")
-    data_predict = predictions.numpy()
-    y_data_plot = y_data.data.numpy()
-    y_data_plot = np.reshape(y_data_plot, (-1, 1))
-    data_predict = mm_y.inverse_transform(data_predict)
-    y_data_plot = mm_y.inverse_transform(y_data_plot)
-
-    # 可视化结果和评估
-    plt.plot(y_data_plot)
-    plt.plot(data_predict)
-    plt.legend(('real', 'predict'), fontsize='15')
-    plt.show()
-
-    print('MAE/RMSE')
-    print(mean_absolute_error(y_data_plot, data_predict))
-    print(np.sqrt(mean_squared_error(y_data_plot, data_predict)))
-
-
-result(x_data, y_data)
-result(x_test, y_test)
-
 
 # 训练并评估BP神经网络模型
 bp_model = BP(num_classes, input_size, hidden_size, num_layers)
@@ -368,8 +315,8 @@ lstm_mae, lstm_rmse = evaluate_model(lstm_model, x_test, y_test)
 print("BP Model Evaluation:")
 print(f"MAE: {bp_mae}, RMSE: {bp_rmse}")
 
-print("\nGRU Model Evaluation:")
+print("GRU Model Evaluation:")
 print(f"MAE: {gru_mae}, RMSE: {gru_rmse}")
 
-print("\nLSTM Model Evaluation:")
+print("LSTM Model Evaluation:")
 print(f"MAE: {lstm_mae}, RMSE: {lstm_rmse}")
