@@ -21,9 +21,10 @@ export default function Page() {
   if (!data1) return <Loading />;
   return (
     <main className="w-full h-full">
-    <SelectDemo></SelectDemo>
+      <SelectDemo></SelectDemo>
       <Heatmap data={data1.data} />
       <LineChart />
+      <LineChartA />
     </main>
   );
 }
@@ -109,14 +110,18 @@ const Heatmap = ({ data }) => {
 
 const LineChart = () => {
   const { eventId, setEventId } = useEventId();
-  const fetcher = url => fetch(url).then(res => res.json())
-  const { data: timequota, error } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseq/?eventid=${eventId}&mode=date`, fetcher)
-  const { data: sentitive, error1 } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/SensitiveDataOverAll/?eventID=${eventId}`, fetcher)
-  if (error) return <div>Failed to load</div>
-  if (!timequota || !sentitive) return <div>Loading...</div>
-  const data = sentitive.data
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const { data: timequota, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseq/?eventid=${eventId}&mode=date`,
+    fetcher
+  );
+  if (error) return <div>Failed to load</div>;
+  if (!timequota) return <div>Loading...</div>;
+  const data = timequota.data;
 
-  const longestDataset = Object.values(data).reduce((a, b) => (Object.keys(a).length > Object.keys(b).length ? a : b));
+  const longestDataset = Object.values(data).reduce((a, b) =>
+    Object.keys(a).length > Object.keys(b).length ? a : b
+  );
   const labels = Object.keys(longestDataset);
 
   const chartData = {
@@ -139,5 +144,38 @@ const LineChart = () => {
           : "rgba(255, 205, 86, 0.2)",
     })),
   };
+  return <Line data={chartData} />;
+};
+
+const LineChartA = () => {
+  const { eventId, setEventId } = useEventId();
+
+  const urls = [
+    `${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseq/?eventid=${eventId}&mode=date`, // 时间热度
+    `${process.env.NEXT_PUBLIC_API_URL}/SensitiveDataOverAll/?eventID=${eventId}`, // 内容敏感度
+    `${process.env.NEXT_PUBLIC_API_URL}/UserQuotaOverAll/?eventID=${eventId}`, // 用户真实度
+
+    `${process.env.NEXT_PUBLIC_API_URL}/OpinionQuotaOverAll/?eventID=${eventId}`, // 观点对立性
+    `${process.env.NEXT_PUBLIC_API_URL}/SummaryQuotaOverAll/?eventID=${eventId}`, // 总指标
+  ];
+  const fetcher = (urls) =>
+    Promise.all(urls.map((url) => fetch(url).then((res) => res.json())));
+  const { data, error } = useSWR(urls, fetcher);
+  if (error) return <div>{error.message}Failed to load</div>;
+  if (!data) return <div>Loading...</div>;
+
+  const labels = Object.keys(data[0].data); // Assuming all datasets have the same labels
+
+  const chartData = {
+    labels: labels,
+    datasets: data.map((dataset, index) => ({
+      label: dataset.platform,
+      data: Object.values(dataset.data),
+      fill: false,
+      backgroundColor: `rgb(${index * 50}, ${index * 100}, ${index * 150})`, // Change color for each dataset
+      borderColor: `rgba(${index * 50}, ${index * 100}, ${index * 150}, 0.2)`, // Change color for each dataset
+    })),
+  };
+
   return <Line data={chartData} />;
 };
