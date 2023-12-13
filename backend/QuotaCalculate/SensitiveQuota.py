@@ -86,6 +86,52 @@ class SensitiveQuota(BaseInfo):
                     res[TYPE][word] += 1
         return self.packetFormat(res)
 
+    def calcSensitiveQuota(self, eventid, platform):
+        res = {}
+        aimDate = self.aimDate
+        instance = None
+        for i in self.platformLst:
+            if i.platform == platform:
+                instance = i
+                break
+        assert instance is not None, f"instance is None! para: eventid:{eventid} platform:{platform}"
+        for dataI in tqdm.tqdm(instance.data, desc="计算敏感度指标中"):
+            try:
+                sentence = dataI[self.CommentInfo_content]
+                ID = dataI[self.CommentInfo_IDIndex]
+                TIME = dataI[self.CommentInfo_time]
+            except:
+                sentence = dataI[self.NewsInfo_content]
+                ID = dataI[self.NewsInfo_IDIndex]
+                TIME = dataI[self.CommentInfo_time]
+            if str(ID) != str(eventid):
+                continue
+            TIME = TIME.split(" ")[0]
+            dbscan_result = self._calcMetric(aimDate)
+            res[TIME] = dbscan_result
+        return self.packetFormat(res)
+
+    def calcOverAllSensitiveQuota(self, eventid):
+        res = {}
+        aimDate = self.aimDate
+        instance = None
+        for i in self.platformLst:
+            instance = i
+            for dataI in tqdm.tqdm(instance.data, desc="计算敏感度指标中"):
+                try:
+                    sentence = dataI[self.CommentInfo_content]
+                    ID = dataI[self.CommentInfo_IDIndex]
+                    TIME = dataI[self.CommentInfo_time]
+                except:
+                    sentence = dataI[self.NewsInfo_content]
+                    ID = dataI[self.NewsInfo_IDIndex]
+                    TIME = dataI[self.CommentInfo_time]
+                if str(ID) != str(eventid):
+                    continue
+                TIME = TIME.split(" ")[0]
+                dbscan_result = self._calcMetric(aimDate)
+                res[TIME] = dbscan_result*self._calcMetric(aimDate)
+        return self.packetFormat(res)
 
 if __name__ == '__main__':
     print("今天早上我吃了一碗面条")

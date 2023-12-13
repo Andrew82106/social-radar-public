@@ -58,6 +58,14 @@ class TimeQuota(BaseInfo):
             DateList[instance.platform] = self.getDateList(instance.platform, eventID, mode)
         self.data = DateList
 
+    def getDateListofAllPlatformDetail(self, eventID, platform):
+        DateList = {}
+        for instance in self.platformLst:
+            if instance.platform != platform:
+                continue
+            DateList[instance.platform] = self.getDateList(instance.platform, eventID)
+        self.data = DateList
+
     def updateQuota(self, databaseLoc, eventID):
         """
         计算事件eventID的指标
