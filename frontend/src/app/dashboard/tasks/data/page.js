@@ -9,7 +9,7 @@ import CommentList from "@/components/widgets/list/CommentList";
 
 export default function Page() {
   const [page, setPage] = useState(1);
-  const { eventId, setEventId } = useEventId();
+  const { eventId, platform, setEventId } = useEventId();
 
   const router = useRouter();
 
@@ -21,7 +21,9 @@ export default function Page() {
 
   const { data: data2, error: error2 } = useSWR(
     data1
-      ? `${process.env.NEXT_PUBLIC_API_URL}/fetchdetailcomment/?id=${"1"}&platform=${"bilibili"}&count=${40}&page=${page}`
+      ? `${
+          process.env.NEXT_PUBLIC_API_URL
+        }/fetchdetailcomment/?id=${eventId}&platform=${"bilibili"}&count=${40}&page=${page}`
       : null,
     fetcher
   );
@@ -32,8 +34,8 @@ export default function Page() {
     <main className="flex h-full flex-col">
       <div className="w-full flex mb-2 items-center justify-between">
         <button
-          onClick={null}
-          disabled={null}
+          onClick={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
+          disabled={page === 1}
           className="rounded-md flex items-center p-3 transition-transform duration-200 ease-in-out transform active:scale-90 hover:shadow-lg hover:bg-gray-400"
         >
           <ChevronLeft />
@@ -48,7 +50,7 @@ export default function Page() {
             onChange={null}
           />
           <button
-            onClick={null}
+            onClick={() => setPage(prevPage => prevPage + 1)}
             className="rounded-md flex items-center p-3 transition-transform duration-200 ease-in-out transform active:scale-90 hover:shadow-lg hover:bg-gray-400"
           >
             Next
@@ -57,10 +59,8 @@ export default function Page() {
         </div>
       </div>
       {JSON.stringify(data1, null, 2)}
+      {JSON.stringify(platform, null, 2)}
 
-      {JSON.stringify(data1.data[eventId], null, 2)}
-
-      {JSON.stringify(data2, null, 2)}
       <CommentList data={data2.data} />
     </main>
   );

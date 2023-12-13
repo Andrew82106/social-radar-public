@@ -11,17 +11,22 @@ import DeleteTasks from "@/components/widgets/dialog/DeleteTaskButton";
 import AddTaskButton from "@/components/widgets/dialog/AddTaskButton";
 
 export default function Page() {
-  const { eventId, setEventId } = useEventId();
+  const { eventId, setEventId, platform, setPlatform } = useEventId();
 
   const router = useRouter();
 
   const handleEventClick = (id) => {
+
     const url = format({
       pathname: "/dashboard/tasks",
     });
+
+    setPlatform(data[1].data[id]);
     setEventId(id);
+
     router.push(url);
   };
+
 
   const urls = [
     `${process.env.NEXT_PUBLIC_API_URL}/eventList`,
