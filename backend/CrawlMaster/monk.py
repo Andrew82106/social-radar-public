@@ -386,6 +386,12 @@ def UserQuotaOverAll():
     return yyy.calcUserQuotaOverall(eventID)
 
 
+@app.route('/EmotionQuotaOverAll/')
+def EmotionQuotaOverAll():
+    eventID = request.args.get("eventID")
+    return y.calcEQOverall(eventID)
+
+
 @app.route('/OpinionQuotaOverAll/')
 def OpinionQuotaOverAll():
     eventID = request.args.get("eventID")
