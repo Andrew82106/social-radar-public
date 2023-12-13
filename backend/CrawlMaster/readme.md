@@ -172,6 +172,14 @@
 - http://127.0.0.1:5000/timeseq/?eventid=[eventid]&platform=[platform]
 - http://127.0.0.1:5000/timeseq/?eventid=1&platform=zhihu
 
+> 计算对于事件eventid，平台platform中的**时间热度**序列
+- http://127.0.0.1:5000/timequota/gettimeseqdetail/?eventID=[eventID]?platform=[PLATFORM]
+- http://127.0.0.1:5000/timequota/gettimeseqdetail/?eventid=1&platform=zhihu
+
+> 计算对于事件eventid，平台platform中的**内容敏感度**序列
+- http://127.0.0.1:5000/SensitiveDataDetail/?eventID=[eventID]&Platform=[Platform]
+- http://127.0.0.1:5000/SensitiveDataDetail/?eventID=1&Platform=zhihu
+
 #### 5.1.3 返回词频统计情况
 
 > 基于敏感词表统计platform中eventid事件的敏感词总体情况
@@ -185,6 +193,26 @@
 > 获取不同平台下的时间指标中eventID事件的时间热度序列，按照精确度为mode返回（mode=date则精确到日期，等于其他则为精确到秒）
 - http://127.0.0.1:5000/timequota/gettimeseq/?eventID=[eventID]?mode=[MODE]
 - http://127.0.0.1:5000/timequota/gettimeseq/?eventID=1&mode=date
+
+> 获取不同平台下的时间指标中eventID事件的**内容敏感度**序列，按照精确度为日期返回
+- http://127.0.0.1:5000/SensitiveDataOverAll/?eventID=[eventID]
+- http://127.0.0.1:5000/SensitiveDataOverAll/?eventID=2
+
+> 获取不同平台下的时间指标中eventID事件的**用户真实度**序列，按照精确度为日期返回
+- http://127.0.0.1:5000/UserQuotaOverAll/?eventID=[eventID]
+- http://127.0.0.1:5000/UserQuotaOverAll/?eventID=2
+
+> 获取不同平台下的时间指标中eventID事件的**情感激烈性**序列，按照精确度为日期返回
+- http://127.0.0.1:5000/EmotionQuotaOverAll/?eventID=[eventID]
+- http://127.0.0.1:5000/EmotionQuotaOverAll/?eventID=2
+
+> 获取不同平台下的时间指标中eventID事件的**观点对立性**序列，按照精确度为日期返回
+- http://127.0.0.1:5000/OpinionQuotaOverAll/?eventID=[eventID]
+- http://127.0.0.1:5000/OpinionQuotaOverAll/?eventID=2
+
+> 获取不同平台下的时间指标中eventID事件的**总指标**序列，按照精确度为日期返回
+- http://127.0.0.1:5000/SummaryQuotaOverAll/?eventID=[eventID]
+- http://127.0.0.1:5000/SummaryQuotaOverAll/?eventID=2
 
 ### 5.3 按照其他方式分类
 

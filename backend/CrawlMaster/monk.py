@@ -212,6 +212,14 @@ def getTimeSeq():
     a.getDateListofAllPlatform(int(eventid), mode)
     return a.fetch()
 
+@app.route('/timequota/gettimeseqdetail/')
+def getTimeSeqDetail():
+    eventid = request.args.get("eventid")
+    platform = request.args.get("platform")
+    a = TimeQuota()
+    a.getDateListofAllPlatformDetail(int(eventid), platform)
+    return a.fetch()
+
 
 @app.route('/searcheventdetail/')
 def searchEventDetail():
@@ -357,6 +365,37 @@ def timeseq():
         if i.platform == platform:
             return i.packetFormat(i.dateRange[int(eventid)])
     return commentList[0].packetFormat("无该平台")
+
+
+@app.route('/SensitiveDataDetail/')
+def SensitiveDataDetail():
+    eventID = request.args.get("eventID")
+    Platform = request.args.get("Platform")
+    return x.calcSensitiveQuota(eventID, Platform)
+
+
+@app.route('/SensitiveDataOverAll/')
+def SensitiveDataOverAll():
+    eventID = request.args.get("eventID")
+    return x.calcOverAllSensitiveQuota(eventID)
+
+
+@app.route('/UserQuotaOverAll/')
+def UserQuotaOverAll():
+    eventID = request.args.get("eventID")
+    return yyy.calcUserQuotaOverall(eventID)
+
+
+@app.route('/OpinionQuotaOverAll/')
+def OpinionQuotaOverAll():
+    eventID = request.args.get("eventID")
+    return y1.calcOPQuotaOverall(eventID)
+
+
+@app.route('/SummaryQuotaOverAll/')
+def SummaryQuotaOverAll():
+    eventID = request.args.get("eventID")
+    return ss.calcSQOverall(eventID)
 
 
 if __name__ == '__main__':

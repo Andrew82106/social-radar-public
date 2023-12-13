@@ -39,6 +39,20 @@ class SummaryQuota(BaseInfo):
             print(e)
         return self.packetFormat(res)
 
+    def calcSQOverall(self, eventid):
+        res = {}
+        aimDate = '2023-12-29'
+        instance = None
+        for i in self.platformLst:
+            instance = i
+            try:
+                for dataI in tqdm.tqdm(instance.dateRange[int(eventid)], desc="final"):
+                    TIME = dataI.split(" ")[0]
+                    res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
+            except:
+                pass
+        return self.packetFormat(res)
+
 
 if __name__ == '__main__':
     print("end")

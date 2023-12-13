@@ -24,7 +24,7 @@ class BaseInfo(BaseConfig):
 
     @staticmethod
     def _calcMetric(name):
-        return random.randint(0, len(name))
+        return random.randint(0, len(str(name)))
 
     @staticmethod
     def _newD(c):

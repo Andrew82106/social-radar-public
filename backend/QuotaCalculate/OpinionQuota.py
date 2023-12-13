@@ -53,6 +53,20 @@ class OpinionQuota(BaseInfo):
             res[TIME] = dbscan_result
         return self.packetFormat(res)
 
+    def calcOPQuotaOverall(self, eventid):
+        res = {}
+        aimDate = '2023-12-29'
+        instance = None
+        for i in self.platformLst:
+            instance = i
+            try:
+                for dataI in tqdm.tqdm(instance.dateRange[int(eventid)], desc="计算观点指标中"):
+                    TIME = dataI.split(" ")[0]
+                    res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
+            except:
+                pass
+        return self.packetFormat(res)
+
 
 if __name__ == '__main__':
     print("今天早上我吃了一碗面条")
