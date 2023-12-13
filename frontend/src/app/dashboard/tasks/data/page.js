@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEventId } from "@/components/hooks/EventIdContext";
 import useSWR from "swr";
 import Loading from "@/components/common/Loading";
+import CommentList from "@/components/widgets/list/CommentList";
 
 export default function Page() {
   const [page, setPage] = useState(1);
@@ -20,13 +21,13 @@ export default function Page() {
 
   const { data: data2, error: error2 } = useSWR(
     data1
-      ? `${process.env.NEXT_PUBLIC_API_URL}/fetchdetailcomment/?id=${"1"}&platform=${"bilibili"}`
+      ? `${process.env.NEXT_PUBLIC_API_URL}/fetchdetailcomment/?id=${"1"}&platform=${"bilibili"}&count=${40}&page=${page}`
       : null,
     fetcher
   );
 
-  if (error1) return <div>Failed to load</div>;
-  if (!data1) return <Loading />;
+  if (error1 || error2) return <div>Failed to load</div>;
+  if (!data1 || !data2) return <Loading />;
   return (
     <main className="flex h-full flex-col">
       <div className="w-full flex mb-2 items-center justify-between">
@@ -56,8 +57,11 @@ export default function Page() {
         </div>
       </div>
       {JSON.stringify(data1, null, 2)}
+
       {JSON.stringify(data1.data[eventId], null, 2)}
+
       {JSON.stringify(data2, null, 2)}
+      <CommentList data={data2.data} />
     </main>
   );
 }
