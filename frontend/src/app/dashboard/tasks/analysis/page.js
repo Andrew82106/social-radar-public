@@ -111,9 +111,10 @@ const LineChart = () => {
   const { eventId, setEventId } = useEventId();
   const fetcher = url => fetch(url).then(res => res.json())
   const { data: timequota, error } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseq/?eventid=${eventId}&mode=date`, fetcher)
+  const { data: sentitive, error1 } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/SensitiveDataOverAll/?eventID=${eventId}`, fetcher)
   if (error) return <div>Failed to load</div>
-  if (!timequota) return <div>Loading...</div>
-  const data = timequota.data
+  if (!timequota || !sentitive) return <div>Loading...</div>
+  const data = sentitive.data
 
   const longestDataset = Object.values(data).reduce((a, b) => (Object.keys(a).length > Object.keys(b).length ? a : b));
   const labels = Object.keys(longestDataset);
