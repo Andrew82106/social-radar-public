@@ -56,7 +56,7 @@ class UserBQuota(BaseInfo):
         for dataI in tqdm.tqdm(instance.dateRange[int(eventid)], desc="计算用户指标中"):
             TIME = dataI.split(" ")[0]
             res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
-        return self.packetFormat(res)
+        return self.packetFormat(self.normalize_dict_values(res))
 
     def calcUserQuotaOverall(self, eventid):
         res = {}
@@ -71,7 +71,7 @@ class UserBQuota(BaseInfo):
                     res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
             except:
                 pass
-        return self.packetFormat(res)
+        return self.packetFormat(self.normalize_dict_values(res))
 
 
 if __name__ == '__main__':

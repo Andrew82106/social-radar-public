@@ -62,7 +62,7 @@ class TimeQuota(BaseInfo):
                 if i1 not in DateList:
                     DateList[i1] = 0
                 DateList[i1] += DateList0[i]
-        self.data = DateList
+        self.data = self.normalize_dict_values(DateList)
 
     def getDateListofAllPlatformDetail(self, eventID, platform):
         DateList = {}
@@ -70,7 +70,7 @@ class TimeQuota(BaseInfo):
             if instance.platform != platform:
                 continue
             DateList[instance.platform] = self.getDateList(instance.platform, eventID)
-        self.data = DateList
+        self.data = DateList[platform]
 
     def updateQuota(self, databaseLoc, eventID):
         """

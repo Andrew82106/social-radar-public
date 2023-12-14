@@ -212,6 +212,7 @@ def getTimeSeq():
     a.getDateListofAllPlatform(int(eventid), mode)
     return a.fetch()
 
+
 @app.route('/timequota/gettimeseqdetail/')
 def getTimeSeqDetail():
     eventid = request.args.get("eventid")
@@ -384,6 +385,12 @@ def SensitiveDataOverAll():
 def UserQuotaOverAll():
     eventID = request.args.get("eventID")
     return yyy.calcUserQuotaOverall(eventID)
+
+
+@app.route('/EmotionQuotaOverAll/')
+def EmotionQuotaOverAll():
+    eventID = request.args.get("eventID")
+    return y.calcEQOverall(eventID)
 
 
 @app.route('/OpinionQuotaOverAll/')
