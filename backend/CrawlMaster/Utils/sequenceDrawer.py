@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from datetime import datetime
+from datetime import datetime, timedelta
 from matplotlib.dates import AutoDateLocator, AutoDateFormatter
 import pandas as pd
 import pprint
@@ -7,18 +7,23 @@ import pprint
 
 def plot_time_series(data_dict, save=None, title='Time Series Data'):
     # 生成日期范围
-    start_date = min(data_dict.keys())
-    end_date = max(data_dict.keys())
-    date_range = []
-    for date in pd.date_range(start_date, end_date):
-        date_range.append(datetime.strftime(date, "%Y-%m-%d"))
+    dates = sorted(data_dict.keys(), key=lambda x: datetime.strptime(x, "%Y-%m-%d"))
 
-    # 补充不存在的日期对应的值为0
-    for date in date_range:
-        if date not in data_dict:
-            data_dict[date] = 0
+    # 对存在的日期进行处理
+    for i, date in enumerate(dates):
+        current_date = datetime.strptime(date, "%Y-%m-%d")
+
+        previous_date = current_date - timedelta(days=1)
+        previous_date_str = datetime.strftime(previous_date, "%Y-%m-%d")
+        if previous_date_str not in data_dict:
+            data_dict[previous_date_str] = 0
+
+        next_date = current_date + timedelta(days=1)
+        next_date_str = datetime.strftime(next_date, "%Y-%m-%d")
+        if next_date_str not in data_dict:
+            data_dict[next_date_str] = 0
+
     pprint.pprint(data_dict)
-
     # 将字典按照日期排序
     sorted_data = sorted(data_dict.items(), key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"))
     sorted_dates = [datetime.strptime(date, "%Y-%m-%d") for date, _ in sorted_data]
@@ -57,17 +62,14 @@ def plot_time_series(data_dict, save=None, title='Time Series Data'):
 if __name__ == '__main__':
     # 示例字典
     data = {
-        "2023-11-1": 10,
-        "2023-11-2": 15,
-        "2023-11-3": 15,
-        "2023-11-4": 15,
-        "2023-11-5": 15,
-        "2023-11-6": 154,
-        "2023-11-7": 15,
+        "2023-11-01": 10,
+        "2023-11-02": 15,
+        "2023-11-03": 15,
+        "2023-11-04": 15,
+        "2023-11-05": 15,
+        "2023-11-06": 154,
+        "2023-11-07": 15,
         "2022-11-10": 130,
-        "2022-11-11": 135,
-        "2022-11-8": 120,
-        "2022-11-9": 10,
     }  # 可以尝试添加更多日期数据进行测试
 
     # 调用函数绘制折线图
