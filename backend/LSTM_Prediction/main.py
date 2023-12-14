@@ -12,8 +12,8 @@ import torch.utils.data as Data
 
 plt.style.use('ggplot')
 
-seq_length = 3  # time step
-input_size = 3  # input dim
+seq_length = 7  # time step
+input_size = 5  # input dim
 hidden_size = 6
 num_layers = 1
 num_classes = 1
@@ -26,10 +26,11 @@ data_path = 'data.xls'
 
 def read_data(data_path):
     data = pd.read_excel(data_path)
-    data = data.iloc[:, :3]
-    label = data.iloc[:, 2:]
-    print(data.head())
-    return data, label
+    data_features = data.iloc[:, :input_size]  # Extracting the features from the data
+    label = data.iloc[:, input_size]  # Extracting the last column as the label
+    print(data_features.head())
+    print(label)
+    return data_features, label
 
 
 def normalization(data, label):
@@ -37,20 +38,23 @@ def normalization(data, label):
     mm_y = MinMaxScaler()
     data = data.values
     data = mm_x.fit_transform(data)
+
+    # Transpose the label data to maintain shape consistency before normalization
+    label = label.values.reshape(-1, 1)  # Reshape label data to be 2D
     label = mm_y.fit_transform(label)
     return data, label, mm_y
 
 
-def sliding_windows(data, seq_length):
+def sliding_windows(data, label, seq_length):
     x = []
     y = []
     for i in range(len(data) - seq_length - 1):
         _x = data[i:(i + seq_length), :]
-        _y = data[i + seq_length, -1]
+        _y = label[i + seq_length]  # Accessing label directly from NumPy array
         x.append(_x)
         y.append(_y)
     x, y = np.array(x), np.array(y)
-    print('x.shape,y.shape:\n', x.shape, y.shape)
+    print('x.shape, y.shape:\n', x.shape, y.shape)
     return x, y
 
 
@@ -85,11 +89,20 @@ def data_generator(x_train, y_train, x_test, y_test, n_iters, batch_size):
     return train_loader, test_loader, num_epochs
 
 
+
 data, label = read_data(data_path)
 data, label, mm_y = normalization(data, label)
-x, y = sliding_windows(data, seq_length)
+x, y = sliding_windows(data, label, seq_length)
 x_data, y_data, x_train, y_train, x_test, y_test = data_split(x, y, split_ratio)
 train_loader, test_loader, num_epochs = data_generator(x_train, y_train, x_test, y_test, n_iters, batch_size)
+
+print('x_train shape:', x_train.shape)
+print('y_train shape:', y_train.shape)
+print('x_test shape:', x_test.shape)
+print('y_test shape:', y_test.shape)
+print('Sample x_train:', x_train[0])  # Print a sample of x_train to understand its structure
+print('Sample y_train:', y_train[0])  # Print a sample of y_train to understand its structure
+
 
 import torch.nn.functional as F
 
@@ -280,7 +293,9 @@ plt.title('Test Set Predictions')
 plt.legend()
 
 plt.tight_layout()
+plt.savefig("./fitResult.jpg")
 plt.show()
+
 
 
 # 评估模型并返回评估指标
@@ -311,7 +326,7 @@ bp_mae, bp_rmse = evaluate_model(bp_model, x_test, y_test)
 gru_mae, gru_rmse = evaluate_model(gru_model, x_test, y_test)
 lstm_mae, lstm_rmse = evaluate_model(lstm_model, x_test, y_test)
 
-# 输出评估指标
+# Debugging checkpoint 5: Print model evaluation metrics
 print("BP Model Evaluation:")
 print(f"MAE: {bp_mae}, RMSE: {bp_rmse}")
 
