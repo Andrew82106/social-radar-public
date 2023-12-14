@@ -109,8 +109,8 @@ class SensitiveQuota(BaseInfo):
             if str(ID) != str(eventid):
                 continue
             TIME = self.formatTime(TIME)
-            dbscan_result = self._calcMetric(aimDate)
-            res[TIME] = dbscan_result
+            result = self._find_sensitive_word(sentence)
+            res[TIME] = max([len(result[i]) for i in result])
         return self.packetFormat(self.normalize_dict_values(res))
 
     def calcOverAllSensitiveQuota(self, eventid):

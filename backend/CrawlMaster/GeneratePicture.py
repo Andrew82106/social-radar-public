@@ -95,6 +95,7 @@ if __name__ == '__main__':
     saver.addData(SummaryQuotaOverAll()['data'], 'SummaryQuota')
     saver.addData(getTimeSeq()['data'], 'TimeQuota')
     saver.addData(EmotionQuotaOverAll()['data'], 'EmotionQuota')
+    saver.saveData()
 
     plot_time_series(SensitiveDataOverAll()['data'], title=f'SensitiveData EventID:{EventID}', save=f'./labPicture/SensitiveData.jpg')
     plot_time_series(UserQuotaOverAll()['data'], title=f'UserQuota EventID:{EventID}', save=f'./labPicture/UserQuota.jpg')
@@ -102,7 +103,5 @@ if __name__ == '__main__':
     plot_time_series(SummaryQuotaOverAll()['data'], title=f'SummaryQuota EventID:{EventID}', save=f'./labPicture/SummaryQuota.jpg')
     plot_time_series(getTimeSeq()['data'], title=f'TimeQuota EventID:{EventID}', save=f'./labPicture/TimeQuota.jpg')
     plot_time_series(EmotionQuotaOverAll()['data'], title=f'EmotionQuota EventID:{EventID}', save=f'./labPicture/EmotionQuota.jpg')
-
-
 
     print("end")

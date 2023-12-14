@@ -26,12 +26,13 @@ class DataSaver:
         return -1
 
     def insert(self, data: str, colName: str, ID=-1):
+        if colName not in self.data:
+            self.data[colName] = {}
         if ID == -1:
             ID = 0
             for I in self.data[colName]:
-                ID = I + 1
-        if colName not in self.data:
-            self.data[colName] = {}
+                ID = max(I, ID)
+            ID += 1
         self.data[colName][ID] = data
 
     def addData(self, D: dict, colName: str):
@@ -41,3 +42,13 @@ class DataSaver:
                 self.insert(Date, 'timeSeq')
             ID = self.findDataIndex(Date, 'timeSeq')
             self.insert(D[Date], colName, ID)
+
+    def saveData(self, route='./Output.xlsx'):
+        res = {}
+        for ID in self.data['timeSeq']:
+            for col in self.data.keys():
+                if col not in res:
+                    res[col] = []
+                res[col].append(self.data[col][ID])
+        pd.DataFrame(res).to_excel(route)
+        print(f"data saved to {route}")
