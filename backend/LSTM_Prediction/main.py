@@ -12,15 +12,15 @@ import torch.utils.data as Data
 
 plt.style.use('ggplot')
 
-seq_length = 7  # time step
+seq_length = 14  # time step
 input_size = 5  # input dim
 hidden_size = 6
 num_layers = 1
 num_classes = 1
 learning_rate = 0.0001
-batch_size = 16
-n_iters = 12000
-split_ratio = 0.7
+batch_size = 4
+n_iters = 32000
+split_ratio = 0.6
 data_path = 'data.xls'
 
 
@@ -89,7 +89,6 @@ def data_generator(x_train, y_train, x_test, y_test, n_iters, batch_size):
     return train_loader, test_loader, num_epochs
 
 
-
 data, label = read_data(data_path)
 data, label, mm_y = normalization(data, label)
 x, y = sliding_windows(data, label, seq_length)
@@ -102,7 +101,6 @@ print('x_test shape:', x_test.shape)
 print('y_test shape:', y_test.shape)
 print('Sample x_train:', x_train[0])  # Print a sample of x_train to understand its structure
 print('Sample y_train:', y_train[0])  # Print a sample of y_train to understand its structure
-
 
 import torch.nn.functional as F
 
@@ -295,7 +293,6 @@ plt.legend()
 plt.tight_layout()
 plt.savefig("./fitResult.jpg")
 plt.show()
-
 
 
 # 评估模型并返回评估指标
