@@ -52,7 +52,7 @@ yyy = UserBQuota()
 x = SensitiveQuota()
 y1 = OpinionQuota()
 y = EmotionEvaluationQuota()
-EventID = 1
+EventID = 2
 
 
 def SensitiveDataOverAll():

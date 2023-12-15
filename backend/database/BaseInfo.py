@@ -104,12 +104,18 @@ class BaseInfo(BaseConfig):
         if not len(input_dict):
             return input_dict
         values = list(input_dict.values())
-
-        # 对值进行归一化
         scaler = MinMaxScaler()
         scaled_values = scaler.fit_transform([[val] for val in values])
-
-        # 构建归一化后的字典
         normalized_dict = {key: scaled_values[i][0] for i, key in enumerate(input_dict.keys())}
-
         return normalized_dict
+
+    @staticmethod
+    def _averageAt(D):
+        D1 = {}
+        m = 0
+        for Date in D:
+            m += D[Date]
+        m = m/len(D)
+        for S in D:
+            D1[S] = max(0, D[S] + ((0.9+0.019*(len(str(D[S]*271)) % 100))*(m - D[S])))
+        return D1

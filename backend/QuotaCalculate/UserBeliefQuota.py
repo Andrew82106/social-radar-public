@@ -58,20 +58,34 @@ class UserBQuota(BaseInfo):
             res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
         return self.packetFormat(self.normalize_dict_values(res))
 
+    def getDateList(self, platformName: str, eventID, mode='date'):
+        DateList = {}
+        for instance in self.platformLst1:
+            if instance.platform != platformName:
+                continue
+            for ii in instance.fetch_associate_event_with_ID(eventID):
+                if mode == 'date':
+                    T = ii[self.ID_Time].split(" ")[0]
+                else:
+                    T = ii[self.ID_Time]
+                if T not in DateList:
+                    DateList[T] = 0
+                DateList[T] += 1
+        return DateList
+
     def calcUserQuotaOverall(self, eventid):
-        res = {}
-        aimDate = '2023-12-29'
-        instance = None
-        for i in self.platformLst1:
-            instance = i
-            try:
-                for dataI in tqdm.tqdm(instance.dateRange[int(eventid)], desc="计算用户指标中"):
-                    TIME = dataI.split(" ")[0].replace("/", "-")
-                    TIME = datetime.strftime(datetime.strptime(TIME, "%Y-%m-%d"), "%Y-%m-%d")
-                    res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
-            except:
-                pass
-        return self.packetFormat(self.normalize_dict_values(res))
+        DateList = {}
+        for instance in self.platformLst1:
+            DateList0 = self.getDateList(instance.platform, eventid)
+            for i in DateList0:
+                i1 = self.formatTime(i)
+                if i1 not in DateList:
+                    DateList[i1] = 0
+                DateList[i1] += DateList0[i]
+
+        DateList = self._averageAt(DateList)
+        self.data = self.normalize_dict_values(DateList)
+        return self.packetFormat(self.data)
 
 
 if __name__ == '__main__':
