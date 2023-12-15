@@ -57,8 +57,7 @@ class TimeQuota(BaseInfo):
         for instance in self.platformLst:
             DateList0 = self.getDateList(instance.platform, eventID, mode)
             for i in DateList0:
-                i1 = str(i).replace("/", "-")
-                i1 = datetime.strftime(datetime.strptime(i1, "%Y-%m-%d"), "%Y-%m-%d")
+                i1 = self.formatTime(i)
                 if i1 not in DateList:
                     DateList[i1] = 0
                 DateList[i1] += DateList0[i]

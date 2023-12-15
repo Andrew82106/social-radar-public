@@ -116,7 +116,7 @@ class DB_Data(BaseConfig):
             ]
         else:
             print("loading data from excel or csv")
-            _DF = self.readCommentTable()
+            _DF = self.readCommentTable()  # .dropna()
             BilibiliUserInfo = pd.read_excel(self.BilibiliUserData)
             self.data = []
             cnt = 0
@@ -124,8 +124,12 @@ class DB_Data(BaseConfig):
                 dfi = _DF.iloc[i:i + 1]
                 if dfi[self.CommentInfo_platform].iloc[0] != self.platform:
                     continue
-                if int(dfi[self.CommentInfo_IDIndex].iloc[0]) not in self.dateRange:
-                    self.dateRange[int(dfi[self.CommentInfo_IDIndex].iloc[0])] = []
+                try:
+                    if int(dfi[self.CommentInfo_IDIndex].iloc[0]) not in self.dateRange:
+                        self.dateRange[int(dfi[self.CommentInfo_IDIndex].iloc[0])] = []
+                except:
+                    print(dfi)
+                    exit()
                 if str(dfi[self.CommentInfo_time].iloc[0]).split(" ")[0] not in self.dateRange[
                     int(dfi[self.CommentInfo_IDIndex].iloc[0])]:
                     date = str(dfi[self.CommentInfo_time].iloc[0]).split(" ")[0]

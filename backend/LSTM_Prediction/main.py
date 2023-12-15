@@ -12,24 +12,25 @@ import torch.utils.data as Data
 
 plt.style.use('ggplot')
 
-seq_length = 3  # time step
-input_size = 3  # input dim
-hidden_size = 6
+seq_length = 9  # time step
+input_size = 5  # input dim
+hidden_size = 20
 num_layers = 1
 num_classes = 1
 learning_rate = 0.0001
 batch_size = 16
-n_iters = 12000
-split_ratio = 0.7
+n_iters = 16800
+split_ratio = 0.55
 data_path = 'data.xls'
 
 
 def read_data(data_path):
     data = pd.read_excel(data_path)
-    data = data.iloc[:, :3]
-    label = data.iloc[:, 2:]
-    print(data.head())
-    return data, label
+    data_features = data.iloc[:, :input_size]  # Extracting the features from the data
+    label = data.iloc[:, input_size]  # Extracting the last column as the label
+    print(data_features.head())
+    print(label)
+    return data_features, label
 
 
 def normalization(data, label):
@@ -37,20 +38,23 @@ def normalization(data, label):
     mm_y = MinMaxScaler()
     data = data.values
     data = mm_x.fit_transform(data)
+
+    # Transpose the label data to maintain shape consistency before normalization
+    label = label.values.reshape(-1, 1)  # Reshape label data to be 2D
     label = mm_y.fit_transform(label)
     return data, label, mm_y
 
 
-def sliding_windows(data, seq_length):
+def sliding_windows(data, label, seq_length):
     x = []
     y = []
     for i in range(len(data) - seq_length - 1):
         _x = data[i:(i + seq_length), :]
-        _y = data[i + seq_length, -1]
+        _y = label[i + seq_length]  # Accessing label directly from NumPy array
         x.append(_x)
         y.append(_y)
     x, y = np.array(x), np.array(y)
-    print('x.shape,y.shape:\n', x.shape, y.shape)
+    print('x.shape, y.shape:\n', x.shape, y.shape)
     return x, y
 
 
@@ -87,9 +91,16 @@ def data_generator(x_train, y_train, x_test, y_test, n_iters, batch_size):
 
 data, label = read_data(data_path)
 data, label, mm_y = normalization(data, label)
-x, y = sliding_windows(data, seq_length)
+x, y = sliding_windows(data, label, seq_length)
 x_data, y_data, x_train, y_train, x_test, y_test = data_split(x, y, split_ratio)
 train_loader, test_loader, num_epochs = data_generator(x_train, y_train, x_test, y_test, n_iters, batch_size)
+
+print('x_train shape:', x_train.shape)
+print('y_train shape:', y_train.shape)
+print('x_test shape:', x_test.shape)
+print('y_test shape:', y_test.shape)
+print('Sample x_train:', x_train[0])  # Print a sample of x_train to understand its structure
+print('Sample y_train:', y_train[0])  # Print a sample of y_train to understand its structure
 
 import torch.nn.functional as F
 
@@ -254,36 +265,7 @@ for epoch in range(num_epochs):
 lstm_train_true, lstm_train_pred = evaluate_model(lstm_model, x_train, y_train)
 lstm_test_true, lstm_test_pred = evaluate_model(lstm_model, x_test, y_test)
 
-# 可视化比较三种模型的预测结果
-plt.figure(figsize=(12, 6))
 
-# 绘制训练集的预测结果比较图
-plt.subplot(1, 2, 1)
-# plt.plot(bp_train_true, label='BP True')
-plt.plot(bp_train_pred, label='BP Predict')
-# plt.plot(gru_train_true, label='GRU True')
-plt.plot(gru_train_pred, label='GRU Predict')
-plt.plot(lstm_train_true, label='True data')
-plt.plot(lstm_train_pred, label='LSTM Predict')
-plt.title('Training Set Predictions')
-plt.legend()
-
-# 绘制测试集的预测结果比较图
-plt.subplot(1, 2, 2)
-# plt.plot(bp_test_true, label='BP True')
-plt.plot(bp_test_pred, label='BP Predict')
-# plt.plot(gru_test_true, label='GRU True')
-plt.plot(gru_test_pred, label='GRU Predict')
-plt.plot(lstm_test_true, label='True data')
-plt.plot(lstm_test_pred, label='LSTM Predict')
-plt.title('Test Set Predictions')
-plt.legend()
-
-plt.tight_layout()
-plt.show()
-
-
-# 评估模型并返回评估指标
 def evaluate_model(model, x_data, y_data):
     model.eval()
     predictions = []
@@ -311,7 +293,7 @@ bp_mae, bp_rmse = evaluate_model(bp_model, x_test, y_test)
 gru_mae, gru_rmse = evaluate_model(gru_model, x_test, y_test)
 lstm_mae, lstm_rmse = evaluate_model(lstm_model, x_test, y_test)
 
-# 输出评估指标
+# Debugging checkpoint 5: Print model evaluation metrics
 print("BP Model Evaluation:")
 print(f"MAE: {bp_mae}, RMSE: {bp_rmse}")
 
@@ -320,3 +302,52 @@ print(f"MAE: {gru_mae}, RMSE: {gru_rmse}")
 
 print("LSTM Model Evaluation:")
 print(f"MAE: {lstm_mae}, RMSE: {lstm_rmse}")
+
+lossInfo = f"BP MAE: {bp_mae}, BP RMSE: {bp_rmse}\n" + f"GRU MAE: {gru_mae}, GRU RMSE: {gru_rmse}\n" + f"LSTM MAE: {lstm_mae}, LSTM RMSE: {lstm_rmse}"
+
+# 可视化比较三种模型的预测结果
+plt.figure(figsize=(32, 12))
+fontsize = 20
+linewidth = 3.3
+# 绘制训练集的预测结果比较图
+plt.subplot(1, 2, 1)
+# plt.plot(bp_train_true, label='BP True')
+plt.plot(bp_train_pred, label='BP Predict')
+# plt.plot(gru_train_true, label='GRU True')
+plt.plot(gru_train_pred, label='GRU Predict')
+plt.plot(lstm_train_true, label='True data', linewidth=linewidth)
+plt.plot(lstm_train_pred, label='LSTM Predict')
+plt.title('Training Set Predictions', fontsize=fontsize)
+plt.legend(fontsize=fontsize)
+
+# 绘制测试集的预测结果比较图
+plt.subplot(1, 2, 2)
+# plt.plot(bp_test_true, label='BP True')
+plt.plot(bp_test_pred, label='BP Predict')
+# plt.plot(gru_test_true, label='GRU True')
+plt.plot(gru_test_pred, label='GRU Predict')
+plt.plot(lstm_test_true, label='True data', linewidth=linewidth)
+plt.plot(lstm_test_pred, label='LSTM Predict')
+plt.title('Test Set Predictions', fontsize=fontsize)
+plt.legend(fontsize=fontsize)
+
+plt.subplot(1, 2, 1)  # 选择左边的图（训练集预测结果比较图）
+
+
+paraInfo = f"seq_length = {seq_length} input_size = {input_size} hidden_size = {hidden_size}\nnum_layers = {num_layers} num_classes = {num_classes} learning_rate = {learning_rate}\nbatch_size = {batch_size} n_iters = {n_iters} split_ratio = {split_ratio}"
+# 在左边的图下方添加注释
+plt.text(0, 1.06, f'parameter:{paraInfo}\nlossInfo:{lossInfo}', transform=plt.gca().transAxes, fontsize=20,
+         verticalalignment='bottom', bbox=dict(facecolor='none', edgecolor='black', boxstyle='round'))
+
+# 添加注释到右边的图
+plt.subplot(1, 2, 2)  # 选择右边的图（测试集预测结果比较图）
+
+
+# 在右边的图下方添加注释
+plt.text(0, 1.06, f'parameter:{paraInfo}\nlossInfo:{lossInfo}', transform=plt.gca().transAxes, fontsize=fontsize,
+         verticalalignment='bottom', bbox=dict(facecolor='none', edgecolor='black', boxstyle='round'))
+
+
+plt.tight_layout()
+plt.savefig(f"./lstmFitCato/fitResult_INFO_{paraInfo.replace(' = ', '::')}.jpg")
+# plt.show()

@@ -52,7 +52,7 @@ yyy = UserBQuota()
 x = SensitiveQuota()
 y1 = OpinionQuota()
 y = EmotionEvaluationQuota()
-EventID = 2
+EventID = 1
 
 
 def SensitiveDataOverAll():
@@ -97,11 +97,11 @@ if __name__ == '__main__':
     saver.addData(EmotionQuotaOverAll()['data'], 'EmotionQuota')
     saver.saveData()
 
-    plot_time_series(SensitiveDataOverAll()['data'], title=f'SensitiveData EventID:{EventID}', save=f'./labPicture/SensitiveData.jpg')
-    plot_time_series(UserQuotaOverAll()['data'], title=f'UserQuota EventID:{EventID}', save=f'./labPicture/UserQuota.jpg')
-    plot_time_series(OpinionQuotaOverAll()['data'], title=f'OpinionQuota EventID:{EventID}', save=f'./labPicture/OpinionQuota.jpg')
-    plot_time_series(SummaryQuotaOverAll()['data'], title=f'SummaryQuota EventID:{EventID}', save=f'./labPicture/SummaryQuota.jpg')
-    plot_time_series(getTimeSeq()['data'], title=f'TimeQuota EventID:{EventID}', save=f'./labPicture/TimeQuota.jpg')
-    plot_time_series(EmotionQuotaOverAll()['data'], title=f'EmotionQuota EventID:{EventID}', save=f'./labPicture/EmotionQuota.jpg')
+    plot_time_series(SensitiveDataOverAll()['data'], title=f'SensitiveData EventID:{EventID}', save=f'./labPicture/SensitiveData_Event{EventID}.jpg')
+    plot_time_series(UserQuotaOverAll()['data'], title=f'UserQuota EventID:{EventID}', save=f'./labPicture/UserQuota_Event{EventID}.jpg')
+    plot_time_series(OpinionQuotaOverAll()['data'], title=f'OpinionQuota EventID:{EventID}', save=f'./labPicture/OpinionQuota_Event{EventID}.jpg')
+    plot_time_series(SummaryQuotaOverAll()['data'], title=f'SummaryQuota EventID:{EventID}', save=f'./labPicture/SummaryQuota_Event{EventID}.jpg')
+    plot_time_series(getTimeSeq()['data'], title=f'TimeQuota EventID:{EventID}', save=f'./labPicture/TimeQuota_Event{EventID}.jpg')
+    plot_time_series(EmotionQuotaOverAll()['data'], title=f'EmotionQuota EventID:{EventID}', save=f'./labPicture/EmotionQuota_Event{EventID}.jpg')
 
     print("end")
