@@ -103,10 +103,21 @@ class BaseInfo(BaseConfig):
     def normalize_dict_values(input_dict: dict):
         if not len(input_dict):
             return input_dict
+
         values = list(input_dict.values())
-        scaler = MinMaxScaler()
-        scaled_values = scaler.fit_transform([[val] for val in values])
-        normalized_dict = {key: scaled_values[i][0] for i, key in enumerate(input_dict.keys())}
+
+        # 计算值的范围
+        min_val = min(values)
+        max_val = max(values)
+
+        # 将值进行中心化缩放到[-0.5, 0.5]范围内
+        scaled_values = [(val - min_val - (max_val - min_val) / 2) / (max_val - min_val) for val in values]
+
+        # 将缩放后的值映射到[0, 1]范围内
+        normalized_values = [(val + 0.5) for val in scaled_values]
+
+        # 构建新的字典
+        normalized_dict = {key: normalized_values[i] for i, key in enumerate(input_dict.keys())}
         return normalized_dict
 
     @staticmethod
