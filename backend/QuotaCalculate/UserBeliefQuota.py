@@ -63,7 +63,8 @@ class UserBQuota(BaseInfo):
         for instance in self.platformLst1:
             if instance.platform != platformName:
                 continue
-            for ii in instance.fetch_associate_event_with_ID(eventID):
+            Events = instance.fetch_associate_event_with_ID(eventID)
+            for ii in Events:
                 if mode == 'date':
                     T = ii[self.ID_Time].split(" ")[0]
                 else:
@@ -82,7 +83,7 @@ class UserBQuota(BaseInfo):
                 if i1 not in DateList:
                     DateList[i1] = 0
                 DateList[i1] += DateList0[i]
-
+        # print(DateList)
         DateList = self._averageAt(DateList)
         self.data = self.normalize_dict_values(DateList)
         return self.packetFormat(self.data)
