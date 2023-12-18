@@ -95,7 +95,7 @@ class BaseInfo(BaseConfig):
     def fetch_associate_event_with_ID(self, ID):
         res = []
         for i in self.data:
-            if i[self.ID_Index] == ID:
+            if str(i[self.ID_Index]) == str(ID):
                 res.append(i)
         return res
 
@@ -122,6 +122,8 @@ class BaseInfo(BaseConfig):
 
     @staticmethod
     def _averageAt(D):
+        if len(D) == 0:
+            return {}
         D1 = {}
         m = 0
         for Date in D:
