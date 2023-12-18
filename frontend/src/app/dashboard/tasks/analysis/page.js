@@ -14,7 +14,7 @@ export default function Page() {
   const { eventId, platform, activePlatform, setEventId, setActivePlatform } = useEventId();
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
   const { data: data1, error: error1 } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/summaryLocationByPlatform/?eventID=${eventId}&Platform=${activePlatform}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/summaryLocationByPlatform/?eventid=${eventId}&Platform=${activePlatform}`,
     fetcher
   );
   if (error1) return <div>Failed to load</div>;
@@ -113,11 +113,11 @@ const LineChart = () => {
   const { eventId, platform, activePlatform, setEventId, setActivePlatform } = useEventId();
 
   const urls = [
-    `${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseqdetail/?eventid=${eventId}?platform=${activePlatform}`, // 时间热度
-    `${process.env.NEXT_PUBLIC_API_URL}/SensitiveDataDetail/?eventID=${eventId}&Platform=${activePlatform}`, // 内容敏感度
+    `${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseqdetail/?eventid=${eventId}&platform=${activePlatform}`, // 时间热度
+    `${process.env.NEXT_PUBLIC_API_URL}/SensitiveDataDetail/?eventid=${eventId}&Platform=${activePlatform}`, // 内容敏感度
     `${process.env.NEXT_PUBLIC_API_URL}/UserDataByDate/?eventid=${eventId}&platform=${activePlatform}`, // 用户真实度
-    `${process.env.NEXT_PUBLIC_API_URL}/EmotionDataDetail/?eventID=${eventId}&Platform=${activePlatform}&mode=date`, // 情感激烈性
-    `${process.env.NEXT_PUBLIC_API_URL}/OpinionDataDetail/?eventID=${eventId}&Platform=${activePlatform}`, // 观点对立性
+    `${process.env.NEXT_PUBLIC_API_URL}/EmotionDataDetail/?eventid=${eventId}&Platform=${activePlatform}&mode=date`, // 情感激烈性
+    `${process.env.NEXT_PUBLIC_API_URL}/OpinionDataDetail/?eventid=${eventId}&Platform=${activePlatform}`, // 观点对立性
     `${process.env.NEXT_PUBLIC_API_URL}/SummaryQuota/?eventid=${eventId}&platform=${activePlatform}`, // 总指标
   ];
   const fetcher = (urls) =>
