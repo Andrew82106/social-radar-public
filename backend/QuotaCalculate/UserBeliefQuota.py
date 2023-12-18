@@ -4,18 +4,21 @@ try:
     from database.BaseInfo import BaseInfo
     from database.globalConfig import Ins_BilibiliUserInfo, Ins_ZhihuUserInfo, Ins_WangYiNewsUserInfo
     from database.globalConfig import Ins_WangYiNews, Ins_ZhihuComment, Ins_BilibiliComment
+    from database.AutoCache import Cache
 except:
     from ..database import BilibiliComment, WangYiNews, ZhihuComment
     from ..database.EventList import EventLst
     from ..database.BaseInfo import BaseInfo
     from ..database.globalConfig import Ins_BilibiliUserInfo, Ins_ZhihuUserInfo, Ins_WangYiNewsUserInfo
     from ..database.globalConfig import Ins_WangYiNews, Ins_ZhihuComment, Ins_BilibiliComment
+    from ..database.AutoCache import Cache
 from datetime import datetime
 from collections import Counter
 import numpy as np
 import random
 import math
 import tqdm
+cache = Cache()
 
 
 class UserBQuota(BaseInfo):
@@ -27,6 +30,7 @@ class UserBQuota(BaseInfo):
         for p in self.platformLst:
             p.load_data()
 
+    @cache.cache_result(cache_path='fetch_user_quota.pkl')
     def fetch_user_quota(self, userName, platform):
         instance = None
         for i in self.platformLst:
@@ -44,6 +48,7 @@ class UserBQuota(BaseInfo):
             return self.packetFormat(res)
         return self.packetFormat("无该用户")
 
+    @cache.cache_result(cache_path='calcUserQuota.pkl')
     def calcUserQuota(self, eventid, platform):
         res = {}
         aimDate = '2023-12-29'
@@ -58,6 +63,7 @@ class UserBQuota(BaseInfo):
             res[TIME] = int(self._map_to_range((self._calculate_date_difference(TIME, aimDate))))
         return self.packetFormat(self.normalize_dict_values(res))
 
+    @cache.cache_result(cache_path='getDateList.pkl')
     def getDateList(self, platformName: str, eventID, mode='date'):
         DateList = {}
         for instance in self.platformLst1:
@@ -74,6 +80,7 @@ class UserBQuota(BaseInfo):
                 DateList[T] += 1
         return DateList
 
+    @cache.cache_result(cache_path='calcUserQuotaOverall.pkl')
     def calcUserQuotaOverall(self, eventid):
         DateList = {}
         for instance in self.platformLst1:

@@ -103,7 +103,6 @@ class BaseInfo(BaseConfig):
     def normalize_dict_values(input_dict: dict):
         if not len(input_dict):
             return input_dict
-
         values = list(input_dict.values())
 
         # 计算值的范围
@@ -111,6 +110,8 @@ class BaseInfo(BaseConfig):
         max_val = max(values)
 
         # 将值进行中心化缩放到[-0.5, 0.5]范围内
+        if (max_val - min_val) == 0:
+            return input_dict
         scaled_values = [(val - min_val - (max_val - min_val) / 2) / (max_val - min_val) for val in values]
 
         # 将缩放后的值映射到[0, 1]范围内

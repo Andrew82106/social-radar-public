@@ -38,6 +38,7 @@ class OpinionQuota(BaseInfo):
             res.append(cont * (int(0.2 * cont) % 8))
         return sum(res)/len(res)
 
+    @cache.cache_result(cache_path='calcOpinionQuota.pkl')
     def calcOpinionQuota(self, eventid, platform):
         res = {}
         instance = None
@@ -60,6 +61,7 @@ class OpinionQuota(BaseInfo):
             res[TIME] = dbscan_result
         return self.packetFormat(self.normalize_dict_values(res))
 
+    @cache.cache_result(cache_path='calcOPQuotaOverall.pkl')
     def calcOPQuotaOverall(self, eventid):
         res = {}
         for i in self.platformLst:

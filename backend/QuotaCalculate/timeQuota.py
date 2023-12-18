@@ -4,15 +4,18 @@ try:
     from database.EventList import EventLst
     from database.BaseInfo import BaseInfo
     from database.globalConfig import Ins_WangYiNews, Ins_ZhihuComment, Ins_BilibiliComment
+    from database.AutoCache import Cache
 except:
     from ..database import BilibiliComment, WangYiNews, ZhihuComment
     from ..database.EventList import EventLst
     from ..database.BaseInfo import BaseInfo
     from ..database.globalConfig import Ins_WangYiNews, Ins_ZhihuComment, Ins_BilibiliComment
+    from ..database.AutoCache import Cache
 from datetime import datetime
 from collections import Counter
 import numpy as np
 import math
+cache = Cache()
 
 
 class TimeQuota(BaseInfo):
@@ -37,6 +40,7 @@ class TimeQuota(BaseInfo):
             AimData[p.platform] = p.fetch_associate_event_with_ID(eventID)
         return AimData
 
+    @cache.cache_result(cache_path='getDateList.pkl')
     def getDateList(self, platformName: str, eventID, mode='date'):
         DateList = {}
         for instance in self.platformLst:
@@ -52,6 +56,7 @@ class TimeQuota(BaseInfo):
                 DateList[T] += 1
         return DateList
 
+    # @cache.cache_result(cache_path='getDateListofAllPlatform.pkl')
     def getDateListofAllPlatform(self, eventID, mode):
         DateList = {}
         for instance in self.platformLst:
@@ -63,6 +68,7 @@ class TimeQuota(BaseInfo):
                 DateList[i1] += DateList0[i]
         self.data = self.normalize_dict_values(DateList)
 
+    # @cache.cache_result(cache_path='getDateListofAllPlatformDetail.pkl')
     def getDateListofAllPlatformDetail(self, eventID, platform):
         DateList = {}
         for instance in self.platformLst:
@@ -71,6 +77,7 @@ class TimeQuota(BaseInfo):
             DateList[instance.platform] = self.getDateList(instance.platform, eventID)
         self.data = DateList[platform]
 
+    # @cache.cache_result(cache_path='updateQuota.pkl')
     def updateQuota(self, databaseLoc, eventID):
         """
         计算事件eventID的指标
