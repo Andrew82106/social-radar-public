@@ -18,7 +18,9 @@ export default function Page() {
 
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
   const { data: data2, error: error2 } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/searcheventdetail/?eventid=${eventId}&platform=${activePlatform}&keyword=${newSearchTerm}&count=30&page=${page}`,
+    newSearchTerm !== ""
+      ? `${process.env.NEXT_PUBLIC_API_URL}/searcheventdetail/?eventid=${eventId}&platform=${activePlatform}&keyword=${newSearchTerm}&count=40&page=${page}`
+      : null,
     fetcher
   );
 
@@ -30,7 +32,7 @@ export default function Page() {
   );
 
   if (error1 || error2) return <div>Failed to load</div>;
-  if (!data1 || !data2) return <Loading />;
+  if (!data1 || (newSearchTerm && !data2)) return <Loading />;
   return (
     <main className="flex h-full flex-col">
       <div className="w-full flex mb-2 items-center justify-between">
@@ -60,9 +62,6 @@ export default function Page() {
           </button>
         </div>
       </div>
-      {/* {JSON.stringify(data2.data)}   */}
-      {JSON.stringify(activePlatform)}
-      {JSON.stringify(newSearchTerm)}
       <CommentList data={newSearchTerm == "" ? data1.data : data2.data} />
     </main>
   );
