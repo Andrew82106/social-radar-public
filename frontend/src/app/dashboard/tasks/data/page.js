@@ -8,23 +8,24 @@ import Loading from "@/components/common/Loading";
 import CommentList from "@/components/widgets/list/CommentList";
 
 export default function Page() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [newSearchTerm, setNewSearchTerm] = useState("");
+  const [comments, setComments] = useState([]);
   const [page, setPage] = useState(1);
-  const { eventId, platform, setEventId } = useEventId();
+  const { eventId, platform, setEventId, activePlatform } = useEventId();
 
   const router = useRouter();
 
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  const { data: data1, error: error1 } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/summaryPlatformByEvent`,
+  const { data: data2, error: error2 } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/searcheventdetail/?eventid=${eventId}&platform=${activePlatform}&keyword=${newSearchTerm}&count=30&page=${page}`,
     fetcher
   );
 
-  const { data: data2, error: error2 } = useSWR(
-    data1
-      ? `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/fetchdetailcomment/?id=${eventId}&platform=${"bilibili"}&count=${40}&page=${page}`
-      : null,
+  const { data: data1, error: error1 } = useSWR(
+    `${
+      process.env.NEXT_PUBLIC_API_URL
+    }/fetchdetailcomment/?id=${eventId}&platform=${activePlatform}&count=${40}&page=${page}`,
     fetcher
   );
 
@@ -46,11 +47,12 @@ export default function Page() {
             type="text"
             placeholder="Search..."
             className="border-2 border-gray-300 border-blue-400 rounded-md p-2 mr-5"
-            value={null}
-            onChange={null}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <button onClick={() => setNewSearchTerm(searchTerm)}>搜索</button>
           <button
-            onClick={() => setPage(prevPage => prevPage + 1)}
+            onClick={() => setPage((prevPage) => prevPage + 1)}
             className="rounded-md flex items-center p-3 transition-transform duration-200 ease-in-out transform active:scale-90 hover:shadow-lg hover:bg-gray-400"
           >
             Next
@@ -58,10 +60,10 @@ export default function Page() {
           </button>
         </div>
       </div>
-      {JSON.stringify(data1, null, 2)}
-      {JSON.stringify(platform, null, 2)}
-
-      <CommentList data={data2.data} />
+      {/* {JSON.stringify(data2.data)}   */}
+      {JSON.stringify(activePlatform)}
+      {JSON.stringify(newSearchTerm)}
+      <CommentList data={newSearchTerm == "" ? data1.data : data2.data} />
     </main>
   );
 }

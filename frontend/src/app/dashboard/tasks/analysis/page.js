@@ -128,14 +128,33 @@ const LineChart = () => {
 
   const labels = Object.keys(data[0].data); // Assuming all datasets have the same labels
 
+  const datasetNames = [
+    '时间热度',
+    '内容敏感度',
+    '用户真实度',
+    '情感激烈性',
+    '观点对立性',
+    '总指标',
+  ];
+
+  const colors = [
+    'rgba(255, 99, 132, 0.6)', // red
+    'rgba(75, 192, 192, 0.6)', // green
+    'rgba(153, 102, 255, 0.6)', // purple
+    'rgba(255, 159, 64, 0.6)', // orange
+    'rgba(255, 205, 86, 0.6)', // yellow
+    'rgba(54, 162, 235, 0.6)', // blue
+    // Add more colors if you have more datasets
+  ];
+
   const chartData = {
     labels: labels,
     datasets: data.map((dataset, index) => ({
-      label: dataset.platform,
+      label: datasetNames[index],
       data: Object.values(dataset.data),
       fill: false,
-      backgroundColor: `rgb(${index * 50}, ${index * 100}, ${index * 150})`, // Change color for each dataset
-      borderColor: `rgba(${index * 50}, ${index * 100}, ${index * 150}, 0.6)`, // Change color for each dataset
+      backgroundColor: colors[index % colors.length],
+      borderColor: colors[index % colors.length],
     })),
   };
 
