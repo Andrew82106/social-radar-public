@@ -32,12 +32,13 @@ export default function Page() {
         <div className="w-full p-4 bg-white rounded shadow">
           <h2 className="text-xl font-bold mb-2">指标数据</h2>
           <div className="grid grid-cols-2 gap-4">
-            <DataCard title="时间热度" value={data2.data.quta1} />
-            <DataCard title="内容敏感度" value={data2.data.quta2} />
-            <DataCard title="用户真实度" value={data2.data.quta3} />
-            <DataCard title="情感激烈性" value={data2.data.quta4} />
-            <DataCard title="观点对立性" value={data2.data.quta5} />
-            <DataCard title="总指标" value={data2.data.quta6} />
+            {/* {JSON.stringify(data2.data)} */}
+            <DataCard title="时间热度" value={data2.data["时间热度指标"]} />
+            <DataCard title="内容敏感度" value={data2.data["敏感度热度指标"]} />
+            <DataCard title="用户真实度" value={data2.data["用户可性度热度指标"]} />
+            <DataCard title="情感激烈性" value={data2.data["情感激烈性热度指标"]} />
+            <DataCard title="观点对立性" value={data2.data["观点对立性热度指标"]} />
+            <DataCard title="总指标" value={data2.data["总热度指标"]} />
           </div>
         </div>
         <PlatformSelect />

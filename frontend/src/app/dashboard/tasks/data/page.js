@@ -52,7 +52,14 @@ export default function Page() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button onClick={() => setNewSearchTerm(searchTerm)}>搜索</button>
+          <button
+            onClick={() => {
+              setNewSearchTerm(searchTerm);
+              setPage(1);
+            }}
+          >
+            搜索
+          </button>
           <button
             onClick={() => setPage((prevPage) => prevPage + 1)}
             className="rounded-md flex items-center p-3 transition-transform duration-200 ease-in-out transform active:scale-90 hover:shadow-lg hover:bg-gray-400"
