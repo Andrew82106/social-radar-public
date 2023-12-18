@@ -14,7 +14,7 @@ export default function Page() {
   const { eventId, setEventId } = useEventId();
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
   const { data: data1, error: error1 } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/summaryLocationall/?eventID=${eventId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/summaryLocationall/?eventid=${eventId}`,
     fetcher
   );
   if (error1) return <div>Failed to load</div>;
@@ -115,11 +115,11 @@ const LineChart = () => {
 
   const urls = [
     `${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseq/?eventid=${eventId}&mode=date`, // 时间热度
-    `${process.env.NEXT_PUBLIC_API_URL}/SensitiveDataOverAll/?eventID=${eventId}`, // 内容敏感度
-    `${process.env.NEXT_PUBLIC_API_URL}/UserQuotaOverAll/?eventID=${eventId}`, // 用户真实度
-    `${process.env.NEXT_PUBLIC_API_URL}/EmotionQuotaOverAll/?eventID=${eventId}`, // 情感激烈性
-    `${process.env.NEXT_PUBLIC_API_URL}/OpinionQuotaOverAll/?eventID=${eventId}`, // 观点对立性
-    `${process.env.NEXT_PUBLIC_API_URL}/SummaryQuotaOverAll/?eventID=${eventId}`, // 总指标
+    `${process.env.NEXT_PUBLIC_API_URL}/SensitiveDataOverAll/?eventid=${eventId}`, // 内容敏感度
+    `${process.env.NEXT_PUBLIC_API_URL}/UserQuotaOverAll/?eventid=${eventId}`, // 用户真实度
+    `${process.env.NEXT_PUBLIC_API_URL}/EmotionQuotaOverAll/?eventid=${eventId}`, // 情感激烈性
+    `${process.env.NEXT_PUBLIC_API_URL}/OpinionQuotaOverAll/?eventid=${eventId}`, // 观点对立性
+    `${process.env.NEXT_PUBLIC_API_URL}/SummaryQuotaOverAll/?eventid=${eventId}`, // 总指标
   ];
   const fetcher = (urls) =>
     Promise.all(urls.map((url) => fetch(url).then((res) => res.json())));
