@@ -72,13 +72,13 @@ class Search(BaseInfo, DB_Data):
             commentRes[instance.platform] = []
             # print(userLst['data'])
             for userInfo in userLst['data']:
-                print(userInfo)
+                # print(userInfo)
                 # if count is not None and len(commentRes[instance.platform]) >= int(count):
                 #     break
                 # print(keyWord, self.CommentInfo_content, userInfo)
                 try:
                     if str(userInfo[self.CommentInfo_IDIndex]) != str(EventID):
-                        print(str(userInfo[self.CommentInfo_IDIndex]), str(EventID))
+                        # print(str(userInfo[self.CommentInfo_IDIndex]), str(EventID))
                         continue
                     if keyWord in userInfo[self.CommentInfo_content]:
                         commentRes[instance.platform].append(userInfo)
