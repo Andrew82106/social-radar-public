@@ -11,7 +11,7 @@ import SelectDemo from "@/components/widgets/select/PlatformSelect";
 ChartJS.register(...registerables);
 
 export default function Page() {
-  const { eventId, setEventId } = useEventId();
+  const { eventId, setEventId, platform, setPlatform } = useEventId();
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
   const { data: data1, error: error1 } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/summaryLocationall/?eventid=${eventId}`,
