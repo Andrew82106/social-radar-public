@@ -75,7 +75,7 @@
 
 > 查询对于事件eventid，平台platform的相关用户的地域分布
 - http://127.0.0.1:5000/summaryLocationByPlatform/?eventid=[eventid]&Platform=[Platform]
-- http://127.0.0.1:5000/deleteplatform/?platformName=wangyi
+- http://127.0.0.1:5000/summaryLocationByPlatform/?eventid=1&Platform=bilibili
 
 ## 3 后端操作接口
 
@@ -97,7 +97,7 @@
 
 > 在所有平台类型中删除名为platformName的平台
 - http://127.0.0.1:5000/deleteplatform/?platformName=[platformName]
-- http://127.0.0.1:5000/summaryLocationByPlatform/?eventid=1&Platform=bilibili
+- http://127.0.0.1:5000/deleteplatform/?platformName=wangyi
 
 ## 4 搜索类接口
 

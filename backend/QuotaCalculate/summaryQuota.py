@@ -3,16 +3,19 @@ try:
     from database.EventList import EventLst
     from database.BaseInfo import BaseInfo
     from database.globalConfig import Ins_WangYiNews, Ins_ZhihuComment, Ins_BilibiliComment
+    from database.AutoCache import Cache
 except:
     from ..database import BilibiliComment, WangYiNews, ZhihuComment
     from ..database.EventList import EventLst
     from ..database.BaseInfo import BaseInfo
     from ..database.globalConfig import Ins_WangYiNews, Ins_ZhihuComment, Ins_BilibiliComment
+    from ..database.AutoCache import Cache
 from datetime import datetime
 from collections import Counter
 import numpy as np
 import math
 import tqdm
+cache = Cache()
 
 
 class SummaryQuota(BaseInfo):
@@ -23,6 +26,7 @@ class SummaryQuota(BaseInfo):
         for p in self.platformLst:
             p.load_data()
 
+    @cache.cache_result(cache_path='calc_summary_q.pkl')
     def calc_summary_q(self, eventID, platform):
         instance = None
         for i in self.platformLst:
@@ -39,6 +43,7 @@ class SummaryQuota(BaseInfo):
             print(e)
         return self.packetFormat(self.normalize_dict_values(res))
 
+    @cache.cache_result(cache_path='calcSQOverall.pkl')
     def calcSQOverall(self, eventid):
         res = {}
         aimDate = '2023-12-29'

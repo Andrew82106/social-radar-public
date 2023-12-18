@@ -88,6 +88,7 @@ class SensitiveQuota(BaseInfo):
                     res[TYPE][word] += 1
         return self.packetFormat(res)
 
+    @cache.cache_result(cache_path='calcSensitiveQuota.pkl')
     def calcSensitiveQuota(self, eventid, platform):
         res = {}
         aimDate = self.aimDate
@@ -113,6 +114,7 @@ class SensitiveQuota(BaseInfo):
             res[TIME] = max([len(result[i]) for i in result])
         return self.packetFormat(self.normalize_dict_values(res))
 
+    @cache.cache_result(cache_path='calcOverAllSensitiveQuota.pkl')
     def calcOverAllSensitiveQuota(self, eventid):
         res = {}
         for i in self.platformLst:
