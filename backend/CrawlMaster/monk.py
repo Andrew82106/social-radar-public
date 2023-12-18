@@ -266,7 +266,7 @@ def addPlatform():
 
 @app.route('/summaryLocationByPlatform/')
 def summaryLocationByPlatform():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     Platform = request.args.get("Platform")
     for instance in userList:
         if instance.platform != Platform:
@@ -276,7 +276,7 @@ def summaryLocationByPlatform():
 
 @app.route('/summaryLocationall/')
 def summaryLocationall():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     res = {}
     for instance in userList:
         res_for_instance = instance.summary_location(eventID)['data']
@@ -302,7 +302,7 @@ def sensitivedataDetect(sentence):
 
 @app.route('/sensitivedataOverviewDetail/')
 def sensitivedataOverviewDetail():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     Platform = request.args.get("Platform")
     return x.summarySensitiveWord(eventID, Platform)
 
@@ -312,7 +312,7 @@ y = EmotionEvaluationQuota()
 
 @app.route('/EmotionDataDetail/')
 def EmotionDataDetail():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     Platform = request.args.get("Platform")
     mode = request.args.get("mode")
     return y.calcScoreByEventAndPlatform(eventID, Platform, mode)
@@ -323,7 +323,7 @@ y1 = OpinionQuota()
 
 @app.route('/OpinionDataDetail/')
 def OpinionDataDetail():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     Platform = request.args.get("Platform")
     return y1.calcOpinionQuota(eventID, Platform)
 
@@ -370,38 +370,38 @@ def timeseq():
 
 @app.route('/SensitiveDataDetail/')
 def SensitiveDataDetail():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     Platform = request.args.get("Platform")
     return x.calcSensitiveQuota(eventID, Platform)
 
 
 @app.route('/SensitiveDataOverAll/')
 def SensitiveDataOverAll():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     return x.calcOverAllSensitiveQuota(eventID)
 
 
 @app.route('/UserQuotaOverAll/')
 def UserQuotaOverAll():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     return yyy.calcUserQuotaOverall(eventID)
 
 
 @app.route('/EmotionQuotaOverAll/')
 def EmotionQuotaOverAll():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     return y.calcEQOverall(eventID)
 
 
 @app.route('/OpinionQuotaOverAll/')
 def OpinionQuotaOverAll():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     return y1.calcOPQuotaOverall(eventID)
 
 
 @app.route('/SummaryQuotaOverAll/')
 def SummaryQuotaOverAll():
-    eventID = request.args.get("eventID")
+    eventID = request.args.get("eventid")
     return ss.calcSQOverall(eventID)
 
 

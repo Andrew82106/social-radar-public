@@ -60,8 +60,8 @@
 ### 2.2 按照事件分类
 
 > 查询对于事件eventid，所有平台的相关用户的地域分布
-- http://127.0.0.1:5000/summaryLocationall/?eventID=[eventID]
-- http://127.0.0.1:5000/summaryLocationall/?eventID=2
+- http://127.0.0.1:5000/summaryLocationall/?eventid=[eventid]
+- http://127.0.0.1:5000/summaryLocationall/?eventid=2
 
 ### 2.3 按照平台和事件分类
 
@@ -74,7 +74,7 @@
 - http://127.0.0.1:5000/fetchdetailnews/?id=1&platform=wangyi&count=6&page=1
 
 > 查询对于事件eventid，平台platform的相关用户的地域分布
-- http://127.0.0.1:5000/summaryLocationByPlatform/?eventID=[eventID]&Platform=[Platform]
+- http://127.0.0.1:5000/summaryLocationByPlatform/?eventid=[eventid]&Platform=[Platform]
 - http://127.0.0.1:5000/deleteplatform/?platformName=wangyi
 
 ## 3 后端操作接口
@@ -84,7 +84,7 @@
 - http://127.0.0.1:5000/addEvent/阿里|P0|故障|666
 
 > 删除一个事件
-- http://127.0.0.1:5000/delEvent/[eventID]、
+- http://127.0.0.1:5000/delEvent/[eventid]
 - http://127.0.0.1:5000/delEvent/2
 
 > 删除项目缓存
@@ -97,7 +97,7 @@
 
 > 在所有平台类型中删除名为platformName的平台
 - http://127.0.0.1:5000/deleteplatform/?platformName=[platformName]
-- http://127.0.0.1:5000/summaryLocationByPlatform/?eventID=1&Platform=bilibili
+- http://127.0.0.1:5000/summaryLocationByPlatform/?eventid=1&Platform=bilibili
 
 ## 4 搜索类接口
 
@@ -153,12 +153,12 @@
 基于时间序列是指该指标在每一合法日期都会有一个值
 
 > 计算platform中eventid事件的**情感激烈性指标**(第一次计算耗时很久，需要写等待效果)，mode参数设置时间的精确度，mode=date则时间精确到日
-- http://127.0.0.1:5000/EmotionDataDetail/?eventID=[eventID]&Platform=[Platform]&mode=[mode]
-- http://127.0.0.1:5000/EmotionDataDetail/?eventID=1&Platform=bilibili&mode=date
+- http://127.0.0.1:5000/EmotionDataDetail/?eventid=[eventid]&Platform=[Platform]&mode=[mode]
+- http://127.0.0.1:5000/EmotionDataDetail/?eventid=1&Platform=bilibili&mode=date
 
 > 计算platform中eventid事件的**观点指标**，时间精确到日
-- http://127.0.0.1:5000/OpinionDataDetail/?eventID=[eventID]&Platform=[Platform]
-- http://127.0.0.1:5000/OpinionDataDetail/?eventID=1&Platform=bilibili
+- http://127.0.0.1:5000/OpinionDataDetail/?eventid=[eventid]&Platform=[Platform]
+- http://127.0.0.1:5000/OpinionDataDetail/?eventid=1&Platform=bilibili
 
 > 计算对于事件eventid，平台platform中的**用户综合指标**，时间精确到日
 - http://127.0.0.1:5000/UserDataByDate/?eventid=[eventid]&platform=[platform]
@@ -173,46 +173,46 @@
 - http://127.0.0.1:5000/timeseq/?eventid=1&platform=zhihu
 
 > 计算对于事件eventid，平台platform中的**时间热度**序列
-- http://127.0.0.1:5000/timequota/gettimeseqdetail/?eventID=[eventID]?platform=[PLATFORM]
+- http://127.0.0.1:5000/timequota/gettimeseqdetail/?eventid=[eventid]?platform=[PLATFORM]
 - http://127.0.0.1:5000/timequota/gettimeseqdetail/?eventid=1&platform=zhihu
 
 > 计算对于事件eventid，平台platform中的**内容敏感度**序列
-- http://127.0.0.1:5000/SensitiveDataDetail/?eventID=[eventID]&Platform=[Platform]
-- http://127.0.0.1:5000/SensitiveDataDetail/?eventID=1&Platform=zhihu
+- http://127.0.0.1:5000/SensitiveDataDetail/?eventid=[eventid]&Platform=[Platform]
+- http://127.0.0.1:5000/SensitiveDataDetail/?eventid=1&Platform=zhihu
 
 #### 5.1.3 返回词频统计情况
 
 > 基于敏感词表统计platform中eventid事件的敏感词总体情况
-- http://127.0.0.1:5000/sensitivedataOverviewDetail/?eventID=[EVENTID]&Platform=[PLATFORM]
-- http://127.0.0.1:5000/sensitivedataOverviewDetail/?eventID=1&Platform=bilibili
+- http://127.0.0.1:5000/sensitivedataOverviewDetail/?eventid=[EVENTID]&Platform=[PLATFORM]
+- http://127.0.0.1:5000/sensitivedataOverviewDetail/?eventid=1&Platform=bilibili
 
 ### 5.2 按照事件分类
 
 #### 5.2.1 返回序列
 
 > 获取不同平台下的时间指标中eventID事件的时间热度序列，按照精确度为mode返回（mode=date则精确到日期，等于其他则为精确到秒）
-- http://127.0.0.1:5000/timequota/gettimeseq/?eventID=[eventID]?mode=[MODE]
-- http://127.0.0.1:5000/timequota/gettimeseq/?eventID=1&mode=date
+- http://127.0.0.1:5000/timequota/gettimeseq/?eventid=[eventid]?mode=[MODE]
+- http://127.0.0.1:5000/timequota/gettimeseq/?eventid=1&mode=date
 
 > 获取不同平台下的时间指标中eventID事件的**内容敏感度**序列，按照精确度为日期返回
-- http://127.0.0.1:5000/SensitiveDataOverAll/?eventID=[eventID]
-- http://127.0.0.1:5000/SensitiveDataOverAll/?eventID=2
+- http://127.0.0.1:5000/SensitiveDataOverAll/?eventid=[eventid]
+- http://127.0.0.1:5000/SensitiveDataOverAll/?eventid=2
 
 > 获取不同平台下的时间指标中eventID事件的**用户真实度**序列，按照精确度为日期返回
-- http://127.0.0.1:5000/UserQuotaOverAll/?eventID=[eventID]
-- http://127.0.0.1:5000/UserQuotaOverAll/?eventID=2
+- http://127.0.0.1:5000/UserQuotaOverAll/?eventid=[eventid]
+- http://127.0.0.1:5000/UserQuotaOverAll/?eventid=2
 
 > 获取不同平台下的时间指标中eventID事件的**情感激烈性**序列，按照精确度为日期返回
-- http://127.0.0.1:5000/EmotionQuotaOverAll/?eventID=[eventID]
-- http://127.0.0.1:5000/EmotionQuotaOverAll/?eventID=2
+- http://127.0.0.1:5000/EmotionQuotaOverAll/?eventid=[eventid]
+- http://127.0.0.1:5000/EmotionQuotaOverAll/?eventid=2
 
 > 获取不同平台下的时间指标中eventID事件的**观点对立性**序列，按照精确度为日期返回
-- http://127.0.0.1:5000/OpinionQuotaOverAll/?eventID=[eventID]
-- http://127.0.0.1:5000/OpinionQuotaOverAll/?eventID=2
+- http://127.0.0.1:5000/OpinionQuotaOverAll/?eventid=[eventid]
+- http://127.0.0.1:5000/OpinionQuotaOverAll/?eventid=2
 
 > 获取不同平台下的时间指标中eventID事件的**总指标**序列，按照精确度为日期返回
-- http://127.0.0.1:5000/SummaryQuotaOverAll/?eventID=[eventID]
-- http://127.0.0.1:5000/SummaryQuotaOverAll/?eventID=2
+- http://127.0.0.1:5000/SummaryQuotaOverAll/?eventid=[eventid]
+- http://127.0.0.1:5000/SummaryQuotaOverAll/?eventid=2
 
 ### 5.3 按照其他方式分类
 
