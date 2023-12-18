@@ -6,25 +6,25 @@ import * as d3 from "d3";
 import Loading from "@/components/common/Loading";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Line } from "react-chartjs-2";
-import SelectDemo from "@/components/widgets/select/PlatformSelect";
+import PlatformSelect from "@/components/widgets/select/PlatformSelect";
 
 ChartJS.register(...registerables);
 
 export default function Page() {
-  const { eventId, setEventId } = useEventId();
+  const { eventId, platform, activePlatform, setEventId, setActivePlatform } = useEventId();
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
   const { data: data1, error: error1 } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/summaryLocationall/?eventID=${eventId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/summaryLocationByPlatform/?eventID=${eventId}&Platform=${activePlatform}`,
     fetcher
   );
   if (error1) return <div>Failed to load</div>;
   if (!data1) return <Loading />;
   return (
     <main className="w-full h-full">
-      <SelectDemo></SelectDemo>
+      <PlatformSelect />
+      {activePlatform}
       <Heatmap data={data1.data} />
       <LineChart />
-      <LineChartA />
     </main>
   );
 }
@@ -33,6 +33,7 @@ const Heatmap = ({ data }) => {
   const ref = useRef();
 
   useEffect(() => {
+    d3.select(ref.current).selectAll("*").remove();
     d3.json("/china_simplify.json").then((topology) => {
       console.log(JSON.stringify(topology));
       const geoData = topology;
@@ -83,7 +84,7 @@ const Heatmap = ({ data }) => {
           tooltip.style.display = "none";
         });
     });
-  }, []);
+  }, [data]);
 
   return (
     <>
@@ -109,54 +110,15 @@ const Heatmap = ({ data }) => {
 };
 
 const LineChart = () => {
-  const { eventId, setEventId } = useEventId();
-  const fetcher = (url) => fetch(url).then((res) => res.json());
-  const { data: timequota, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseq/?eventid=${eventId}&mode=date`,
-    fetcher
-  );
-  if (error) return <div>Failed to load</div>;
-  if (!timequota) return <div>Loading...</div>;
-  const data = timequota.data;
-
-  const longestDataset = Object.values(data).reduce((a, b) =>
-    Object.keys(a).length > Object.keys(b).length ? a : b
-  );
-  const labels = Object.keys(longestDataset);
-
-  const chartData = {
-    labels: labels,
-    datasets: Object.entries(data).map(([name, values]) => ({
-      label: name,
-      data: Object.values(values),
-      fill: false,
-      backgroundColor:
-        name === "bilibili"
-          ? "rgb(75, 192, 192)"
-          : name === "wangyi"
-          ? "rgb(255, 99, 132)"
-          : "rgb(255, 205, 86)",
-      borderColor:
-        name === "bilibili"
-          ? "rgba(75, 192, 192, 0.2)"
-          : name === "wangyi"
-          ? "rgba(255, 99, 132, 0.2)"
-          : "rgba(255, 205, 86, 0.2)",
-    })),
-  };
-  return <Line data={chartData} />;
-};
-
-const LineChartA = () => {
-  const { eventId, setEventId } = useEventId();
+  const { eventId, platform, activePlatform, setEventId, setActivePlatform } = useEventId();
 
   const urls = [
-    `${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseq/?eventid=${eventId}&mode=date`, // 时间热度
-    `${process.env.NEXT_PUBLIC_API_URL}/SensitiveDataOverAll/?eventID=${eventId}`, // 内容敏感度
-    `${process.env.NEXT_PUBLIC_API_URL}/UserQuotaOverAll/?eventID=${eventId}`, // 用户真实度
-    `${process.env.NEXT_PUBLIC_API_URL}/EmotionQuotaOverAll/?eventID=${eventId}`, // 情感激烈性
-    `${process.env.NEXT_PUBLIC_API_URL}/OpinionQuotaOverAll/?eventID=${eventId}`, // 观点对立性
-    `${process.env.NEXT_PUBLIC_API_URL}/SummaryQuotaOverAll/?eventID=${eventId}`, // 总指标
+    `${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseqdetail/?eventid=${eventId}?platform=${activePlatform}`, // 时间热度
+    `${process.env.NEXT_PUBLIC_API_URL}/SensitiveDataDetail/?eventID=${eventId}&Platform=${activePlatform}`, // 内容敏感度
+    `${process.env.NEXT_PUBLIC_API_URL}/UserDataByDate/?eventid=${eventId}&platform=${activePlatform}`, // 用户真实度
+    `${process.env.NEXT_PUBLIC_API_URL}/EmotionDataDetail/?eventID=${eventId}&Platform=${activePlatform}&mode=date`, // 情感激烈性
+    `${process.env.NEXT_PUBLIC_API_URL}/OpinionDataDetail/?eventID=${eventId}&Platform=${activePlatform}`, // 观点对立性
+    `${process.env.NEXT_PUBLIC_API_URL}/SummaryQuota/?eventid=${eventId}&platform=${activePlatform}`, // 总指标
   ];
   const fetcher = (urls) =>
     Promise.all(urls.map((url) => fetch(url).then((res) => res.json())));
@@ -173,7 +135,7 @@ const LineChartA = () => {
       data: Object.values(dataset.data),
       fill: false,
       backgroundColor: `rgb(${index * 50}, ${index * 100}, ${index * 150})`, // Change color for each dataset
-      borderColor: `rgba(${index * 50}, ${index * 100}, ${index * 150}, 0.2)`, // Change color for each dataset
+      borderColor: `rgba(${index * 50}, ${index * 100}, ${index * 150}, 0.6)`, // Change color for each dataset
     })),
   };
 
