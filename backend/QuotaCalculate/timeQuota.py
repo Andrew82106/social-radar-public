@@ -68,7 +68,7 @@ class TimeQuota(BaseInfo):
                 DateList[i1] += DateList0[i]
         self.data = self.normalize_dict_values(DateList)
 
-    # @cache.cache_result(cache_path='getDateListofAllPlatformDetail.pkl')
+    @cache.cache_result(cache_path='getDateListofAllPlatformDetail.pkl')
     def getDateListofAllPlatformDetail(self, eventID, platform):
         DateList = {}
         for instance in self.platformLst:
@@ -76,6 +76,7 @@ class TimeQuota(BaseInfo):
                 continue
             DateList[instance.platform] = self.getDateList(instance.platform, eventID)
         self.data = DateList[platform]
+        return self.packetFormat(self.normalize_dict_values(self.data))
 
     # @cache.cache_result(cache_path='updateQuota.pkl')
     def updateQuota(self, databaseLoc, eventID):
