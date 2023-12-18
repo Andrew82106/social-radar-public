@@ -218,8 +218,7 @@ def getTimeSeqDetail():
     eventid = request.args.get("eventid")
     platform = request.args.get("platform")
     a = TimeQuota()
-    a.getDateListofAllPlatformDetail(int(eventid), platform)
-    return a.fetch()
+    return a.getDateListofAllPlatformDetail(int(eventid), platform)
 
 
 @app.route('/searcheventdetail/')

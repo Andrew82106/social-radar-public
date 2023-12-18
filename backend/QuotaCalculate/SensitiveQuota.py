@@ -28,6 +28,7 @@ class SensitiveQuota(BaseInfo):
         for p in self.platformLst:
             p.load_data()
         self._load_word_base()
+        self.sensitiveDataOverview()
 
     def _load_word_base(self):
         _df = pd.read_excel(os.path.join(self.calculateBase, '敏感词库表统计.xlsx'))
@@ -50,6 +51,7 @@ class SensitiveQuota(BaseInfo):
             res[TYPE] = list(set(res[TYPE]))
         return res
 
+    @cache.cache_result(cache_path='sensitiveDataOverview.pkl')
     def sensitiveDataOverview(self):
         res = {}
         for i in self.wordBase:
