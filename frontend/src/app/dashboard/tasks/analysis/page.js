@@ -154,7 +154,7 @@ const LineChartA = () => {
     `${process.env.NEXT_PUBLIC_API_URL}/timequota/gettimeseq/?eventid=${eventId}&mode=date`, // 时间热度
     `${process.env.NEXT_PUBLIC_API_URL}/SensitiveDataOverAll/?eventID=${eventId}`, // 内容敏感度
     `${process.env.NEXT_PUBLIC_API_URL}/UserQuotaOverAll/?eventID=${eventId}`, // 用户真实度
-
+    `${process.env.NEXT_PUBLIC_API_URL}/EmotionQuotaOverAll/?eventID=${eventId}`, // 情感激烈性
     `${process.env.NEXT_PUBLIC_API_URL}/OpinionQuotaOverAll/?eventID=${eventId}`, // 观点对立性
     `${process.env.NEXT_PUBLIC_API_URL}/SummaryQuotaOverAll/?eventID=${eventId}`, // 总指标
   ];
