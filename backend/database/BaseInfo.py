@@ -61,7 +61,8 @@ class BaseInfo(BaseConfig):
                 else:
                     self.info['dataPage'] = data[page*count:min(page*count + count, len(data))]
             except:
-                self.info['dataPage'] = f"参数错误，数据读取失败。self.info['data']长{len(self.info['data'])}"
+                # self.info['dataPage'] = f"参数错误，数据读取失败。self.info['data']长{len(self.info['data'])}"
+                self.info['dataPage'] = {}
 
         return self.packetFormat({
             'datalist': self.info['dataPage'],
