@@ -93,10 +93,10 @@ export default function CommentList({ data }) {
                   用户指标
                 </h3>
                 <p className="text-gray-600">
-                  <strong>Quota 1:</strong> {userQuota.data.quta1}
+                  <strong>活动频率指标:</strong> {userQuota.data.quta1}
                 </p>
                 <p className="text-gray-600">
-                  <strong>Quota 2:</strong> {userQuota.data.quta2}
+                  <strong>行为分析指标:</strong> {userQuota.data.quta2}
                 </p>
                 {/* 显示其他用户指标 */}
               </div>
