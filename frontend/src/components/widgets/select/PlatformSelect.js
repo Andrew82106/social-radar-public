@@ -16,17 +16,33 @@ const PlatformSelect = () => {
   const data = platform;
 
   return (
-    <>
+    <div className="flex">
       {data.map((platform, index) => (
         <button
           key={index}
           value={platform}
           onClick={() => setActivePlatform(platform)}
+          className={classnames(
+            "p-3", // padding
+            "m-2", // margin
+            "rounded-lg", // large rounded corners
+            "text-base", // base text size
+            "font-semibold", // semi-bold font weight
+            "transition-colors", // smooth color transitions
+            "duration-200", // transition duration
+            "ease-in-out", // transition timing function
+            "hover:bg-gray-400", // hover background color
+            "hover:text-white", // hover text color
+            {
+              "bg-gray-300 text-black": activePlatform === platform,
+              "bg-gray-200 text-gray-500": activePlatform !== platform,
+            }
+          )}
         >
           {platform}
         </button>
       ))}
-    </>
+    </div>
   );
 };
 

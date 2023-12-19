@@ -2,7 +2,14 @@
 import Link from "next/link";
 import { useEventId } from "@/components/hooks/EventIdContext";
 import { usePathname, useRouter } from "next/navigation";
-import { CheckCircle, Settings, BarChartBig } from "lucide-react";
+import {
+  CheckCircle,
+  Settings,
+  BarChartBig,
+  Database,
+  LineChart,
+  ArrowLeft,
+} from "lucide-react";
 import { EventIdProvider } from "@/components/hooks/EventIdContext";
 
 function DashboardLink({ href, children, isActive }) {
@@ -28,7 +35,7 @@ export default function DashboardLayout({ children }) {
   return (
     <EventIdProvider>
       <div className="flex h-screen bg-gray-200 dark:bg-gray-700">
-        <div className="grow-0 p-6 bg-white dark:bg-black">
+        <div className="grow-0 p-6 bg-white dark:bg-black whitespace-nowrap">
           {!isPathInLayoutTasks ? (
             <ul className="text-lg font-semibold font-sans space-y-4 text-black dark:text-white">
               <DashboardLink
@@ -36,45 +43,52 @@ export default function DashboardLayout({ children }) {
                 isActive={pathname == "/dashboard"}
               >
                 <CheckCircle size={24} />
-                <span>Tasks</span>
+                <span>任务</span>
               </DashboardLink>
               <DashboardLink
                 href="/dashboard/status"
                 isActive={pathname == "/dashboard/status"}
               >
                 <BarChartBig size={24} />
-                <span>Status</span>
+                <span>系统状态</span>
               </DashboardLink>
               <DashboardLink
                 href="/dashboard/settings"
                 isActive={pathname == "/dashboard/settings"}
               >
                 <Settings size={24} />
-                <span>Settings</span>
+                <span>设置</span>
               </DashboardLink>
             </ul>
           ) : (
             <ul className="text-lg font-semibold font-sans space-y-4 text-black dark:text-white">
               <DashboardLink
+                href="/dashboard"
+                isActive={false}
+              >
+                <ArrowLeft size={24} />
+                <span>返回</span>
+              </DashboardLink>
+              <DashboardLink
                 href="/dashboard/tasks"
                 isActive={pathname == "/dashboard/tasks"}
               >
                 <CheckCircle size={24} />
-                <span>Overview</span>
+                <span>事件概览</span>
               </DashboardLink>
               <DashboardLink
                 href="/dashboard/tasks/analysis"
                 isActive={pathname == "/dashboard/tasks/analysis"}
               >
-                <BarChartBig size={24} />
-                <span>Analysis</span>
+                <LineChart size={24} />
+                <span>平台分析</span>
               </DashboardLink>
               <DashboardLink
                 href="/dashboard/tasks/data"
                 isActive={pathname == "/dashboard/tasks/data"}
               >
-                <Settings size={24} />
-                <span>Data</span>
+                <Database size={24} />
+                <span>数据</span>
               </DashboardLink>
             </ul>
           )}

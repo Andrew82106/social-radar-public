@@ -25,6 +25,7 @@ const AddEventSelect = ({ data }) => {
       components={animatedComponents}
       isMulti
       options={platforms}
+      placeholder="选择平台"
     />
   );
 };

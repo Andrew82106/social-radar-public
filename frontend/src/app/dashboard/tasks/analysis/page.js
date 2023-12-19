@@ -10,6 +10,12 @@ import PlatformSelect from "@/components/widgets/select/PlatformSelect";
 
 ChartJS.register(...registerables);
 
+import { scaleSequential } from 'd3-scale';
+import { interpolateViridis } from 'd3-scale-chromatic';
+
+// 定义颜色比例尺
+const colorScale = scaleSequential(interpolateViridis).domain([0, 100]);
+
 export default function Page() {
   const { eventId, platform, activePlatform, setEventId, setActivePlatform } =
     useEventId();
@@ -27,26 +33,39 @@ export default function Page() {
   if (error1) return <div>Failed to load</div>;
   if (!data1 || !data2) return <Loading />;
   return (
-    <main className="w-full h-full">
-      <div className="flex flex-col w-full h-full overflow-auto">
-        <div className="w-full p-4 bg-white rounded shadow">
+    <main className="w-full h-full flex flex-col items-center justify-center space-y-4 bg-gray-100 p-4">
+      <PlatformSelect />
+      <div className="flex flex-col items-center max-w-6xl overflow-auto w-full space-y-4">
+        <div className="h-1/2 p-8 bg-white rounded shadow w-full">
           <h2 className="text-xl font-bold mb-2">指标数据</h2>
-          <div className="grid grid-cols-2 gap-4">
-            {/* {JSON.stringify(data2.data)} */}
+          <div className="flex flex-wrap justify-between space-x-2">
             <DataCard title="时间热度" value={data2.data["时间热度指标"]} />
             <DataCard title="内容敏感度" value={data2.data["敏感度热度指标"]} />
-            <DataCard title="用户真实度" value={data2.data["用户可性度热度指标"]} />
-            <DataCard title="情感激烈性" value={data2.data["情感激烈性热度指标"]} />
-            <DataCard title="观点对立性" value={data2.data["观点对立性热度指标"]} />
+            <DataCard
+              title="用户真实度"
+              value={data2.data["用户可性度热度指标"]}
+            />
+            <DataCard
+              title="情感激烈性"
+              value={data2.data["情感激烈性热度指标"]}
+            />
+            <DataCard
+              title="观点对立性"
+              value={data2.data["观点对立性热度指标"]}
+            />
             <DataCard title="总指标" value={data2.data["总热度指标"]} />
           </div>
         </div>
-        <PlatformSelect />
-        {activePlatform}
-        <div>
-          <Heatmap data={data1.data} />
+        <div className="w-full h-2xl p-4 bg-white rounded shadow">
+          <LineChart />
         </div>
-        <LineChart />
+        <div className="flex flex-row w-full p-4 space-x-2 bg-white rounded shadow">
+          <div className="bg-gray-200 rounded inline-block">
+            <Heatmap data={data1.data} />
+          </div>
+          <Legend data={data1.data} />
+        </div>
+        <SensitiveDataOverview />
       </div>
     </main>
   );
@@ -68,7 +87,7 @@ const Heatmap = ({ data }) => {
         .geoMercator()
         .center([107, 31])
         .scale(750)
-        .translate([width / 2, height / 2 + 50]);
+        .translate([width / 2 + 50, height / 2 + 100]);
 
       const path = d3.geoPath().projection(projection);
 
@@ -148,7 +167,7 @@ const LineChart = () => {
     Promise.all(urls.map((url) => fetch(url).then((res) => res.json())));
   const { data, error } = useSWR(urls, fetcher);
   if (error) return <div>{error.message}Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
+  if (!data) return <Loading />;
 
   const labels = Object.keys(data[0].data); // Assuming all datasets have the same labels
 
@@ -191,3 +210,77 @@ const DataCard = ({ title, value }) => (
     <p className="text-gray-600">{value}</p>
   </div>
 );
+
+const SensitiveDataOverview = () => {
+  const { eventId, platform, activePlatform, setEventId, setActivePlatform } =
+    useEventId();
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+  const { data, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/sensitivedataOverviewDetail/?eventid=${eventId}&Platform=${activePlatform}`,
+    fetcher
+  );
+
+  if (error) return <div>Failed to load</div>;
+  if (!data) return <Loading />;
+
+  return (
+    <div className="w-full p-6 mx-auto bg-white rounded-xl shadow-md flex flex-col space-x-4">
+      <h1 className=" text-3xl font-bold mb-4">敏感词频统计</h1>
+      <div>
+        {Object.entries(data.data).map(([category, words]) => (
+          <div
+            key={category}
+            className="flex flex-row text-xl font-bold mb-4 flex-wrap"
+          >
+            <h2>{category}</h2>
+            {Object.entries(words).map(([word, count]) => (
+              <p key={word} className="text-gray-500 mx-2">
+                {word}: {count}
+              </p>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const Legend = ({ data }) => {
+  // 假设 data 是一个对象，其键是省份名称，值是该省份在轴上的位置（0-100）
+  let provinces = Object.keys(data);
+  let positions = Object.values(data);
+
+  // 创建一个新的数组，包含省份和位置的信息
+  let items = provinces.map((province, index) => ({ province, position: positions[index] }));
+
+  // 按位置对数组进行排序
+  items.sort((a, b) => a.position - b.position);
+
+  // 对相邻的省份进行错开
+  for (let i = 1; i < items.length; i++) {
+    if (items[i].position - items[i - 1].position < 3) { // 如果两个省份的位置相差小于10%，则将它们错开
+      items[i].offset = 60; // 偏移量
+    }
+  }
+
+  // 创建一个颜色渐变字符串
+  const gradient = `linear-gradient(to bottom, ${colorScale(0)}, ${colorScale(100)})`; // 修改为从上到下的渐变
+
+  return (
+    <div className="relative w-32 h-full opacity-80 rounded-lg shadow-lg overflow-hidden" style={{ backgroundImage: gradient }}>
+      {items.map((item, index) => (
+        <div
+          key={item.province}
+          className="absolute left-0 transform -translate-y-1/2"
+          style={{ top: `${item.position}%`, left: `${item.offset || 0}px` }} // 修改为顶部偏移
+        >
+          <div className="w-4 h-4 bg-white rounded-full animate-pulse" />
+          <span className="text-lg text-gray-800 mt-2 bg-white px-1 rounded-md shadow-md transition-all duration-500 ease-in-out transform hover:scale-125">
+            {item.province}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};

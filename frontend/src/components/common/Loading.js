@@ -14,7 +14,7 @@ export default function Loading() {
             stroke-width="1.2"
           />
         </svg>
-        <p className="font-mono text-3xl">Processing...</p>
+        <p className="font-mono text-3xl">加载中...</p>
       </div>
     </main>
   );

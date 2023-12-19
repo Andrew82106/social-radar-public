@@ -10,6 +10,12 @@ import SelectDemo from "@/components/widgets/select/PlatformSelect";
 
 ChartJS.register(...registerables);
 
+import { scaleSequential } from "d3-scale";
+import { interpolateViridis } from "d3-scale-chromatic";
+
+// 定义颜色比例尺
+const colorScale = scaleSequential(interpolateViridis).domain([0, 100]);
+
 export default function Page() {
   const { eventId, setEventId, platform, setPlatform } = useEventId();
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
@@ -20,12 +26,20 @@ export default function Page() {
   if (error1) return <div>Failed to load</div>;
   if (!data1) return <Loading />;
   return (
-    <main className="w-full h-full">
-      <div className="flex flex-row overflow-x-auto">
-        <div>
-          <Heatmap data={data1.data} />
+    <main className="w-full h-full bg-gray-100 p-4">
+      <div className="h-full flex flex-col overflow-x-auto space-y-4">
+        <div className="border-2 border-gray-200 bg-white rounded p-4 shadow">
+          <div className="flex flex-col space-y-4">
+            <div className="border-2 border-gray-200 bg-white rounded p-4 shadow h-auto">
+              <LineChart />
+            </div>
+            <div className="bg-gray-200 rounded inline-block">
+              <Heatmap data={data1.data} />
+            </div>
+
+            <Legend data={data1.data} />
+          </div>
         </div>
-        <LineChart />
       </div>
     </main>
   );
@@ -46,7 +60,7 @@ const Heatmap = ({ data }) => {
         .geoMercator()
         .center([107, 31])
         .scale(750)
-        .translate([width / 2, height / 2 + 50]);
+        .translate([width / 2 + 150, height / 2 + 100]);
 
       const path = d3.geoPath().projection(projection);
 
@@ -130,21 +144,21 @@ const LineChart = () => {
   const labels = Object.keys(data[0].data); // Assuming all datasets have the same labels
 
   const datasetNames = [
-    '时间热度',
-    '内容敏感度',
-    '用户真实度',
-    '情感激烈性',
-    '观点对立性',
-    '总指标',
+    "时间热度",
+    "内容敏感度",
+    "用户真实度",
+    "情感激烈性",
+    "观点对立性",
+    "总指标",
   ];
 
   const colors = [
-    'rgba(255, 99, 132, 0.6)', // red
-    'rgba(75, 192, 192, 0.6)', // green
-    'rgba(153, 102, 255, 0.6)', // purple
-    'rgba(255, 159, 64, 0.6)', // orange
-    'rgba(255, 205, 86, 0.6)', // yellow
-    'rgba(54, 162, 235, 0.6)', // blue
+    "rgba(255, 99, 132, 0.6)", // red
+    "rgba(75, 192, 192, 0.6)", // green
+    "rgba(153, 102, 255, 0.6)", // purple
+    "rgba(255, 159, 64, 0.6)", // orange
+    "rgba(255, 205, 86, 0.6)", // yellow
+    "rgba(54, 162, 235, 0.6)", // blue
     // Add more colors if you have more datasets
   ];
 
@@ -160,4 +174,52 @@ const LineChart = () => {
   };
 
   return <Line data={chartData} />;
+};
+
+const Legend = ({ data }) => {
+  // 假设 data 是一个对象，其键是省份名称，值是该省份在轴上的位置（0-100）
+  let provinces = Object.keys(data);
+  let positions = Object.values(data);
+
+  // 创建一个新的数组，包含省份和位置的信息
+  let items = provinces.map((province, index) => ({
+    province,
+    position: positions[index],
+  }));
+
+  // 按位置对数组进行排序
+  items.sort((a, b) => a.position - b.position);
+
+  // 对相邻的省份进行错开
+  for (let i = 1; i < items.length; i++) {
+    if (items[i].position - items[i - 1].position < 3) {
+      // 如果两个省份的位置相差小于10%，则将它们错开
+      items[i].offset = 60; // 偏移量
+    }
+  }
+
+  // 创建一个颜色渐变字符串
+  const gradient = `linear-gradient(to right, ${colorScale(0)}, ${colorScale(
+    100
+  )})`;
+
+  return (
+    <div
+      className="relative h-32 opacity-80 rounded-lg shadow-lg overflow-hidden"
+      style={{ backgroundImage: gradient }}
+    >
+      {items.map((item, index) => (
+        <div
+          key={item.province}
+          className="absolute transform -translate-x-1/2"
+          style={{ left: `${item.position}%`, top: `${item.offset || 20}px` }} // 使用偏移量
+        >
+          <div className="w-4 h-4 bg-white rounded-full animate-pulse" />
+          <span className="text-lg text-gray-800 mt-2 bg-white px-1 rounded-md shadow-md transition-all duration-500 ease-in-out transform hover:scale-125">
+            {item.province}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
 };
